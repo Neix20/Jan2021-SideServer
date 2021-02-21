@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="Jan2021-SideServer">
+		<class>domain.Customer</class>
+		<class>domain.Employee</class>
+		<class>domain.Office</class>
+		<class>domain.Orderdetail</class>
+		<class>domain.OrderdetailPK</class>
+		<class>domain.Order</class>
+		<class>domain.Payment</class>
+		<class>domain.PaymentPK</class>
+		<class>domain.Productline</class>
+		<class>domain.Product</class>
+		<class>domain.UserRole</class>
+		<class>domain.UserRolePK</class>
+		<class>domain.User</class>
+	</persistence-unit>
+</persistence>
