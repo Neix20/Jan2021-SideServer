@@ -15,7 +15,7 @@ public class PaymentPK implements Serializable {
 	@Column(insertable=false, updatable=false)
 	private Integer customernumber;
 
-	private String referencenumber;
+	private String checknumber;
 
 	public PaymentPK() {
 	}
@@ -25,11 +25,11 @@ public class PaymentPK implements Serializable {
 	public void setCustomernumber(Integer customernumber) {
 		this.customernumber = customernumber;
 	}
-	public String getReferencenumber() {
-		return this.referencenumber;
+	public String getChecknumber() {
+		return this.checknumber;
 	}
-	public void setReferencenumber(String referencenumber) {
-		this.referencenumber = referencenumber;
+	public void setChecknumber(String checknumber) {
+		this.checknumber = checknumber;
 	}
 
 	public boolean equals(Object other) {
@@ -42,14 +42,14 @@ public class PaymentPK implements Serializable {
 		PaymentPK castOther = (PaymentPK)other;
 		return 
 			this.customernumber.equals(castOther.customernumber)
-			&& this.referencenumber.equals(castOther.referencenumber);
+			&& this.checknumber.equals(castOther.checknumber);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.customernumber.hashCode();
-		hash = hash * prime + this.referencenumber.hashCode();
+		hash = hash * prime + this.checknumber.hashCode();
 		
 		return hash;
 	}

@@ -1,8 +1,14 @@
 package domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.math.BigDecimal;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -10,7 +16,7 @@ import java.math.BigDecimal;
  * 
  */
 @Entity
-@Table(name="payments")
+@Table(name="payments", schema="classicmodels")
 @NamedQuery(name="Payment.findAll", query="SELECT p FROM Payment p")
 public class Payment implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +32,7 @@ public class Payment implements Serializable {
 
 	//bi-directional many-to-one association to Customer
 	@ManyToOne
-	@JoinColumn(name="customernumber")
+	@JoinColumn(name="customernumber",insertable=false, updatable=false)
 	private Customer customer;
 
 	public Payment() {

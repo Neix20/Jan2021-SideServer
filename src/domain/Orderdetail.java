@@ -1,8 +1,14 @@
 package domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.math.BigDecimal;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -10,7 +16,7 @@ import java.math.BigDecimal;
  * 
  */
 @Entity
-@Table(name="orderdetails")
+@Table(name="orderdetails", schema="classicmodels")
 @NamedQuery(name="Orderdetail.findAll", query="SELECT o FROM Orderdetail o")
 public class Orderdetail implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -26,12 +32,12 @@ public class Orderdetail implements Serializable {
 
 	//bi-directional many-to-one association to Order
 	@ManyToOne
-	@JoinColumn(name="ordernumber")
+	@JoinColumn(name="ordernumber",insertable=false, updatable=false)
 	private Order order;
 
 	//bi-directional many-to-one association to Product
 	@ManyToOne
-	@JoinColumn(name="productcode")
+	@JoinColumn(name="productcode",insertable=false, updatable=false)
 	private Product product;
 
 	public Orderdetail() {

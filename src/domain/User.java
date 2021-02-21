@@ -1,7 +1,11 @@
 package domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -9,7 +13,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="users")
+@Table(name="users", schema="classicmodels")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;

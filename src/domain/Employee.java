@@ -1,8 +1,15 @@
 package domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 /**
@@ -10,7 +17,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="employees")
+@Table(name="employees", schema="classicmodels")
 @NamedQuery(name="Employee.findAll", query="SELECT e FROM Employee e")
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +43,7 @@ public class Employee implements Serializable {
 
 	//bi-directional many-to-one association to Office
 	@ManyToOne
-	@JoinColumn(name="officecode")
+	@JoinColumn(name="officecode",insertable=false, updatable=false)
 	private Office office;
 
 	public Employee() {

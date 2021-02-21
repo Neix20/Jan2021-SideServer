@@ -1,7 +1,11 @@
 package domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 
 /**
@@ -9,7 +13,7 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="user_roles")
+@Table(name="user_roles", schema="classicmodels")
 @NamedQuery(name="UserRole.findAll", query="SELECT u FROM UserRole u")
 public class UserRole implements Serializable {
 	private static final long serialVersionUID = 1L;

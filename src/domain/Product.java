@@ -1,9 +1,16 @@
 package domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 /**
@@ -11,7 +18,7 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name="products")
+@Table(name="products", schema="classicmodels")
 @NamedQuery(name="Product.findAll", query="SELECT p FROM Product p")
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -39,7 +46,7 @@ public class Product implements Serializable {
 
 	//bi-directional many-to-one association to Productline
 	@ManyToOne
-	@JoinColumn(name="productline")
+	@JoinColumn(name="productline",insertable=false, updatable=false)
 	private Productline productlineBean;
 
 	public Product() {
