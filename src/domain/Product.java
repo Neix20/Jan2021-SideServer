@@ -82,6 +82,10 @@ public class Product implements Serializable {
 	public Product() {
 	}
 	
+	public String getProductline() {
+		return this.productline;
+	}
+	
 	public void setProductline(String productline) {
 		this.productline = productline;
 	}

@@ -1,16 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List"%>
+<%@ page import="java.util.Map"%>
+<%@ page import="java.util.HashMap"%>
 <%@ page import="domain.Product"%>
 <%@ page import="domain.Productline"%>
 <%@ page import="Utilities.html_generator"%>
 <%
-List<Product> list = (List<Product>) request.getAttribute("List");
+List<Product> Productlist = (List<Product>) request.getAttribute("List");
 List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult");
+List<Productline> ProductlineList = (List<Productline>) request.getAttribute("ProductlineList");
 %>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="utf-8">
@@ -18,10 +20,10 @@ List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult"
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
-    <title>PHPJabbers.com | Free Car Dealer Website Template</title>
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Vehicle Model Website</title>
+    <link rel="stylesheet" type="text/css" href="frontend/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="frontend/assets/css/font-awesome.css">
+    <link rel="stylesheet" href="frontend/assets/css/style.css">
 
     <script src="../js/jquery-3.5.1.min.js"></script>
     <script>
@@ -82,7 +84,7 @@ List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult"
 
     <!-- ***** Call to Action Start ***** -->
     <section class="section section-bg" id="call-to-action"
-        style="background-image: url(assets/images/banner-image-1-1920x500.jpg)">
+        style="background-image: url(frontend/assets/images/banner-image-1-1920x500.jpg)">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
@@ -106,7 +108,7 @@ List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult"
                     <div class="col-2 text-right">Category: </div>
                     <div class="col-2">
                         <select id="category" name="category">
-                            
+                            <% for(Productline p : ProductlineList) out.println("<option value=\"" + p.getProductline() + "\">"+p.getProductline()+"</option>"); %>
                         </select>
                     </div>
                     <div class="col-4"></div>
@@ -119,117 +121,19 @@ List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult"
                     </div>
                 </div>
             </form>
+            
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="assets/images/cars_1.jpg" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>
-                                <sup>$</sup>11779
-                            </span>
-
-                            <h4>Lorem ipsum dolor sit amet, consectetur</h4>
-
-                            <ul class="social-icons">
-                                <li><a href="car-details.html">+ View Model</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="assets/images/cars_2.jpg" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>
-                                <sup>$</sup>11779
-                            </span>
-
-                            <h4>Lorem ipsum dolor sit amet, consectetur</h4>
-
-                            <ul class="social-icons">
-                                <li><a href="car-details.html">+ View Model</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="assets/images/cars_3.jpg" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>
-                                <sup>$</sup>11779
-                            </span>
-
-                            <h4>Lorem ipsum dolor sit amet, consectetur</h4>
-
-                            <ul class="social-icons">
-                                <li><a href="car-details.html">+ View Model</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="assets/images/cars_4.jpg" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>
-                                <sup>$</sup>11779
-                            </span>
-
-                            <h4>Lorem ipsum dolor sit amet, consectetur</h4>
-
-                            <ul class="social-icons">
-                                <li><a href="car-details.html">+ View Model</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="assets/images/cars_5.jpg" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>
-                                <sup>$</sup>11779
-                            </span>
-
-                            <h4>Lorem ipsum dolor sit amet, consectetur</h4>
-
-                            <ul class="social-icons">
-                                <li><a href="car-details.html">+ View Model</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="assets/images/cars_6.jpg" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>
-                                <sup>$</sup>11779
-                            </span>
-
-                            <h4>Lorem ipsum dolor sit amet, consectetur</h4>
-
-                            <ul class="social-icons">
-                                <li><a href="car-details.html">+ View Model</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            	<%
+            	HashMap<String, Integer> map = new HashMap<String, Integer>();
+            	for(Productline pl : ProductlineList) map.put(pl.getProductline().split(" ")[0], 1);
+            	for(Product p : Productlist){
+            		String type = p.getProductline().split(" ")[0];
+            		int number = map.get(type);
+            		out.println(html_generator.productItem_html(p.getProductname(), type+"_"+ number++ +".jpg", p.getMsrp() + ""));
+            		if(number == 6) number = 1;
+            		map.put(type, number);
+            	}
+            	%>
             </div>
 
             <br>
@@ -274,22 +178,22 @@ List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult"
     </footer>
 
     <!-- jQuery -->
-    <script src="assets/js/jquery-2.1.0.min.js"></script>
+    <script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
 
     <!-- Bootstrap -->
-    <script src="assets/js/popper.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="frontend/assets/js/popper.js"></script>
+    <script src="frontend/assets/js/bootstrap.min.js"></script>
 
     <!-- Plugins -->
-    <script src="assets/js/scrollreveal.min.js"></script>
-    <script src="assets/js/waypoints.min.js"></script>
-    <script src="assets/js/jquery.counterup.min.js"></script>
-    <script src="assets/js/imgfix.min.js"></script>
-    <script src="assets/js/mixitup.js"></script>
-    <script src="assets/js/accordions.js"></script>
+    <script src="frontend/assets/js/scrollreveal.min.js"></script>
+    <script src="frontend/assets/js/waypoints.min.js"></script>
+    <script src="frontend/assets/js/jquery.counterup.min.js"></script>
+    <script src="frontend/assets/js/imgfix.min.js"></script>
+    <script src="frontend/assets/js/mixitup.js"></script>
+    <script src="frontend/assets/js/accordions.js"></script>
 
     <!-- Global Init -->
-    <script src="assets/js/custom.js"></script>
+    <script src="frontend/assets/js/custom.js"></script>
 
 </body>
 

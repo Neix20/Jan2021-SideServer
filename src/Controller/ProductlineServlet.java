@@ -40,7 +40,7 @@ public class ProductlineServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		List<Productline> list = productlineBean.getAllProductline();
 		String keyword = request.getParameter("keyword");
-		List<Productline> SearchResult = (keyword != null) ? productlineBean.getSearchResult(keyword) : new ArrayList<Productline>();		
+		List<Productline> SearchResult = (keyword != null) ? productlineBean.getSearchResult(keyword) : new ArrayList<Productline>();
 		request.setAttribute("List", list);
 		request.setAttribute("SearchResult", SearchResult);
 		RequestDispatcher req = request.getRequestDispatcher("productLine.jsp");

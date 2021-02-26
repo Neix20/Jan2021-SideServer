@@ -15,7 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import Utilities.html_generator;
 import domain.Product;
+import domain.Productline;
 import sessionBean.ProductSessionBeanLocal;
+import sessionBean.ProductlineSessionBeanLocal;
 
 /**
  * Servlet implementation class ProductServlet
@@ -26,6 +28,9 @@ public class ProductServlet extends HttpServlet {
     
 	@EJB
 	private ProductSessionBeanLocal productBean;
+	
+	@EJB
+	private ProductlineSessionBeanLocal productlineBean;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -43,9 +48,11 @@ public class ProductServlet extends HttpServlet {
 		String keyword = request.getParameter("keyword");
 		List<Product> list = productBean.getAllProduct();
 		List<Product> SearchResult = (keyword != null) ? productBean.getSearchResult(keyword) : new ArrayList<Product>();	
+		List<Productline> productlineList = productlineBean.getAllProductline();
 		request.setAttribute("List", list);
 		request.setAttribute("SearchResult", SearchResult);
-		RequestDispatcher req = request.getRequestDispatcher("productDebug.jsp");
+		request.setAttribute("ProductlineList", productlineList);
+		RequestDispatcher req = request.getRequestDispatcher("frontend/productDisplay.jsp");
 		req.forward(request, response);
 	}
 
