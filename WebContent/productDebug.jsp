@@ -119,8 +119,8 @@ List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult"
                     <td><input type="text" name="productline" /></td>
                 </tr>
                 <tr>
-                    <td><label for="quantity">Quantity: </label></td>
-                    <td><input type="text" name="quantity" /></td>
+                    <td><label for="quantityInStock">Quantity: </label></td>
+                    <td><input type="text" name="quantityInStock" /></td>
                 </tr>
                 <tr>
                     <td><label for="buyprice">Buy Price: </label></td>
@@ -163,8 +163,8 @@ List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult"
                     <td><input type="text" name="productline" /></td>
                 </tr>
                 <tr>
-                    <td><label for="quantity">Quantity: </label></td>
-                    <td><input type="text" name="quantity" /></td>
+                    <td><label for="quantityInStock">Quantity: </label></td>
+                    <td><input type="text" name="quantityInStock" /></td>
                 </tr>
                 <tr>
                     <td><label for="buyprice">Buy Price: </label></td>

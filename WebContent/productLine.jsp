@@ -74,12 +74,12 @@ List<Productline> SearchResult = (List<Productline>) request.getAttribute("Searc
 		<table class="table" style="width: 400px;">
 			<tbody>
 				<tr>
-					<td><label for="name">Name: </label></td>
-					<td><input type="text" name="name" /></td>
+					<td><label for="productline">Name: </label></td>
+					<td><input type="text" name="productline" /></td>
 				</tr>
 				<tr>
-					<td><label for="description">Description: </label></td>
-					<td><input type="text" name="description" /></td>
+					<td><label for="textdescription">Description: </label></td>
+					<td><input type="text" name="textdescription" /></td>
 				</tr>
 			</tbody>
 		</table>
@@ -90,14 +90,14 @@ List<Productline> SearchResult = (List<Productline>) request.getAttribute("Searc
 		<table class="table" style="width: 400px;">
 			<tbody>
 				<tr>
-					<td><label for="name">Name: </label></td>
-					<td><select name="name">
+					<td><label for="productline">Name: </label></td>
+					<td><select name="productline">
 							<% for(Productline pl : list) out.println("<option value=\"" + pl.getProductline() + "\">"+pl.getProductline()+"</option>"); %>
 					</select></td>
 				</tr>
 				<tr>
-					<td><label for="description">Description: </label></td>
-					<td><input type="text" name="description" /></td>
+					<td><label for="textdescription">Description: </label></td>
+					<td><input type="text" name="textdescription" /></td>
 				</tr>
 			</tbody>
 		</table>
@@ -108,8 +108,8 @@ List<Productline> SearchResult = (List<Productline>) request.getAttribute("Searc
 		<table class="table" style="width: 400px;">
 			<tbody>
 				<tr>
-					<td><label for="name">Name: </label></td>
-					<td><select name="name">
+					<td><label for="productline">Name: </label></td>
+					<td><select name="productline">
 							<% for(Productline pl : list) out.println("<option value=\"" + pl.getProductline() + "\">"+pl.getProductline()+"</option>"); %>
 					</select></td>
 				</tr>

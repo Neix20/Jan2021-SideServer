@@ -2,7 +2,6 @@ package Controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,51 +56,29 @@ public class ProductServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 		String type = request.getParameter("type");
+		String[] parameter = Product.getParameter();
+		String[] arr = new String[parameter.length];
 		
-		//Convert this shit to array
-		String productcode = request.getParameter("productcode");
-		String productname = request.getParameter("productname");
-		String productdescription = request.getParameter("productdescription");   
-		String productscale = request.getParameter("productscale");
-		String productvendor = request.getParameter("productvendor");
-		String productline = request.getParameter("productline");
-		String quantity = request.getParameter("quantity");
-		String buyprice = request.getParameter("buyprice");
-		String msrp = request.getParameter("msrp");
-		String description = request.getParameter("description");
+		for(int i = 0; i < arr.length; i++) arr[i] = request.getParameter(parameter[i]);
+		
 		Product p;
 		PrintWriter out = response.getWriter();
+		
 		switch(type) {
 		case "ADD":
 			p = new Product();
-			p.setBuyprice(new BigDecimal(buyprice));
-			p.setMsrp(new BigDecimal(msrp));
-			p.setProductcode(productcode);
-			p.setProductdescription(productdescription);
-			p.setProductname(productname);
-			p.setProductscale(productscale);
-			p.setProductvendor(productvendor);
-			p.setQuantityinstock(Integer.valueOf(quantity));
-			p.setProductline(productline);
+			p.setEverything(arr);
 			productBean.addProduct(p);
 			out.println(html_generator.operation_complete("added", "ProductServlet"));
 			break;
 		case "UPDATE":
-			p = productBean.getProduct(productcode);
-			p.setBuyprice(new BigDecimal(buyprice));
-			p.setMsrp(new BigDecimal(msrp));
-			p.setProductcode(productcode);
-			p.setProductdescription(productdescription);
-			p.setProductname(productname);
-			p.setProductscale(productscale);
-			p.setProductvendor(productvendor);
-			p.setQuantityinstock(Integer.valueOf(quantity));
-			p.setProductline(productline);
+			p = productBean.getProduct(arr[3]);
+			p.setEverything(arr);
 			productBean.updateProduct(p);
 			out.println(html_generator.operation_complete("updated", "ProductServlet"));
 			break;
 		case "DELETE":
-			p = productBean.getProduct(productcode);
+			p = productBean.getProduct(arr[3]);
 			productBean.deleteProduct(p);
 			out.println(html_generator.operation_complete("deleted", "ProductServlet"));
 			break;

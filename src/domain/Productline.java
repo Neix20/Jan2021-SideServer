@@ -124,5 +124,17 @@ public class Productline implements Serializable {
 		return "Productline [productline=" + productline + ", htmldescription=" + htmldescription + ", image=" + image
 				+ ", textdescription=" + textdescription + "]";
 	}
+	
+	public static String[] getParameter() {
+		String[] s = {"productline", "htmldescription", "image", "textdescription"};
+		return s;
+	}
+	
+	public void setEverything(String[] arr) {
+		this.setProductline(arr[0]);
+		this.setHtmldescription(arr[1]);
+		this.setImage(arr[2]);
+		this.setTextdescription(arr[3]);
+	}
 
 }

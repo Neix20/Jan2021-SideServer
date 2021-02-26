@@ -187,5 +187,22 @@ public class Product implements Serializable {
 	public void setProductlineBean(Productline productlineBean) {
 		this.productlineBean = productlineBean;
 	}
+	
+	public static String[] getParameter() {
+		String[] s = {"quantityInStock", "buyprice", "msrp", "productcode", "productdescription", "productname", "productscale", "productvendor", "productline"};
+		return s;
+	}
+	
+	public void setEverything(String[] arr) {
+		this.setQuantityinstock(Integer.valueOf(arr[0]));
+		this.setBuyprice(new BigDecimal(arr[1]));
+		this.setMsrp(new BigDecimal(arr[2]));
+		this.setProductcode(arr[3]);
+		this.setProductdescription(arr[4]);
+		this.setProductname(arr[5]);
+		this.setProductscale(arr[6]);
+		this.setProductvendor(arr[7]);
+		this.setProductline(arr[8]);
+	}
 
 }

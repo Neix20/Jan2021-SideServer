@@ -53,27 +53,29 @@ public class ProductlineServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String type = request.getParameter("type");
-		String name = request.getParameter("name");
-		String description = request.getParameter("description");
+		String[] parameter = Productline.getParameter();
+		String[] arr = new String[parameter.length];
+		
+		for(int i = 0; i < arr.length; i++) arr[i] = request.getParameter(parameter[i]);
+		
 		Productline pl;
 		PrintWriter out = response.getWriter();
+		
 		switch(type) {
 		case "ADD":
 			pl = new Productline();
-			pl.setProductline(name);
-			pl.setTextdescription(description);
+			pl.setEverything(arr);
 			productlineBean.addProductline(pl);
 			out.println(html_generator.operation_complete("added", "ProductlineServlet"));
 			break;
 		case "UPDATE":
-			pl = productlineBean.getProductline(name);
-			pl.setProductline(name);
-			pl.setTextdescription(description);
+			pl = productlineBean.getProductline(arr[0]);
+			pl.setEverything(arr);
 			productlineBean.updateProductline(pl);
 			out.println(html_generator.operation_complete("updated", "ProductlineServlet"));
 			break;
 		case "DELETE":
-			pl = productlineBean.getProductline(name);
+			pl = productlineBean.getProductline(arr[0]);
 			productlineBean.deleteProductline(pl);
 			out.println(html_generator.operation_complete("deleted", "ProductlineServlet"));
 			break;

@@ -1,3 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.List"%>
+<%@ page import="domain.Product"%>
+<%@ page import="domain.Productline"%>
+<%@ page import="Utilities.html_generator"%>
+<%
+List<Product> list = (List<Product>) request.getAttribute("List");
+List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult");
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,11 +19,8 @@
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
     <title>PHPJabbers.com | Free Car Dealer Website Template</title>
-
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
-
     <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
-
     <link rel="stylesheet" href="assets/css/style.css">
 
     <script src="../js/jquery-3.5.1.min.js"></script>
@@ -99,10 +106,7 @@
                     <div class="col-2 text-right">Category: </div>
                     <div class="col-2">
                         <select id="category" name="category">
-                            <option value="volvo">Volvo XC90</option>
-                            <option value="saab">Saab 95</option>
-                            <option value="mercedes">Mercedes SLK</option>
-                            <option value="audi">Audi TT</option>
+                            
                         </select>
                     </div>
                     <div class="col-4"></div>
@@ -261,7 +265,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <p>
-                        Copyright Â© 2020 Company Name
+                        Copyright © 2020 Company Name
                         - Template by: <a href="https://www.phpjabbers.com/">PHPJabbers.com</a>
                     </p>
                 </div>
