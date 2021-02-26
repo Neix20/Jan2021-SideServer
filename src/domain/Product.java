@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,25 +22,49 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="products", schema="classicmodels")
-@NamedQuery(name="Product.findAll", query="SELECT p FROM Product p")
+@NamedNativeQueries({
+	@NamedNativeQuery(
+		name="Product.findAll", 
+		query="SELECT * FROM classicmodels.products",
+		resultClass = Product.class
+	),
+	@NamedNativeQuery(
+		name="Product.findByProductcode", 
+		query="SELECT * FROM classicmodels.products where productcode = ?",
+		resultClass = Product.class
+	),
+	@NamedNativeQuery(
+		name="Product.findByKeyword", 
+		query="SELECT * FROM classicmodels.products where concat(productcode,productdescription,productname,productscale,productvendor,quantityinstock,buyprice,msrp) like ?",
+		resultClass = Product.class
+	)
+})
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name="productcode")
 	private String productcode;
 
+	@Column(name="buyprice")
 	private BigDecimal buyprice;
 
+	@Column(name="msrp")
 	private BigDecimal msrp;
 
+	@Column(name="productdescription")
 	private String productdescription;
 
+	@Column(name="productname")
 	private String productname;
 
+	@Column(name="productscale")
 	private String productscale;
 
+	@Column(name="productvendor")
 	private String productvendor;
 
+	@Column(name="quantityinstock")
 	private Integer quantityinstock;
 
 	//bi-directional many-to-one association to Orderdetail
@@ -45,11 +72,18 @@ public class Product implements Serializable {
 	private List<Orderdetail> orderdetails;
 
 	//bi-directional many-to-one association to Productline
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="productline",insertable=false, updatable=false)
 	private Productline productlineBean;
+	
+	@Column(nullable = true)
+	private String productline;
 
 	public Product() {
+	}
+	
+	public void setProductline(String productline) {
+		this.productline = productline;
 	}
 
 	public String getProductcode() {
@@ -136,6 +170,14 @@ public class Product implements Serializable {
 		orderdetail.setProduct(null);
 
 		return orderdetail;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [productcode=" + productcode + ", buyprice=" + buyprice + ", msrp=" + msrp
+				+ ", productdescription=" + productdescription + ", productname=" + productname + ", productscale="
+				+ productscale + ", productvendor=" + productvendor + ", quantityinstock=" + quantityinstock
+				+ ", productlineBean=" + productlineBean + "]";
 	}
 
 	public Productline getProductlineBean() {

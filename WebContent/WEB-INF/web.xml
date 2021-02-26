@@ -5,11 +5,11 @@
 	version="4.0">
 	<display-name>Jan2021-SideServer</display-name>
 	<servlet>
-		<servlet-name>productServlet</servlet-name>
-		<servlet-class>Controller.productServlet</servlet-class>
+		<servlet-name>ProductServlet</servlet-name>
+		<servlet-class>Controller.ProductServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>productServlet</servlet-name>
+		<servlet-name>ProductServlet</servlet-name>
 		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
