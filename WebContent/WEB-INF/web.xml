@@ -6,14 +6,13 @@
 	<display-name>Jan2021-SideServer</display-name>
 	<servlet>
 		<servlet-name>ProductServlet</servlet-name>
-		<servlet-class>Controller.ProductServlet</servlet-class>
+		<servlet-class>controller.ProductServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ProductServlet</servlet-name>
 		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
-		<welcome-file>test</welcome-file>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
