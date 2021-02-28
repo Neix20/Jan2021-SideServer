@@ -5,7 +5,7 @@
 <%@ page import="java.util.HashMap"%>
 <%@ page import="domain.Product"%>
 <%@ page import="domain.Productline"%>
-<%@ page import="Utilities.html_generator"%>
+<%@ page import="utility.html_generator"%>
 <%
 List<Product> Productlist = (List<Product>) request.getAttribute("List");
 List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult");

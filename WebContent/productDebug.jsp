@@ -2,7 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List"%>
 <%@ page import="domain.Product"%>
-<%@ page import="Utilities.html_generator" %>
+<%@ page import="utility.html_generator" %>
 <%
 List<Product> list = (List<Product>) request.getAttribute("List");
 List<Product> SearchResult = (List<Product>) request.getAttribute("SearchResult");

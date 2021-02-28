@@ -1,4 +1,4 @@
-package Utilities;
+package utility;
 
 public class html_generator {
 	public static String table_column(String text) {

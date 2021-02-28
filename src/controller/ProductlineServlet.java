@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,29 +13,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Utilities.html_generator;
-import domain.Product;
 import domain.Productline;
-import sessionBean.ProductSessionBeanLocal;
-import sessionBean.ProductlineSessionBeanLocal;
-
+import session_bean.ProductlineSessionBeanLocal;
+import utility.html_generator;
 /**
- * Servlet implementation class ProductServlet
+ * Servlet implementation class ProductlineServlet
  */
-@WebServlet("/ProductServlet")
-public class ProductServlet extends HttpServlet {
+@WebServlet("/ProductlineServlet")
+public class ProductlineServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
 	@EJB
-	private ProductSessionBeanLocal productBean;
-	
-	@EJB
 	private ProductlineSessionBeanLocal productlineBean;
-	
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ProductServlet() {
+    public ProductlineServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -45,14 +38,12 @@ public class ProductServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		List<Productline> list = productlineBean.getAllProductline();
 		String keyword = request.getParameter("keyword");
-		List<Product> list = productBean.getAllProduct();
-		List<Product> SearchResult = (keyword != null) ? productBean.getSearchResult(keyword) : new ArrayList<Product>();	
-		List<Productline> productlineList = productlineBean.getAllProductline();
+		List<Productline> SearchResult = (keyword != null) ? productlineBean.getSearchResult(keyword) : new ArrayList<Productline>();
 		request.setAttribute("List", list);
 		request.setAttribute("SearchResult", SearchResult);
-		request.setAttribute("ProductlineList", productlineList);
-		RequestDispatcher req = request.getRequestDispatcher("frontend/productDisplay.jsp");
+		RequestDispatcher req = request.getRequestDispatcher("productLine.jsp");
 		req.forward(request, response);
 	}
 
@@ -61,35 +52,36 @@ public class ProductServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
 		String type = request.getParameter("type");
-		String[] parameter = Product.getParameter();
+		String[] parameter = Productline.getParameter();
 		String[] arr = new String[parameter.length];
 		
 		for(int i = 0; i < arr.length; i++) arr[i] = request.getParameter(parameter[i]);
 		
-		Product p;
+		Productline pl;
 		PrintWriter out = response.getWriter();
 		
 		switch(type) {
 		case "ADD":
-			p = new Product();
-			p.setEverything(arr);
-			productBean.addProduct(p);
-			out.println(html_generator.operation_complete("added", "ProductServlet"));
+			pl = new Productline();
+			pl.setEverything(arr);
+			productlineBean.addProductline(pl);
+			out.println(html_generator.operation_complete("added", "ProductlineServlet"));
 			break;
 		case "UPDATE":
-			p = productBean.getProduct(arr[3]);
-			p.setEverything(arr);
-			productBean.updateProduct(p);
-			out.println(html_generator.operation_complete("updated", "ProductServlet"));
+			pl = productlineBean.getProductline(arr[0]);
+			pl.setEverything(arr);
+			productlineBean.updateProductline(pl);
+			out.println(html_generator.operation_complete("updated", "ProductlineServlet"));
 			break;
 		case "DELETE":
-			p = productBean.getProduct(arr[3]);
-			productBean.deleteProduct(p);
-			out.println(html_generator.operation_complete("deleted", "ProductServlet"));
+			pl = productlineBean.getProductline(arr[0]);
+			productlineBean.deleteProductline(pl);
+			out.println(html_generator.operation_complete("deleted", "ProductlineServlet"));
 			break;
 		}
+		
+		
 	}
 
 }

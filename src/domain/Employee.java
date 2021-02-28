@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -17,8 +18,11 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name="employees", schema="classicmodels")
-@NamedQuery(name="Employee.findAll", query="SELECT e FROM Employee e")
+@Table(name = "employees")
+@NamedQueries({
+	@NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e"),
+	@NamedQuery(name = "Employee.findbyId", query = "SELECT e FROM Employee e WHERE e.employeenumber = :employee_id"),
+})
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
