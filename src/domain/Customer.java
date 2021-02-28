@@ -26,22 +26,35 @@ import javax.persistence.Table;
 @NamedNativeQueries({
 	@NamedNativeQuery(
 			name = "Customer.findAll", 
-			query = "SELECT * FROM classicmodels.customer",
+			query = "SELECT * FROM classicmodels.customers",
 			resultClass = Customer.class
 	),
 	@NamedNativeQuery(
-			name="Product.findAll2", 
-			query="SELECT * FROM classicmodels.customer order by customernumber OFFSET ? LIMIT ?",
+			name="Customer.findAll2", 
+			query="SELECT * FROM classicmodels.customers order by customernumber OFFSET ? LIMIT ?",
+			resultClass = Customer.class	
+	),
+	@NamedNativeQuery(
+			name="Customer.findTotalRows", 
+			query="SELECT COUNT(*) AS totalrow FROM classicmodels.customers",
+			resultClass = Customer.class
+	),
+	@NamedNativeQuery(
+			name="Customer.findTotalRows2", 
+			query="SELECT COUNT(*) AS totalrow from classicmodels.customers WHERE " +
+				  "concat(customernumber ,customername, contactlastname, contactfirstname, " + 
+				  "phone, addressline1, addressline2, city, state, postalCode, country, " + 
+				  "salesrepemployeenumber, creditlimit) LIKE ?",
 			resultClass = Customer.class
 	),
 	@NamedNativeQuery(
 			name = "Customer.findbyCustomerNumber", 
-			query = "SELECT * FROM classicmodels.customer c WHERE c.customernumber = ?",
+			query = "SELECT * FROM classicmodels.customers c WHERE c.customernumber = ?",
 			resultClass = Customer.class
 	),
 	@NamedNativeQuery(
 			name = "Customer.findByKeyword", 
-			query = "SELECT * from classicmodels.customer WHERE concat(customernumber ,customername, " +
+			query = "SELECT * from classicmodels.customers WHERE concat(customernumber ,customername, " +
 				    "contactlastname, contactfirstname, phone, addressline1, addressline2, city, state, " +
 				    "postalCode, country, salesrepemployeenumber, creditlimit) LIKE ? " +
 				    "order by customernumber OFFSET ? LIMIT ?",
@@ -96,9 +109,6 @@ public class Customer implements Serializable {
 	@JoinColumn(name="salesrepemployeenumber",insertable=false, updatable=false)
 	private Employee employee;
 	
-	@Column(nullable = true)
-	private String salesrepemployeenumber;
-
 	//bi-directional many-to-one association to Payment
 	@OneToMany(mappedBy="customer")
 	private List<Payment> payments;
@@ -106,14 +116,6 @@ public class Customer implements Serializable {
 	public Customer() {
 	}
 	
-	public String getSalesRepEmployeeNumber() {
-		return this.salesrepemployeenumber;
-	}
-	
-	public void setSalesRepEmployeeNumber(String productline) {
-		this.salesrepemployeenumber = productline;
-	}
-
 	public Integer getCustomernumber() {
 		return this.customernumber;
 	}

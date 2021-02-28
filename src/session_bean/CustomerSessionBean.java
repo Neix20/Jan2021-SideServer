@@ -34,7 +34,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     @SuppressWarnings("unchecked")
     @Override
     public List<Customer> getAllCustomer() throws EJBException {
-    	return em.createNamedQuery("EmployeeEntity.findAll").getResultList();
+    	return em.createNamedQuery("Customer.findAll").getResultList();
     }
 
     @Override
@@ -78,25 +78,41 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		Query q = null;
 
 		if (keyword.isEmpty()) {
-	
-		    q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM Customer");
-	
+			//TODO Check why native query is not working
+//		    q = em.createNativeQuery("Customer.findTotalRows");
+			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM classicmodels.customers");
 		} else {
-	
-		    q = em.createNativeQuery("SELECT COUNT(*) AS totalrow from Customer "
-			    + "WHERE concat(id,first_name,last_name,gender) LIKE ?");
+		    q = em.createNativeQuery("Customer.findTotalRows2");
 		    q.setParameter(1, "%" + keyword + "%");
-
-	}
-
-	BigInteger results = (BigInteger) q.getSingleResult();
-	int i = results.intValue();
-	return i;
+		}
+	
+		BigInteger results = (BigInteger) q.getSingleResult();
+		int i = results.intValue();
+		
+		return i;
     }
 
     @Override
     public void updateCustomer(String[] s) throws EJBException {
-		
+		Customer customer = findCustomer(s[0]);
+		customer = setValues(s, customer);
+		em.merge(customer);
+    }
+	
+	@Override
+	public void deleteCustomer(String customernumber) throws EJBException {
+		Customer customer = findCustomer(customernumber);
+		em.remove(customer);
+	}
+	
+    @Override
+    public void addCustomer(String[] s) throws EJBException {
+		Customer customer = new Customer();
+		customer = setValues(s, customer);	
+		em.merge(customer);
+    }
+	    
+	private Customer setValues(String s[], Customer customer) {
 		Integer customernumber = Integer.parseInt(s[0]);
 		String addressline1 = s[1];
 		String addressline2 = s[2];
@@ -106,16 +122,18 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		String country = s[6];
 		BigDecimal creditlimit = new BigDecimal(s[7]);
 		String customername = s[8];
-		String phone = s[9];
-		String postalcode = s[10];
-		String state = s[11];
-		String salesrepemployeenumber = s[12];
-		String payments_no = s[13];
+		String email = s[9];
+		String phone = s[10];
+		String postalcode = s[11];
+		String state = s[12];
+		
+		//TODO Implement the find function from other members.
+		String salesrepemployeenumber = s[13];
+		String payments_no = s[14];
+		
 		Employee salesrepemployee = null;
 		List<Payment> payments = null;
-	
-		Customer customer = findCustomer(s[0]);
-	
+		
 		customer.setCustomernumber(customernumber);
 		customer.setAddressline1(addressline1);
 		customer.setAddressline2(addressline2);
@@ -125,56 +143,14 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		customer.setCountry(country);
 		customer.setCreditlimit(creditlimit);
 		customer.setCustomername(customername);
+		customer.setEmail(email);
 		customer.setPhone(phone);
 		customer.setPostalcode(postalcode);
 		customer.setState(state);
 		customer.setEmployee(salesrepemployee);
 		customer.setPayments(payments);
-	
-		em.merge(customer);
-	    }
-	
-	    @Override
-	    public void deleteCustomer(String customernumber) throws EJBException {
-		Customer customer = findCustomer(customernumber);
-		em.remove(customer);
-	    }
-	
-	    @Override
-	    public void addCustomer(String[] s) throws EJBException {
-		Integer customernumber = null;
-		String addressline1 = null;
-		String addressline2 = null;
-		String city = null;
-		String contactfirstname = null;
-		String contactlastname = null;
-		String country = null;
-		BigDecimal creditlimit = null;
-		String customername = null;
-		String phone = null;
-		String postalcode = null;
-		String state = null;
-		Employee employee = null;
-		List<Payment> payments = null;
-	
-		Customer customer = new Customer();
-	
-		customer.setCustomernumber(customernumber);
-		customer.setAddressline1(addressline1);
-		customer.setAddressline2(addressline2);
-		customer.setCity(city);
-		customer.setContactfirstname(contactfirstname);
-		customer.setContactlastname(contactlastname);
-		customer.setCountry(country);
-		customer.setCreditlimit(creditlimit);
-		customer.setCustomername(customername);
-		customer.setPhone(phone);
-		customer.setPostalcode(postalcode);
-		customer.setState(state);
-		customer.setEmployee(employee);
-		customer.setPayments(payments);
-	
-		em.merge(customer);
-    }
+		
+		return customer;
+	}
     
 }

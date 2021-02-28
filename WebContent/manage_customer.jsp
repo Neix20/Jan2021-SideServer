@@ -125,7 +125,7 @@
 			    <th>Postal Code</th>
 			    <th>State</th>
 			    <th>Sales person</th>
-			    <th>Payments</th>
+			    <!-- <th>Payments</th> -->
 			</tr>
 			<%
 			List<Customer> customers = (List<Customer>) request.getAttribute("customers");
@@ -146,9 +146,10 @@
 			    out.println("<td>" + customer.getPostalcode() + "</td>");
 			    out.println("<td>" + customer.getState() + "</td>");
 			    out.println("<td>" + customer.getEmployee() + "</td>");
-			    out.println("<td>" + customer.getPayments() + "</td>");
-				out.println("<td><a href=\"EmployeeController?id=" + customer.getCustomernumber() + "\">Update</a></td>");
-				out.println("<td><a href=\"EmployeeController?id=" + customer.getCustomernumber() + "\">Delete</a></td>");
+			    //TODO Display payment record
+			    // out.println("<td>" + customer.getPayments() + "</td>");
+				out.println("<td><a href=\"CustomerServlet?id=" + customer.getCustomernumber() + "\">Update</a></td>");
+				out.println("<td><a href=\"CustomerServlet?id=" + customer.getCustomernumber() + "\">Delete</a></td>");
 				out.println("</tr>");
 			}
 			} else {
@@ -169,14 +170,14 @@
 			%>
 			<%
 			out.println("<li class=\"page-item\">");
-			out.println("<a class=\"page-link\" href=\"" + "PaginationServlet?recordsPerPage=" + recordsPerPage
+			out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
 					+ "&currentPage=1" + "&keyword=" + keyword +
 					"\">First</a>");
 			out.println("</li>");
 			%>
 			<li class="page-item">
 				<%
-				out.println("<a class=\"page-link\" href=\"" + "PaginationServlet?recordsPerPage=" + recordsPerPage
+				out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
 						+ "&currentPage=" + (currentPage - 1) +
 						"&keyword=" + keyword + "\">Previous</a>");
 				%>
@@ -187,12 +188,12 @@
 			<%
 			if (currentPage < nOfPages) {
 				out.println("<li class=\"page-item\">");
-				out.println("<a class=\"page-link\" href=\"" + "PaginationServlet?recordsPerPage=" + recordsPerPage
+				out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
 				+ "&currentPage=" + (currentPage + 1) +
 				"&keyword=" + keyword + "\">Next</a>");
 				out.println("</li>");
 				out.println("<li class=\"page-item\">");
-				out.println("<a class=\"page-link\" href=\"" + "PaginationServlet?recordsPerPage=" + recordsPerPage
+				out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
 				+ "&currentPage=" + nOfPages + "&keyword=" +
 				keyword + "\">Last</a>");
 				out.println("</li>");

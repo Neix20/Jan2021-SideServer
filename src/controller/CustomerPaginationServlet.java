@@ -36,14 +36,18 @@ public class CustomerPaginationServlet extends HttpServlet {
 		int nOfPages = 0;
 		int currentPage = 1;
 		int recordsPerPage = 30;
-		String keyword = request.getParameter("keyword");
-		
+		String keyword = ""; 
+				
 		if (request.getParameter("currentPage") != null) {
 			currentPage = Integer.valueOf(request.getParameter("currentPage"));
 		}
 		
 		if (request.getParameter("recordsPerPage") != null) {
 			recordsPerPage = Integer.valueOf(request.getParameter("recordsPerPage"));
+		}
+		
+		if (request.getParameter("keyword") != null) {
+			keyword = request.getParameter("keyword");
 		}
 	
 		try {
@@ -64,6 +68,7 @@ public class CustomerPaginationServlet extends HttpServlet {
 		    request.setAttribute("customers", lists);
 	
 		} catch (EJBException ex) {
+			throw ex;
 		}
 		
 		request.setAttribute("nOfPages", nOfPages);

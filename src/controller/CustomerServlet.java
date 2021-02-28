@@ -48,8 +48,8 @@ public class CustomerServlet extends HttpServlet {
 		String id = request.getParameter("id");
 	
 		try {
-		    Customer emp = customerBean.findCustomer(id);
-		    request.setAttribute("EMP", emp);
+		    Customer customer = customerBean.findCustomer(id);
+		    request.setAttribute("customer", customer);
 	
 		    RequestDispatcher req = request.getRequestDispatcher("EmployeeUpdate.jsp");
 		    req.forward(request, response);
@@ -101,22 +101,17 @@ public class CustomerServlet extends HttpServlet {
 	
 		try {
 		    if (ValidateManageLogic.validateManager(request).equals("UPDATE")) {
-	
-			customerBean.updateCustomer(s);
-	
+		    	customerBean.updateCustomer(s);
 		    } else if (ValidateManageLogic.validateManager(request).equals("DELETE")) {
-	
-			customerBean.deleteCustomer(customernumber);
-	
+		    	customerBean.deleteCustomer(customernumber);
 		    } else {
-	
-			customerBean.addCustomer(s);
-	
+		    	customerBean.addCustomer(s);
 		    }
 	
 		    ValidateManageLogic.navigateJS(out);
 	
 		} catch (EJBException ex) {
+			throw ex;
 		}
     }
 

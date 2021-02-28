@@ -3,6 +3,7 @@ package domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -24,10 +25,13 @@ public class Payment implements Serializable {
 	@EmbeddedId
 	private PaymentPK id;
 
+	@Column(name="amount")
 	private BigDecimal amount;
 
+	@Column(name="paymentdate")
 	private String paymentdate;
 
+	@Column(name="paymentmethod")
 	private String paymentmethod;
 
 	//bi-directional many-to-one association to Customer

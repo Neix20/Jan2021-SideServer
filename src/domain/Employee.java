@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "employees")
+@Table(name = "employees", schema="classicmodels")
 @NamedQueries({
 	@NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e"),
 	@NamedQuery(name = "Employee.findbyId", query = "SELECT e FROM Employee e WHERE e.employeenumber = :employee_id"),
