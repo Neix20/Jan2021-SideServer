@@ -19,7 +19,7 @@ public class ValidateManageLogic {
     public static void navigateJS(PrintWriter out) {
 	out.println("<SCRIPT type=\"text/javascript\">");
 	out.println("alert(\"Record has been updated and url will be redirected\")");
-	out.println("window.location.assign(\"PaginationServlet?currentPage=1&recordsPerPage=700&keyword=\")");
+	out.println("window.location.assign(\"CustomerPagination?currentPage=1&recordsPerPage=30&keyword=\")");
 	out.println("</SCRIPT>");
     }
 }

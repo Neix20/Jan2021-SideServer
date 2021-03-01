@@ -51,7 +51,7 @@ public class CustomerServlet extends HttpServlet {
 		    Customer customer = customerBean.findCustomer(id);
 		    request.setAttribute("customer", customer);
 	
-		    RequestDispatcher req = request.getRequestDispatcher("EmployeeUpdate.jsp");
+		    RequestDispatcher req = request.getRequestDispatcher("update_customer.jsp");
 		    req.forward(request, response);
 		} catch (EJBException ex) {
 		}
@@ -65,49 +65,51 @@ public class CustomerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 
-		String customernumber = request.getParameter("customernumber");
-		String addressline1 = request.getParameter("addressline1");
-		String addressline2 = request.getParameter("addressline2");
-		String city = request.getParameter("city");
-		String contactfirstname = request.getParameter("contactfirstname");
-		String contactlastname = request.getParameter("contactlastname");
-		String country = request.getParameter("country");
-		String creditlimit = request.getParameter("creditlimit");
-		String customername = request.getParameter("customername");
-		String phone = request.getParameter("phone");
-		String postalcode = request.getParameter("postalcode");
-		String state = request.getParameter("state");
-		String salesrepemployeenumber = request.getParameter("salesrepemployeenumber");
-		String payments_no = request.getParameter("payments");
+    	String customernumber = request.getParameter("customernumber");
+        String customername = request.getParameter("customername");
+        String contactfirstname = request.getParameter("contact_firstname");
+        String contactlastname = request.getParameter("contact_lastname");
+        String phone = request.getParameter("phone");
+        String email = request.getParameter("email");
+        String addressline1 = request.getParameter("addressline1");
+        String addressline2 = request.getParameter("addressline2");
+        String city = request.getParameter("city");
+        String state = request.getParameter("state");
+        String postalcode = request.getParameter("postalcode");
+        String country = request.getParameter("country");
+        String salesrepemployeenumber = request.getParameter("salesrepemployeenumber");
+        String creditlimit = request.getParameter("creditlimit");
 	
 		PrintWriter out = response.getWriter();
 	
 		String[] s = {
-			customernumber,
-			addressline1,
-			addressline2,
-			city,
-			contactfirstname,
-			contactlastname,
-			country,
-			creditlimit,
-			customername,
-			phone,
-			postalcode,
-			state,
-			salesrepemployeenumber,
-			payments_no,
+		    customername,
+		    contactfirstname,	
+		    contactlastname,
+		    phone,
+		    email,
+		    addressline1,
+		    addressline2,
+		    city,
+		    state,
+		    postalcode,
+		    country,
+		    salesrepemployeenumber,
+		    creditlimit,
 		};
 	
+		String action = request.getParameter("user_action");
+		
 		try {
-		    if (ValidateManageLogic.validateManager(request).equals("UPDATE")) {
-		    	customerBean.updateCustomer(s);
-		    } else if (ValidateManageLogic.validateManager(request).equals("DELETE")) {
+		    if (action.equals("UPDATE")) {
+		    	customerBean.updateCustomer(s, customernumber);
+		    } else if (action.equals("DELETE")) {
 		    	customerBean.deleteCustomer(customernumber);
 		    } else {
 		    	customerBean.addCustomer(s);
 		    }
 	
+		    //TODO: Redirect to a page, Have a pop up?
 		    ValidateManageLogic.navigateJS(out);
 	
 		} catch (EJBException ex) {

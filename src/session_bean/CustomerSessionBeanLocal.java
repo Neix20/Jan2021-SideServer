@@ -17,7 +17,7 @@ public interface CustomerSessionBeanLocal {
 
 	public int getNumberOfRows(String keyword) throws EJBException;
 
-	public void updateCustomer(String[] s) throws EJBException;
+	public void updateCustomer(String[] s, String customernumber) throws EJBException;
 
 	public void deleteCustomer(String customernumber) throws EJBException;
 

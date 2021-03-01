@@ -112,20 +112,20 @@
 	<div class="row col-md-6">
 		<table class="table table-striped table-bordered table-sm">
 			<tr>
-			    <th>Customer No</th>
-			    <th>Address Line 1</th>
-			    <th>Address Line 2</th>
-			    <th>City</th>
-			    <th>Contact First Name</th>
-			    <th>Contact Last Name</th>
-			    <th>Country</th>
-			    <th>Credit Limit</th>
-			    <th>Customer Name</th>
-			    <th>Phone</th>
-			    <th>Postal Code</th>
-			    <th>State</th>
-			    <th>Sales person</th>
-			    <!-- <th>Payments</th> -->
+				<th>Customer no</th>
+				<th>Name</th>
+				<th>Contact first name</th>
+				<th>Contact last name</th>
+				<th>Phone</th>
+				<th>Email</th>
+				<th>Address line 1</th>
+				<th>Address line 2</th>
+				<th>City</th>
+				<th>State</th>
+				<th>Postal code</th>
+				<th>Country</th>
+				<th>Sales representative no</th>
+				<th>Credit limit</th>
 			</tr>
 			<%
 			List<Customer> customers = (List<Customer>) request.getAttribute("customers");
@@ -134,18 +134,20 @@
 			for (Customer customer : customers) {
 				out.println("<tr>");
 			    out.println("<td>" + customer.getCustomernumber() + "</td>");
+			    out.println("<td>" + customer.getCustomername() + "</td>");
+			    out.println("<td>" + customer.getContactfirstname() + "</td>");
+			    out.println("<td>" + customer.getContactlastname() + "</td>");
+			    out.println("<td>" + customer.getPhone() + "</td>");
+			    out.println("<td>" + customer.getEmail() + "</td>");
 			    out.println("<td>" + customer.getAddressline1() + "</td>");
 			    out.println("<td>" + customer.getAddressline2() + "</td>");
 			    out.println("<td>" + customer.getCity() + "</td>");
-			    out.println("<td>" + customer.getContactfirstname() + "</td>");
-			    out.println("<td>" + customer.getContactlastname() + "</td>");
-			    out.println("<td>" + customer.getCountry() + "</td>");
-			    out.println("<td>" + customer.getCreditlimit() + "</td>");
-			    out.println("<td>" + customer.getCustomername() + "</td>");
-			    out.println("<td>" + customer.getPhone() + "</td>");
-			    out.println("<td>" + customer.getPostalcode() + "</td>");
 			    out.println("<td>" + customer.getState() + "</td>");
+			    out.println("<td>" + customer.getPostalcode() + "</td>");
+			    out.println("<td>" + customer.getCountry() + "</td>");
+			    //TODO  Link this employee to another page
 			    out.println("<td>" + customer.getEmployee() + "</td>");
+			    out.println("<td>" + customer.getCreditlimit() + "</td>");
 			    //TODO Display payment record
 			    // out.println("<td>" + customer.getPayments() + "</td>");
 				out.println("<td><a href=\"CustomerServlet?id=" + customer.getCustomernumber() + "\">Update</a></td>");
@@ -217,19 +219,38 @@
 	></script>
 	<button class="open-button" onclick="openForm()">Open Form</button>
 	<div class="form-popup" id="myForm">
-		<form action="EmployeeController" class="form-container" method="post">
-			<h1>Add Customer</h1>
-			<fieldset>
-				<legend>Add Add Customer Details:</legend>
-				<br> First Name: <input type="text" name="fname" /> <br>
-				Last Name: <input type="text" name="lname" /> <br> Gender: <input
-					type="text" name="gender"
-				/> <br> DOB: <input type="text" name="dob" /> <br> Hired
-				Date: <input type="text" name="hdate" />
-			</fieldset>
+		<form action="CustomerServlet" class="form-container" method="post">
+			<h1>Add Customer Details</h1>
+			<label for="customername">Contact first name:</label><br>
+	        <input type="text" id="customername" name="customername" required><br>
+	        <label for="contact_firstname">Contact first name:</label><br>
+	        <input type="text" id="contact_firstname" name="contact_firstname" required><br>
+	        <label for="contact_lastname">Contact last name:</label><br>
+	        <input type="text" id="contact_lastname" name="contact_lastname" required>
+	        <label for="phone">Phone:</label><br>
+	        <input type="text" id="phone" name="phone" required>
+	        <label for="email">Email:</label><br>
+	        <input type="email" id="email" name="email" required><br>
+	        <label for="addressline1">Address line 1:</label><br>
+	        <input type="text" id="addressline1" name="addressline1" required>
+	        <label for="addressline2">Address line 2:</label><br>
+	        <input type="text" id="addressline2" name="addressline2">
+	        <label for="city">City:</label><br>
+	        <input type="text" id="city" name="city" required>
+	        <label for="state">State:</label><br>
+	        <input type="text" id="state" name="state">
+	        <label for="postalcode">Postal code:</label><br>
+	        <input type="text" id="postalcode" name="postalcode">
+	        <label for="country">Country:</label><br>
+	        <input type="text" id="country" name="country" required>
+	        <label for="salesrepemployeenumber">Sales person representative:</label><br>
+	        <input type="text" id="salesrepemployeenumber" name="salesrepemployeenumber">
+	        <label for="creditlimit">Credit limit:</label><br>
+	        <input type="number" id="creditlimit" name="creditlimit" step="0.01" min="0">
 			<button type="submit" class="btn">Submit Test</button>
 			<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
 			<button type="reset" class="btn">Reset</button>
+			<input type="hidden" id="user_action" name="user_action" value="ADD">
 		</form>
 	</div>
 	<script>

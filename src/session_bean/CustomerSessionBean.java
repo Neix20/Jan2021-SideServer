@@ -40,7 +40,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     @Override
     public Customer findCustomer(String customernumber) throws EJBException {
 		Query q = em.createNamedQuery("Customer.findbyCustomerNumber");
-		q.setParameter(1, Long.valueOf(customernumber));
+		q.setParameter(1, Integer.valueOf(customernumber));
 		return (Customer) q.getSingleResult();
     }
 
@@ -93,8 +93,8 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public void updateCustomer(String[] s) throws EJBException {
-		Customer customer = findCustomer(s[0]);
+    public void updateCustomer(String[] s, String customernumber) throws EJBException {
+		Customer customer = findCustomer(customernumber);
 		customer = setValues(s, customer);
 		em.merge(customer);
     }
@@ -113,42 +113,38 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 	    
 	private Customer setValues(String s[], Customer customer) {
-		Integer customernumber = Integer.parseInt(s[0]);
-		String addressline1 = s[1];
-		String addressline2 = s[2];
-		String city = s[3];
-		String contactfirstname = s[4];
-		String contactlastname = s[5];
-		String country = s[6];
-		BigDecimal creditlimit = new BigDecimal(s[7]);
-		String customername = s[8];
-		String email = s[9];
-		String phone = s[10];
-		String postalcode = s[11];
-		String state = s[12];
+				
+		String customername = s[0];
+		String contactfirstname = s[1];
+		String contactlastname = s[2];
+		String phone = s[3];
+		String email = s[4];
+		String addressline1 = s[5];
+		String addressline2 = s[6];
+		String city = s[7];
+		String state = s[8];
+		String postalcode = s[9];
+		String country = s[10];
+		String salesrepemployeenumber = s[11];
+		BigDecimal creditlimit = new BigDecimal(s[12]);
 		
 		//TODO Implement the find function from other members.
-		String salesrepemployeenumber = s[13];
-		String payments_no = s[14];
-		
 		Employee salesrepemployee = null;
-		List<Payment> payments = null;
 		
-		customer.setCustomernumber(customernumber);
+		customer.setCustomername(customername);
+		customer.setContactfirstname(contactfirstname);
+		customer.setContactlastname(contactlastname);
+		customer.setPhone(phone);
+		customer.setEmail(email);
 		customer.setAddressline1(addressline1);
 		customer.setAddressline2(addressline2);
 		customer.setCity(city);
-		customer.setContactfirstname(contactfirstname);
-		customer.setContactlastname(contactlastname);
+		customer.setState(state);
+		customer.setPostalcode(postalcode);
 		customer.setCountry(country);
 		customer.setCreditlimit(creditlimit);
-		customer.setCustomername(customername);
-		customer.setEmail(email);
-		customer.setPhone(phone);
-		customer.setPostalcode(postalcode);
-		customer.setState(state);
-		customer.setEmployee(salesrepemployee);
-		customer.setPayments(payments);
+		// TODO: Add find by employee id
+		// customer.setEmployee(salesrepemployee);
 		
 		return customer;
 	}
