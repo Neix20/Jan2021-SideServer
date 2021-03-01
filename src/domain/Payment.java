@@ -2,13 +2,15 @@ package domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
 
 
@@ -18,7 +20,43 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="payments", schema="classicmodels")
-@NamedQuery(name="Payment.findAll", query="SELECT p FROM Payment p")
+@NamedNativeQueries({
+	@NamedNativeQuery(
+			name = "Payment.findAll", 
+			query = "SELECT * FROM classicmodels.payments",
+			resultClass = Payment.class
+	),
+	@NamedNativeQuery(
+			name="Payment.findAll2", 
+			query="SELECT * FROM classicmodels.payments order by customernumber, checknumber OFFSET ? LIMIT ?",
+			resultClass = Payment.class	
+	),
+	@NamedNativeQuery(
+			name="Payment.findTotalRows", 
+			query="SELECT COUNT(*) AS totalrow FROM classicmodels.payments",
+			resultClass = Payment.class
+	),
+	@NamedNativeQuery(
+			name="Payment.findTotalRows2", 
+			query="SELECT COUNT(*) AS totalrow from classicmodels.payments" +
+				  " WHERE concat(customernumber ,checknumber, paymentdate, " + 
+				  "amount, paymentmethod) LIKE ? ",
+			resultClass = Payment.class
+	),
+	@NamedNativeQuery(
+			name = "Payment.findbyPaymentId", 
+			query = "SELECT * FROM classicmodels.payments p "+
+			"WHERE p.customernumber = ? AND p.checknumber = ?",
+			resultClass = Payment.class
+	),
+	@NamedNativeQuery(
+			name = "Payment.findByKeyword", 
+			query = "SELECT * from classicmodels.payments WHERE concat(customernumber ,checknumber, " +
+				    "paymentdate, amount, paymentmethod) LIKE ? " +
+				    "order by customernumber, checknumber OFFSET ? LIMIT ?",
+			resultClass = Payment.class
+	),
+})
 public class Payment implements Serializable {
 	private static final long serialVersionUID = 1L;
 

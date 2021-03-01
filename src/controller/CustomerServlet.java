@@ -2,9 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.util.List;
-
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.servlet.RequestDispatcher;
@@ -15,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import domain.Customer;
-import domain.Employee;
-import domain.Payment;
 import session_bean.CustomerSessionBeanLocal;
 import utility.ValidateManageLogic;
 
@@ -110,7 +105,7 @@ public class CustomerServlet extends HttpServlet {
 		    }
 	
 		    //TODO: Redirect to a page, Have a pop up?
-		    ValidateManageLogic.navigateJS(out);
+		    ValidateManageLogic.navigateJS(out, "CustomerPagination");
 	
 		} catch (EJBException ex) {
 			throw ex;

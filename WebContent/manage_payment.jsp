@@ -1,12 +1,12 @@
 <%@page import="java.util.List"%>
-<%@page import="domain.Customer"%>
+<%@page import="domain.Payment"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Customer Management</title>
+<title>Payment Management</title>
 <style>
 	body {
 		font-family: Arial, Helvetica, sans-serif;
@@ -113,45 +113,32 @@
 		<table class="table table-striped table-bordered table-sm">
 			<tr>
 				<th>Customer no</th>
-				<th>Name</th>
-				<th>Contact first name</th>
-				<th>Contact last name</th>
-				<th>Phone</th>
-				<th>Email</th>
-				<th>Address line 1</th>
-				<th>Address line 2</th>
-				<th>City</th>
-				<th>State</th>
-				<th>Postal code</th>
-				<th>Country</th>
-				<th>Sales representative no</th>
-				<th>Credit limit</th>
+				<th>Check no</th>
+				<th>Amount</th>
+				<th>Payment date</th>
+				<th>Payment method</th>
 			</tr>
 			<%
-			List<Customer> customers = (List<Customer>) request.getAttribute("customers");
+			List<Payment> payments = (List<Payment>) request.getAttribute("payments");
 			
-			if (customers.size() != 0) {
-			for (Customer customer : customers) {
+			if (payments.size() != 0) {
+			for (Payment payment : payments) {
+				
 				out.println("<tr>");
-			    out.println("<td>" + customer.getCustomernumber() + "</td>");
-			    out.println("<td>" + customer.getCustomername() + "</td>");
-			    out.println("<td>" + customer.getContactfirstname() + "</td>");
-			    out.println("<td>" + customer.getContactlastname() + "</td>");
-			    out.println("<td>" + customer.getPhone() + "</td>");
-			    out.println("<td>" + customer.getEmail() + "</td>");
-			    out.println("<td>" + customer.getAddressline1() + "</td>");
-			    out.println("<td>" + customer.getAddressline2() + "</td>");
-			    out.println("<td>" + customer.getCity() + "</td>");
-			    out.println("<td>" + customer.getState() + "</td>");
-			    out.println("<td>" + customer.getPostalcode() + "</td>");
-			    out.println("<td>" + customer.getCountry() + "</td>");
-			    //TODO  Link this employee to another page
-			    out.println("<td>" + customer.getEmployee() + "</td>");
-			    out.println("<td>" + customer.getCreditlimit() + "</td>");
-			    //TODO Display payment record
-			    // out.println("<td>" + customer.getPayments() + "</td>");
-				out.println("<td><a href=\"CustomerServlet?id=" + customer.getCustomernumber() + "\">Update</a></td>");
-				out.println("<td><a href=\"CustomerServlet?id=" + customer.getCustomernumber() + "\">Delete</a></td>");
+				
+				Integer customernumber = payment.getId().getCustomernumber();
+				String checknumber = payment.getId().getChecknumber();
+				
+			    out.println("<td>" + customernumber + "</td>");
+			    out.println("<td>" + checknumber + "</td>");
+			    out.println("<td>" + payment.getAmount() + "</td>");
+			    out.println("<td>" + payment.getPaymentdate() + "</td>");
+			    out.println("<td>" + payment.getPaymentmethod() + "</td>");
+			    
+			    String href = "'PaymentServlet?customernumber="+customernumber+"&checknumber="+checknumber+"'";
+				out.println("<td><a href="+href+">Update</a></td>");
+				out.println("<td><a href="+href+">Delete</a></td>");
+				
 				out.println("</tr>");
 			}
 			} else {
@@ -165,21 +152,21 @@
 			%>
 		</table>
 	</div>
-	<nav aria-label="Navigation for customers">
+	<nav aria-label="Navigation for payments">
 		<ul class="pagination">
 			<%
 			if (currentPage != 1 && nOfPages != 0) {
 			%>
 			<%
 			out.println("<li class=\"page-item\">");
-			out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
+			out.println("<a class=\"page-link\" href=\"" + "PaymentPagination?recordsPerPage=" + recordsPerPage
 					+ "&currentPage=1" + "&keyword=" + keyword +
 					"\">First</a>");
 			out.println("</li>");
 			%>
 			<li class="page-item">
 				<%
-				out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
+				out.println("<a class=\"page-link\" href=\"" + "PaymentPagination?recordsPerPage=" + recordsPerPage
 						+ "&currentPage=" + (currentPage - 1) +
 						"&keyword=" + keyword + "\">Previous</a>");
 				%>
@@ -190,12 +177,12 @@
 			<%
 			if (currentPage < nOfPages) {
 				out.println("<li class=\"page-item\">");
-				out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
+				out.println("<a class=\"page-link\" href=\"" + "PaymentPagination?recordsPerPage=" + recordsPerPage
 				+ "&currentPage=" + (currentPage + 1) +
 				"&keyword=" + keyword + "\">Next</a>");
 				out.println("</li>");
 				out.println("<li class=\"page-item\">");
-				out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
+				out.println("<a class=\"page-link\" href=\"" + "PaymentPagination?recordsPerPage=" + recordsPerPage
 				+ "&currentPage=" + nOfPages + "&keyword=" +
 				keyword + "\">Last</a>");
 				out.println("</li>");
@@ -219,34 +206,16 @@
 	></script>
 	<button class="open-button" onclick="openForm()">Open Form</button>
 	<div class="form-popup" id="myForm">
-		<form action="CustomerServlet" class="form-container" method="post">
-			<h1>Add Customer Details</h1>
-			<label for="customername">Contact first name:</label><br>
-	        <input type="text" id="customername" name="customername" required><br>
-	        <label for="contact_firstname">Contact first name:</label><br>
-	        <input type="text" id="contact_firstname" name="contact_firstname" required><br>
-	        <label for="contact_lastname">Contact last name:</label><br>
-	        <input type="text" id="contact_lastname" name="contact_lastname" required>
-	        <label for="phone">Phone:</label><br>
-	        <input type="text" id="phone" name="phone" required>
-	        <label for="email">Email:</label><br>
-	        <input type="email" id="email" name="email" required><br>
-	        <label for="addressline1">Address line 1:</label><br>
-	        <input type="text" id="addressline1" name="addressline1" required>
-	        <label for="addressline2">Address line 2:</label><br>
-	        <input type="text" id="addressline2" name="addressline2">
-	        <label for="city">City:</label><br>
-	        <input type="text" id="city" name="city" required>
-	        <label for="state">State:</label><br>
-	        <input type="text" id="state" name="state">
-	        <label for="postalcode">Postal code:</label><br>
-	        <input type="text" id="postalcode" name="postalcode">
-	        <label for="country">Country:</label><br>
-	        <input type="text" id="country" name="country" required>
-	        <label for="salesrepemployeenumber">Sales person representative:</label><br>
-	        <input type="text" id="salesrepemployeenumber" name="salesrepemployeenumber">
-	        <label for="creditlimit">Credit limit:</label><br>
-	        <input type="number" id="creditlimit" name="creditlimit" step="0.01" min="0">
+		<form action="PaymentServlet" class="form-container" method="post">
+			<h1>Add Payment Details</h1>
+			<label for="customernumber">Customer no:</label><br>
+			<input type="number" id="customernumber" name="customernumber" min="0" required><br>
+			<label for="amount">Amount:</label><br>
+			<input type="number" id="amount" name="amount" step="0.01" min="0" required><br>
+			<label for="paymentdate">Payment date:</label><br>
+			<input type="date" id="paymentdate" name="paymentdate" required><br>
+			<label for="paymentmethod">Payment method:</label><br>
+			<input type="text" id="paymentmethod" name="paymentmethod" required><br>
 			<button type="submit" class="btn">Submit Test</button>
 			<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
 			<button type="reset" class="btn">Reset</button>

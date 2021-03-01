@@ -13,7 +13,6 @@ import javax.persistence.Query;
 
 import domain.Customer;
 import domain.Employee;
-import domain.Payment;
 
 /**
  * Session Bean implementation class CustomerSessionBean
@@ -78,11 +77,16 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		Query q = null;
 
 		if (keyword.isEmpty()) {
-			//TODO Check why native query is not working
-//		    q = em.createNativeQuery("Customer.findTotalRows");
+		    // q = em.createNamedQuery("Customer.findTotalRows");
 			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM classicmodels.customers");
 		} else {
-		    q = em.createNativeQuery("Customer.findTotalRows2");
+		    q = em.createNativeQuery(
+		    		"SELECT COUNT(*) AS totalrow from classicmodels.customers WHERE " +
+		    		"concat(customernumber ,customername, contactlastname, contactfirstname, " + 
+					"phone, addressline1, addressline2, city, state, postalCode, country, " + 
+					"salesrepemployeenumber, creditlimit) LIKE ?"
+				);
+		    
 		    q.setParameter(1, "%" + keyword + "%");
 		}
 	

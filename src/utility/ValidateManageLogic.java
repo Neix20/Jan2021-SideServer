@@ -16,10 +16,10 @@ public class ValidateManageLogic {
 
 //this method is used to notify a user that a record has been updated and to
 //redirect to another page
-    public static void navigateJS(PrintWriter out) {
+    public static void navigateJS(PrintWriter out, String redirectPath) {
 	out.println("<SCRIPT type=\"text/javascript\">");
 	out.println("alert(\"Record has been updated and url will be redirected\")");
-	out.println("window.location.assign(\"CustomerPagination?currentPage=1&recordsPerPage=30&keyword=\")");
+	out.println("window.location.assign(\""+redirectPath+"?currentPage=1&recordsPerPage=30&keyword=\")");
 	out.println("</SCRIPT>");
     }
 }

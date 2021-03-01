@@ -12,23 +12,30 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import domain.Customer;
-import session_bean.CustomerSessionBeanLocal;
+import domain.Payment;
+import session_bean.PaymentSessionBeanLocal;
 
-@WebServlet("/CustomerPagination")
-public class CustomerPaginationServlet extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
-
+/**
+ * Servlet implementation class PaymentPaginationServlet
+ */
+@WebServlet("/PaymentPagination")
+public class PaymentPaginationServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    
     @EJB
-    private CustomerSessionBeanLocal customerBean;
-
-    public CustomerPaginationServlet() {
-	super();
+    private PaymentSessionBeanLocal paymentBean;
+	
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public PaymentPaginationServlet() {
+        super();
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		response.setContentType("text/html;charset=UTF-8");
 	
@@ -51,7 +58,7 @@ public class CustomerPaginationServlet extends HttpServlet {
 	
 		try {
 	
-		    int rows = customerBean.getNumberOfRows(keyword);
+		    int rows = paymentBean.getNumberOfRows(keyword);
 		    nOfPages = rows / recordsPerPage;
 		    System.out.println("At servlet" + nOfPages);
 	
@@ -63,8 +70,8 @@ public class CustomerPaginationServlet extends HttpServlet {
 		    	currentPage = nOfPages;
 		    }
 	
-		    List<Customer> lists = customerBean.readCustomer(currentPage, recordsPerPage, keyword);
-		    request.setAttribute("customers", lists);
+		    List<Payment> lists = paymentBean.readPayment(currentPage, recordsPerPage, keyword);
+		    request.setAttribute("payments", lists);
 	
 		} catch (EJBException ex) {
 			throw ex;
@@ -75,12 +82,15 @@ public class CustomerPaginationServlet extends HttpServlet {
 		request.setAttribute("recordsPerPage", recordsPerPage);
 		request.setAttribute("keyword", keyword);
 	
-		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_customer.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_payment.jsp");
 		dispatcher.forward(request, response);
-    }
+	}
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	doGet(request, response);
-    }
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+	}
+
 }
