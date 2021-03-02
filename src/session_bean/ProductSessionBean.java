@@ -9,8 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import Utilities.Sql_Statement_Generator;
 import domain.Product;
+import utility.Sql_Statement_Generator;
 
 /**
  * Session Bean implementation class ProductSessionBean
