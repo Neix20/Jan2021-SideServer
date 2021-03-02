@@ -14,11 +14,13 @@ public class html_generator {
 				+ "window.location.assign('\\"+servletURL+"');" + "</script>";
 	}
 	
-	public static String productItem_html(String name, String image, String price) {
+	public static String productItem_html(String name, String type, int number, String price, String code) {
 		return "<div class=\"col-lg-4\"><div class=\"trainer-item\"><div class=\"image-thumb\">"
-				+ "<img src=\"frontend/assets/images/" + image
+				+ "<img src=\"frontend/assets/images/" + type + "_" + number + ".jpg"
 				+ "\" alt=\"\"></div><div class=\"down-content\"><span><sup>RM</sup>" + price
 				+ "</span><h3>" + name
-				+ "</h3><ul class=\"social-icons\"><li><a href=\"car-details.html\">+ View Model</a></li></ul></div></div></div>";
+				+ "</h3><ul class=\"social-icons\"><li><a href=\"productDetails?"
+				+ "productCode=" + code + "&image_url=" + type + "_" + number + ".jpg"
+				+"\">+ View Model</a></li></ul></div></div></div>";
 	}
 }

@@ -21,7 +21,7 @@ import utility.html_generator;
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet("/ProductServlet")
+@WebServlet(name="Product Servlet", urlPatterns = {"/ProductServlet", "/productServlet", "/ProductCatalog", "/productCatalog"})
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
@@ -76,7 +76,7 @@ public class ProductServlet extends HttpServlet {
 		request.setAttribute("category", category);
 		request.setAttribute("sort_keyword", sort);
 		request.setAttribute("nOfPage", nOfPage);
-		RequestDispatcher req = request.getRequestDispatcher("frontend/productDisplay.jsp");
+		RequestDispatcher req = request.getRequestDispatcher("frontend/productCatalog.jsp");
 //		RequestDispatcher req = request.getRequestDispatcher("productDebug.jsp");
 		req.forward(request, response);
 	}

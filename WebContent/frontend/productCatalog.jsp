@@ -27,7 +27,7 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
 	rel="stylesheet">
-<title>Vehicle Model Website</title>
+<title>Product Catalog</title>
 <link rel="stylesheet" type="text/css"
 	href="frontend/assets/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
@@ -76,7 +76,7 @@
 						<!-- ***** Menu Start ***** -->
 						<ul class="nav">
 							<li><a href="index.html">Home</a></li>
-							<li><a href="cars.html" class="active">Vehicle Models</a></li>
+							<li><a href="productCatalog.jsp" class="active">Vehicle Models</a></li>
 							<li><a href="contact.html">Contact</a></li>
 						</ul>
 						<a class='menu-trigger'> <span>Menu</span>
@@ -96,9 +96,9 @@
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
 					<div class="cta-content">
-						<br> <br>
+						<br><br>
 						<h2>
-							Our <em>Vehicle Models</em>
+							Product <em>Catalog</em>
 						</h2>
 						<p>Ut consectetur, metus sit amet aliquet placerat, enim est
 							ultricies ligula</p>
@@ -142,15 +142,12 @@
 			<div class="row">
 				<%
 					HashMap<String, Integer> map = new HashMap<String, Integer>();
-					for (Productline pl : ProductlineList)
-						map.put(pl.getProductline().split(" ")[0], 1);
+					for (Productline pl : ProductlineList) map.put(pl.getProductline().split(" ")[0], 1);
 					for (Product p : Productlist) {
 						String type = p.getProductline().split(" ")[0];
 						int number = map.get(type);
-						out.println(html_generator.productItem_html(p.getProductname(), type + "_" + number++ + ".jpg",
-								p.getMsrp() + ""));
-						if (number == 6)
-							number = 1;
+						out.println(html_generator.productItem_html(p.getProductname(), type, number++, p.getMsrp() + "", p.getProductcode()));
+						if (number == 6) number = 1;
 						map.put(type, number);
 					}
 				%>
