@@ -10,8 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,21 +22,19 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="products", schema="classicmodels")
-@NamedNativeQueries({
-	@NamedNativeQuery(
+@NamedQueries({
+	@NamedQuery(
 		name="Product.findAll", 
-		query="SELECT * FROM classicmodels.products",
-		resultClass = Product.class
+		query="Select p From Product p"
 	),
-	@NamedNativeQuery(
+	@NamedQuery(
 		name="Product.findByProductcode", 
-		query="SELECT * FROM classicmodels.products where productcode = ?",
-		resultClass = Product.class
+		query="Select p From Product p where p.productcode = ?1"
 	),
-	@NamedNativeQuery(
+	@NamedQuery(
 		name="Product.findByKeyword", 
-		query="SELECT * FROM classicmodels.products where concat(productcode,productdescription,productname,productscale,productvendor,quantityinstock,buyprice,msrp) like ?",
-		resultClass = Product.class
+		query="SELECT p FROM Product p where concat(p.productcode,p.productdescription,p.productname,p.productscale,p.productvendor)" +
+				"like ?1"
 	)
 })
 public class Product implements Serializable {
@@ -76,7 +74,8 @@ public class Product implements Serializable {
 	@JoinColumn(name="productline",insertable=false, updatable=false)
 	private Productline productlineBean;
 	
-	@Column(nullable = true)
+	//Foreign Key
+	@Column(name="productline", nullable = true)
 	private String productline;
 
 	public Product() {

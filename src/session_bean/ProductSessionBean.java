@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import Utilities.Sql_Statement_Generator;
 import domain.Product;
 
 /**
@@ -31,14 +32,14 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 	@Override
 	public List<Product> getAllProduct() throws EJBException {
 		// TODO Auto-generated method stub
-		return em.createNamedQuery("Product.findAll")
+		return em.createNamedQuery("Product.findAll", Product.class)
 				.getResultList();
 	}
 
 	@Override
 	public Product getProduct(String productcode) throws EJBException {
 		// TODO Auto-generated method stub
-		return (Product) em.createNamedQuery("Product.findByProductcode")
+		return em.createNamedQuery("Product.findByProductcode", Product.class)
 				.setParameter(1, productcode)
 				.getSingleResult();
 	}
@@ -46,7 +47,7 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 	@Override
 	public List<Product> getSearchResult(String keyword) throws EJBException {
 		// TODO Auto-generated method stub
-		return em.createNamedQuery("Product.findByKeyword")
+		return em.createNamedQuery("Product.findByKeyword", Product.class)
 				.setParameter(1, "%" + keyword + "%")
 				.getResultList();
 	}
@@ -68,4 +69,15 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 		// TODO Auto-generated method stub
 		em.remove(em.contains(p) ? p : em.merge(p));
 	}
+
+	@Override
+	public List<Product> getProductList(String category, String sort) throws EJBException {
+		// TODO Auto-generated method stub
+		String text = "SELECT p FROM Product p " 
+					+ Sql_Statement_Generator.productline_category(category) + " "
+					+ Sql_Statement_Generator.order_clause(sort);
+		return em.createQuery(text, Product.class)
+			.getResultList();
+	}
+
 }

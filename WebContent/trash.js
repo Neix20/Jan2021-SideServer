@@ -10,5 +10,9 @@ function generate_txt_1(text) {
 
 let list = ["Product Code", "Product Name", "Product Description", "Product Scale", "Product Vendor", "Product Line", "Quantity", "Buy Price", "MSRP"];
 
-for(let i of list) console.log(generate_txt_1(i));
-
+// for(let i of list) console.log(generate_txt_1(i));
+let num = 9;
+let size = 38;
+for(let i = 1 ; i <= 5; i++){
+    console.log(`[${(i-1) * num},${(i*num > size) ? size : i*num}]`);
+}

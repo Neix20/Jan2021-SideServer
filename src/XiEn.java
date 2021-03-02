@@ -1,8 +1,10 @@
-
 public class XiEn {
 	public static void main(String[] args) {
-		System.out.println("My name is Tan Xi En.");
-		System.out.println("This is my second commit");
-		System.out.println("This is my third commit");
+		int num = 9;
+		int size = 38;
+		for(int i = 1 ; i <= 5; i++){
+		    System.out.print("[" + ((i-1) * num) + ",");
+		    System.out.print((i*num > size) ? size - 1 : i*num - 1 + "]");
+		}
 	}
 }

@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -45,14 +44,40 @@ public class ProductServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String keyword = request.getParameter("keyword");
-		List<Product> list = productBean.getAllProduct();
-		List<Product> SearchResult = (keyword != null) ? productBean.getSearchResult(keyword) : new ArrayList<Product>();	
+//		String keyword = request.getParameter("keyword");
+//		List<Product> list = productBean.getAllProduct();
+//		List<Product> SearchResult = (keyword != null) ? productBean.getSearchResult(keyword) : new ArrayList<Product>();	
 		List<Productline> productlineList = productlineBean.getAllProductline();
-		request.setAttribute("List", list);
-		request.setAttribute("SearchResult", SearchResult);
+
+//		request.setAttribute("List", list);
+//		request.setAttribute("SearchResult", SearchResult);
 		request.setAttribute("ProductlineList", productlineList);
+		
+		//Testing
+		String category = request.getParameter("category");
+		String sort = request.getParameter("sort_keyword");
+		
+		category = (category == null) ? "all" : category;
+		sort = (sort == null) ? "name_ASC" : sort;
+		
+		List<Product> productList = productBean.getProductList(category, sort);
+		
+		int recordsPerPage = 6, nOfPage = productList.size() / recordsPerPage;
+		nOfPage += 1;
+		String temp = request.getParameter("currentPage");
+		int currentPage = (temp != null) ? Integer.valueOf(temp) : 1;
+		int start_num = (currentPage - 1) * recordsPerPage;
+		int end_num = (currentPage * recordsPerPage > productList.size()) ? productList.size() : currentPage * recordsPerPage;
+		
+		productList = productList.subList(start_num, end_num);
+		
+		request.setAttribute("List", productList);
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("category", category);
+		request.setAttribute("sort_keyword", sort);
+		request.setAttribute("nOfPage", nOfPage);
 		RequestDispatcher req = request.getRequestDispatcher("frontend/productDisplay.jsp");
+//		RequestDispatcher req = request.getRequestDispatcher("productDebug.jsp");
 		req.forward(request, response);
 	}
 
