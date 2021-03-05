@@ -77,10 +77,38 @@ public class Product implements Serializable {
 	//Foreign Key
 	@Column(name="productline", nullable = true)
 	private String productline;
-
+			
 	public Product() {
 	}
 	
+	public Product(Product p) {
+		this.productcode = p.productcode;
+		this.buyprice = p.buyprice;
+		this.msrp = p.msrp;
+		this.productdescription = p.productdescription;
+		this.productname = p.productname;
+		this.productscale = p.productscale;
+		this.productvendor = p.productvendor;
+		this.quantityinstock = p.quantityinstock;
+		this.orderdetails = p.orderdetails;
+		this.productlineBean = p.productlineBean;
+		this.productline = p.productline;
+	}
+	
+	public Product(ShoppingCartItem sc) {
+		this.productcode = sc.getProductcode();
+		this.buyprice = sc.getBuyprice();
+		this.msrp = sc.getMsrp();
+		this.productdescription = sc.getProductdescription();
+		this.productname = sc.getProductname();
+		this.productscale = sc.getProductscale();
+		this.productvendor = sc.getProductvendor();
+		this.quantityinstock = sc.getQuantityinstock();
+		this.orderdetails = sc.getOrderdetails();
+		this.productlineBean = sc.getProductlineBean();
+		this.productline = sc.getProductline();
+	}
+
 	public String getProductline() {
 		return this.productline;
 	}
@@ -180,7 +208,7 @@ public class Product implements Serializable {
 		return "Product [productcode=" + productcode + ", buyprice=" + buyprice + ", msrp=" + msrp
 				+ ", productdescription=" + productdescription + ", productname=" + productname + ", productscale="
 				+ productscale + ", productvendor=" + productvendor + ", quantityinstock=" + quantityinstock
-				+ ", productlineBean=" + productlineBean + "]";
+				+ "]";
 	}
 
 	public Productline getProductlineBean() {

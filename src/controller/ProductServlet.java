@@ -46,14 +46,16 @@ public class ProductServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 //		String keyword = request.getParameter("keyword");
 //		List<Product> list = productBean.getAllProduct();
-//		List<Product> SearchResult = (keyword != null) ? productBean.getSearchResult(keyword) : new ArrayList<Product>();	
-		List<Productline> productlineList = productlineBean.getAllProductline();
-
+//		List<Product> SearchResult = (keyword != null) ? productBean.getSearchResult(keyword) : new ArrayList<Product>();
+//		List<Productline> productlineList = productlineBean.getAllProductline();
+//
 //		request.setAttribute("List", list);
 //		request.setAttribute("SearchResult", SearchResult);
-		request.setAttribute("ProductlineList", productlineList);
+//		request.setAttribute("ProductlineList", productlineList);
+		
 		
 		//Testing
+		List<Productline> productlineList = productlineBean.getAllProductline();
 		String category = request.getParameter("category");
 		String sort = request.getParameter("sort_keyword");
 		
@@ -71,11 +73,13 @@ public class ProductServlet extends HttpServlet {
 		
 		productList = productList.subList(start_num, end_num);
 		
-		request.setAttribute("List", productList);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("category", category);
 		request.setAttribute("sort_keyword", sort);
 		request.setAttribute("nOfPage", nOfPage);
+		request.setAttribute("List", productList);
+		request.setAttribute("ProductlineList", productlineList);
+		
 		RequestDispatcher req = request.getRequestDispatcher("frontend/productCatalog.jsp");
 //		RequestDispatcher req = request.getRequestDispatcher("productDebug.jsp");
 		req.forward(request, response);

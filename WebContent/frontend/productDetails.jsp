@@ -1,9 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="domain.Product"%>
+<%@ page import="domain.ShoppingCart"%>
+<%@ page import="domain.ShoppingCartItem"%>
+<%@ page import="utility.html_generator" %>
 <%
-Product p = (Product) request.getAttribute("Product");
-String image_url = (String) request.getAttribute("image_url");
+	Product p = (Product) request.getAttribute("Product");
+	String image_url = (String) request.getAttribute("image_url");
+	String bought = request.getParameter("addBoolean");
+	if(bought != null){
+		int quantity = Integer.valueOf(request.getParameter("buy_quantity"));
+		ShoppingCart scList = (ShoppingCart) session.getAttribute("ShoppingCart");
+		if(scList == null) scList = new ShoppingCart();
+		ShoppingCartItem sc = new ShoppingCartItem(p, quantity);
+		scList.addItem(sc);
+		session.setAttribute("ShoppingCart", scList);
+	}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,35 +60,38 @@ input[type=number] {
 
 <script>
     $(function () {
-      let num = 0;
-      let max_limit = <% out.print(p.getQuantityinstock()); %>, min_limit = 1;
-
-      $("#buy_quantity").attr("min", min_limit);
-      $("#buy_quantity").attr("max", max_limit);
-
-      $("#plus").on("click", _ => {
-        num = $("#buy_quantity").val();
-        (num >= max_limit) ? $("#plus").prop("disabled", true) : $("#buy_quantity").val(++num);
-        if (num >= min_limit) $("#minus").prop("disabled", false);
+      $(".plus").on("click", e => {
+        let num = $(e.target).siblings("input[type=number]").val(), 
+          max_limit = parseInt($(e.target).siblings("input[type=number]").attr("max")),
+          min_limit = parseInt($(e.target).siblings("input[type=number]").attr("min"));
+        (num >= max_limit) ? $(e.target).prop("disabled", true) : $(e.target).siblings("input[type=number]").val(++num);
+        if (num >= min_limit) $(e.target).siblings(".minus").prop("disabled", false);
       });
 
-      $("#minus").on("click", _ => {
-        num = $("#buy_quantity").val();
-        (num <= min_limit) ? $("#minus").prop("disabled", true) : $("#buy_quantity").val(--num);
-        if (num <= max_limit) $("#plus").prop("disabled", false);
+      $(".minus").on("click", e => {
+        let num = $(e.target).siblings("input[type=number]").val(), 
+          max_limit = parseInt($(e.target).siblings("input[type=number]").attr("max")),
+          min_limit = parseInt($(e.target).siblings("input[type=number]").attr("min"));
+        (num <= min_limit) ? $(e.target).prop("disabled", true) : $(e.target).siblings("input[type=number]").val(--num);
+        if (num <= max_limit) $(e.target).siblings(".plus").prop("disabled", false);
       });
 
-      $("#buy_quantity").on("keypress", e => {
+      $(".buy_quantity").on("keypress", e => {
         if (e.keyCode == 13) {
-          num = $("#buy_quantity").val();
-          if (num > max_limit) $("#plus").prop("disabled", true);
-          if (num < min_limit) $("#minus").prop("disabled", true);
-          if (num >= min_limit) $("#minus").prop("disabled", false);
-          if (num <= max_limit) $("#plus").prop("disabled", false);
+          let num = $(e.target).val(), max_limit = parseInt($(e.target).attr("max")), min_limit = parseInt($(e.target).attr("min"));
+          if (num > max_limit) $(e.target).siblings(".plus").prop("disabled", true);
+          if (num < min_limit) $(e.target).siblings(".minus").prop("disabled", true);
+          if (num >= min_limit) $(e.target).siblings(".minus").prop("disabled", false);
+          if (num <= max_limit) $(e.target).siblings(".plus").prop("disabled", false);
         }
       });
 
     });
+    <%
+    if(bought != null){
+    	out.println(html_generator.add_Product_Shopping());
+    }
+    %>
   </script>
 </head>
 
@@ -105,10 +120,10 @@ input[type=number] {
 						<!-- ***** Logo End ***** -->
 						<!-- ***** Menu Start ***** -->
 						<ul class="nav">
-							<li><a href="index.html">Home</a></li>
-							<li><a href="ProductCatalog" class="active">Vehicle
-									Models</a></li>
-							<li><a href="contact.html">Contact</a></li>
+							<li><a href="frontend/index.html">Home</a></li>
+							<li><a href="productCatalog">Vehicle Models</a></li>
+							<li><a href="frontend/shoppingCart.jsp">Shopping Cart</a></li>
+							<li><a href="frontend/contact.html">Contact</a></li>
 						</ul>
 						<a class='menu-trigger'> <span>Menu</span>
 						</a>
@@ -145,55 +160,83 @@ input[type=number] {
 		<div class="row">
 			<!--Images-->
 			<div class="col-md-6 mb-4 mb-md-0">
-				<img src="frontend/assets/images/<% out.print(image_url); %>" style="width: 100%;" />
+				<img src="frontend/assets/images/<%out.print(image_url);%>" style="width: 100%;" />
 			</div>
 
 			<!--Put into div class= container-->
 			<div class="col-md-6">
 
-				<h5><% out.print(p.getProductname()); %></h5>
-				<p><span class="mr-1"><strong>RM<% out.print(p.getMsrp().toString()); %></strong></span></p>
-				<p class="pt-1"><% out.print(p.getProductdescription()); %></p>
+				<h5>
+					<%
+						out.print(p.getProductname());
+					%>
+				</h5>
+				<p>
+					<span class="mr-1"><strong>RM<%
+						out.print(p.getMsrp().toString());
+					%></strong></span>
+				</p>
+				<p class="pt-1">
+					<%
+						out.print(p.getProductdescription());
+					%>
+				</p>
 				<div class="table-responsive">
 					<table class="table table-sm table-borderless mb-0">
 						<tbody>
 							<tr>
 								<th class="pl-0 w-25" scope="row"><strong>Model</strong></th>
-								<td><% out.print(p.getProductline()); %></td>
+								<td>
+									<%
+										out.print(p.getProductline());
+									%>
+								</td>
 							</tr>
 							<tr>
 								<th class="pl-0 w-25" scope="row"><strong>Scale</strong></th>
-								<td><% out.print(p.getProductscale()); %></td>
+								<td>
+									<%
+										out.print(p.getProductscale());
+									%>
+								</td>
 							</tr>
 							<tr>
 								<th class="pl-0 w-25" scope="row"><strong>Vendor</strong></th>
-								<td><% out.print(p.getProductvendor()); %></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<hr>
-
-				<div class="mb-2">
-					<table class="table table-sm table-borderless">
-						<tbody>
-							<tr>
-								<td colspan="3">Quantity</td>
-							</tr>
-							<tr>
 								<td>
-									<button class="btn btn-primary" id="minus">&#9660;</button> <input
-									class="text-right" id="buy_quantity" style="width: 100px;"
-									name="buy_quantity" value="1" type="number" />
-									<button class="btn btn-primary" id="plus">&#9650;</button>
+									<%
+										out.print(p.getProductvendor());
+									%>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-
-				<button type="button" class="btn btn-primary btn-md mr-1 mb-2">Add
-					to cart</button>
+				<hr>
+				<form action="" method="post">
+					<div class="mb-2">
+						<table class="table table-sm table-borderless">
+							<tbody>
+								<tr>
+									<td colspan="3">Quantity</td>
+								</tr>
+								<tr>
+									<td>
+										<button type="button" class="btn btn-primary minus">&#9660;</button>
+										<input class="text-right buy_quantity" style="width: 100px;"
+										name="buy_quantity" value="1" type="number" min="1"
+										max="<%out.print(p.getQuantityinstock());%>" />
+										<button type="button" class="btn btn-primary plus">&#9650;</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<input name="addBoolean" value="true" hidden />
+					<button type="submit" class="btn btn-primary btn-md mr-1 mb-2">
+						<i style="font-size: 24px" class="fa">&#xf07a;</i>
+						Add to cart
+					</button>
+				</form>
 			</div>
 		</div>
 	</div>

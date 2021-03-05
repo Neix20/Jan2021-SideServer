@@ -1,1 +1,11 @@
-<table class="table table-striped table-bordered text-center"><thead><tr class="bg-dark"><th colspan="9" style="color:white;">Product</th></tr></thead><tbody><tr><td>Product Code</td><td>Product Name</td><td>Product Description</td><td>Product Scale</td><td>Product Vendor</td><td>Product Line</td><td>Quantity</td><td>Buy Price</td><td>MSRP</td></tr></tbody></table>
+this.productcode = productcode;
+this.buyprice = buyprice;
+this.msrp = msrp;
+this.productdescription = productdescription;
+this.productname = productname;
+this.productscale = productscale;
+this.productvendor = productvendor;
+this.quantityinstock = quantityinstock;
+this.orderdetails = orderdetails;
+this.productlineBean = productlineBean;
+this.productline = productline;

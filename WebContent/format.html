@@ -1,64 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <script src="js/jquery-3.5.1.min.js"></script>
-    <style>
-        /* Chrome, Safari, Edge, Opera */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+<script>
+    function notifyMe() {
+        if (!('Notification' in window)) {
+            alert('This browser does not support desktop notification');
         }
-
-        /* Firefox */
-        input[type=number] {
-            -moz-appearance: textfield;
+        else if (Notification.permission === 'granted') {
+            let notification = new Notification('Product has been successfully added to shopping cart!');
         }
-    </style>
-    <script src="js/bootstrap.bundle.js"></script>
-    <script>
-        $(function () {
-            let num = 0;
-            let max_limit = 50, min_limit = 1;
-
-            $("#buy_quantity").attr("min", min_limit);
-            $("#buy_quantity").attr("max", max_limit);
-
-            $("#plus").on("click", _ => {
-                num = $("#buy_quantity").val();
-                (num >= max_limit) ? $("#plus").prop("disabled", true) : $("#buy_quantity").val(++num);
-                if (num >= min_limit) $("#minus").prop("disabled", false);
-            });
-
-            $("#minus").on("click", _ => {
-                num = $("#buy_quantity").val();
-                (num <= min_limit) ? $("#minus").prop("disabled", true) : $("#buy_quantity").val(--num);
-                if (num <= max_limit) $("#plus").prop("disabled", false);
-            });
-
-            $("#buy_quantity").on("keypress", e => {
-                if (e.keyCode == 13) {
-                    num = $("#buy_quantity").val();
-                    if (num > max_limit) $("#plus").prop("disabled", true);
-                    if (num < min_limit) $("#minus").prop("disabled", true);
-                    if (num >= min_limit) $("#minus").prop("disabled", false);
-                    if (num <= max_limit) $("#plus").prop("disabled", false);
+        else if (Notification.permission !== 'denied') {
+            Notification.requestPermission().then(function (permission) {
+                if (permission === 'granted') {
+                    let notification = new Notification('Product has been successfully added to shopping cart!');
                 }
             });
-        });
-    </script>
-</head>
-
-<body>
-    <button class="btn btn-primary" id="minus">&#9660;</button>
-    <input id="buy_quantity" style="width: 100px;" name="buy_quantity" value="1" type="number" />
-    <button class="btn btn-primary" id="plus">&#9650;</button>
-</body>
-
-</html>
+        }
+    }
+    notifyMe();
+</script>

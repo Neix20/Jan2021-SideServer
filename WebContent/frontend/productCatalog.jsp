@@ -50,7 +50,6 @@
 </head>
 
 <body>
-
 	<!-- ***** Preloader Start ***** -->
 	<div id="js-preloader" class="js-preloader">
 		<div class="preloader-inner">
@@ -70,13 +69,13 @@
 				<div class="col-12">
 					<nav class="main-nav">
 						<!-- ***** Logo Start ***** -->
-						<a href="index.html" class="logo">Vehicle Models<em>
-								Website</em></a>
+						<a href="index.html" class="logo">Vehicle Models <em>Website</em></a>
 						<!-- ***** Logo End ***** -->
 						<!-- ***** Menu Start ***** -->
 						<ul class="nav">
 							<li><a href="index.html">Home</a></li>
-							<li><a href="productCatalog.jsp" class="active">Vehicle Models</a></li>
+							<li><a href="productCatalog">Vehicle Models</a></li>
+							<li><a href="frontend/shoppingCart.jsp">Shopping Cart</a></li>
 							<li><a href="contact.html">Contact</a></li>
 						</ul>
 						<a class='menu-trigger'> <span>Menu</span>
@@ -96,7 +95,7 @@
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
 					<div class="cta-content">
-						<br><br>
+						<br> <br>
 						<h2>
 							Product <em>Catalog</em>
 						</h2>
@@ -120,8 +119,12 @@
 							<option value="all"></option>
 							<option value="all">All</option>
 							<%
-								for (Productline p : ProductlineList)
-									out.println("<option value=\"" + p.getProductline() + "\">" + p.getProductline() + "</option>");
+								for (Productline p : ProductlineList) {
+							%>
+							<option value="<%out.print(p.getProductline());%>">
+								out.print(p.getProductline());</option>
+							<%
+								}
 							%>
 						</select>
 					</div>
@@ -142,13 +145,33 @@
 			<div class="row">
 				<%
 					HashMap<String, Integer> map = new HashMap<String, Integer>();
-					for (Productline pl : ProductlineList) map.put(pl.getProductline().split(" ")[0], 1);
+					for (Productline pl : ProductlineList)
+						map.put(pl.getProductline().split(" ")[0], 1);
 					for (Product p : Productlist) {
 						String type = p.getProductline().split(" ")[0];
 						int number = map.get(type);
-						out.println(html_generator.productItem_html(p.getProductname(), type, number++, p.getMsrp() + "", p.getProductcode()));
-						if (number == 6) number = 1;
-						map.put(type, number);
+						if (number > 6)
+							number = 0;
+						map.put(type, number + 1);
+				%>
+				<div class="col-lg-4">
+					<div class="trainer-item">
+						<div class="image-thumb">
+							<img src="frontend/assets/images/<% out.print(type + "_" + number); %>.jpg" alt="" style="width: 100%;">
+						</div>
+						<div class="down-content">
+							<span> <sup>RM</sup><% out.print(p.getMsrp().toString()); %>
+							</span>
+
+							<h4><% out.print(p.getProductname()); %></h4>
+
+							<ul class="social-icons">
+								<li><a href="productDetails?productCode=<% out.print(p.getProductcode()); %>&image_url=<% out.print(type + "_" + number + ".jpg"); %>">+ View Model</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<%
 					}
 				%>
 			</div>
@@ -241,7 +264,6 @@
 
 	<!-- Global Init -->
 	<script src="frontend/assets/js/custom.js"></script>
-
 </body>
 
 </html>
