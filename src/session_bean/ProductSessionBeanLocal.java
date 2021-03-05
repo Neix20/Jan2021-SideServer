@@ -12,7 +12,7 @@ public interface ProductSessionBeanLocal {
 	public List<Product> getAllProduct() throws EJBException;
 	public Product getProduct(String productcode) throws EJBException;
 	public List<Product> getSearchResult(String keyword) throws EJBException;
-	public List<Product> getProductList(String category, String sort) throws EJBException;
+	public List<Product> getProductList(String[] category, String sort) throws EJBException;
 	public void addProduct(Product p) throws EJBException;
 	public void updateProduct(Product p) throws EJBException;
 	public void deleteProduct(Product p) throws EJBException;

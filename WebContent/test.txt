@@ -1,11 +1,16 @@
-this.productcode = productcode;
-this.buyprice = buyprice;
-this.msrp = msrp;
-this.productdescription = productdescription;
-this.productname = productname;
-this.productscale = productscale;
-this.productvendor = productvendor;
-this.quantityinstock = quantityinstock;
-this.orderdetails = orderdetails;
-this.productlineBean = productlineBean;
-this.productline = productline;
+function notifyMe() {
+            if (!('Notification' in window)) {
+                alert('This browser does not support desktop notification');
+            }
+            else if (Notification.permission === 'granted') {
+                let notification = new Notification('Product has been successfully added to shopping cart!');
+            }
+            else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === 'granted') {
+                        let notification = new Notification('Product has been successfully added to shopping cart!');
+                    }
+                });
+            }
+        }
+        notifyMe();

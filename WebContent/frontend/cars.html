@@ -12,21 +12,15 @@
     <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
     <link rel="stylesheet" href="assets/css/style.css">
-
-    <script src="../js/jquery-3.5.1.min.js"></script>
+    <script src="assets/js/jquery-2.1.0.min.js"></script>
     <script>
-        $(function () {
-            console.log("Whats gonig on");
-            $('#category').change(function () {
-                $("#query_form").submit();
-            });
-
-            $('#sort').change(function () {
-                $("#query_form").submit();
+        $(function(){
+            $(".btnDropDown").on("click", e => {
+                let str = $(e.target).siblings(".detail_board").css("display");
+                (str == "none") ? $(e.target).siblings(".detail_board").css("display", "hidden") : $(e.target).siblings(".detail_board").css("display", "none");
             });
         });
     </script>
-
 </head>
 
 <body>
@@ -94,22 +88,24 @@
         <div class="container">
             <form action="ProductServlet" method="GET" id="query_form">
                 <div class="row py-3">
-                    <div class="col-2 text-right">Category: </div>
                     <div class="col-2">
-                        <select id="category" name="category">
-                            <option value="all">All</option>
-                            <option value="test">Test</option>
-                        </select>
+                        <button type="button" class="btn btn-primary btnDropDown">Category &#9660;</button>
+                        <div class="detail_board p-1" style="height: 240px; width: 100%; background-color: rgb(211,211,211); display: none;position: absolute; z-index: 2; right: -12px;">
+                            <input type="checkbox" name="category" value="all" /> <label for="all">All</label><br/>
+                        </div>
                     </div>
-                    <div class="col-4"></div>
-                    <div class="col-2 text-right">Sort By: </div>
                     <div class="col-2">
-                        <select id="sort" name="sort_keyword">
-                            <option value="name_asc">Name &#9650;</option>
-                            <option value="name_dsc">Name &#9660;</option>
-                            <option value="price_asc">Price &#9650;</option>
-                            <option value="price_dsc">Price &#9660;</option>
-                        </select>
+                        <button type="button" class="btn btn-primary btnDropDown">Sort By &#9660;</button>
+                        <div class="detail_board p-1" style="height: 135px; width: 100px; background-color: rgb(211,211,211); display: none;position: absolute; z-index: 2; right: 75px;">
+                            <input type="radio" name="sort_keyword" value="name_asc" /> <label for="name_asc">Name &#9650;</label><br/>
+                            <input type="radio" name="sort_keyword" value="name_dsc" /> <label for="name_dsc">Name &#9660;</label><br/>
+                            <input type="radio" name="sort_keyword" value="price_asc" /> <label for="price_asc">Price &#9650;</label><br/>
+                            <input type="radio" name="sort_keyword" value="price_dsc" /> <label for="price_dsc">Price &#9660;</label>
+                        </div>
+                    </div>
+                    <div class="col-7"></div>
+                    <div class="col-1">
+                        <button class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </form>

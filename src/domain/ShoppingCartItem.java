@@ -42,12 +42,12 @@ public class ShoppingCartItem extends Product implements Serializable {
 	}
 	
 	public void addItem() {
-		this.quantity++;
+		if(this.quantity < this.getQuantityinstock()) this.quantity++;
 		this.countPrice();
 	}
 	
 	public void removeItem() {
-		this.quantity--;
+		if(this.quantity > 1) this.quantity--;
 		this.countPrice();
 	}
 

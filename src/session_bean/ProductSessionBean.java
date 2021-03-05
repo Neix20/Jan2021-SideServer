@@ -71,10 +71,10 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 	}
 
 	@Override
-	public List<Product> getProductList(String category, String sort) throws EJBException {
+	public List<Product> getProductList(String[] category, String sort) throws EJBException {
 		// TODO Auto-generated method stub
 		String text = "SELECT p FROM Product p " 
-					+ Sql_Statement_Generator.productline_category(category) + " "
+					+ Sql_Statement_Generator.productline_category(category)
 					+ Sql_Statement_Generator.order_clause(sort);
 		return em.createQuery(text, Product.class)
 			.getResultList();

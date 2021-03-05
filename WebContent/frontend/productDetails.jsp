@@ -97,43 +97,7 @@ input[type=number] {
 
 <body>
 
-	<!-- ***** Preloader Start ***** -->
-	<div id="js-preloader" class="js-preloader">
-		<div class="preloader-inner">
-			<span class="dot"></span>
-			<div class="dots">
-				<span></span> <span></span> <span></span>
-			</div>
-		</div>
-	</div>
-	<!-- ***** Preloader End ***** -->
-
-	<!-- ***** Header Area Start ***** -->
-	<header class="header-area header-sticky">
-		<div class="container">
-			<div class="row">
-				<div class="col-12">
-					<nav class="main-nav">
-						<!-- ***** Logo Start ***** -->
-						<a href="index.html" class="logo">Vehicle Models<em>
-								Website</em></a>
-						<!-- ***** Logo End ***** -->
-						<!-- ***** Menu Start ***** -->
-						<ul class="nav">
-							<li><a href="frontend/index.html">Home</a></li>
-							<li><a href="productCatalog">Vehicle Models</a></li>
-							<li><a href="frontend/shoppingCart.jsp">Shopping Cart</a></li>
-							<li><a href="frontend/contact.html">Contact</a></li>
-						</ul>
-						<a class='menu-trigger'> <span>Menu</span>
-						</a>
-						<!-- ***** Menu End ***** -->
-					</nav>
-				</div>
-			</div>
-		</div>
-	</header>
-	<!-- ***** Header Area End ***** -->
+	<%@ include file="header.jsp"%>
 
 	<!-- ***** Call to Action Start ***** -->
 	<section class="section section-bg" id="call-to-action"
