@@ -210,12 +210,20 @@
 			<h1>Add Payment Details</h1>
 			<label for="customernumber">Customer no:</label><br>
 			<input type="number" id="customernumber" name="customernumber" min="0" required><br>
+	        <label for="checknumber">Check no:</label><br>
+	        <input type="text" id="checknumber" name="checknumber" required><br>
 			<label for="amount">Amount:</label><br>
 			<input type="number" id="amount" name="amount" step="0.01" min="0" required><br>
 			<label for="paymentdate">Payment date:</label><br>
 			<input type="date" id="paymentdate" name="paymentdate" required><br>
 			<label for="paymentmethod">Payment method:</label><br>
-			<input type="text" id="paymentmethod" name="paymentmethod" required><br>
+	        <select name="paymentmethod" id="paymentmethod" required>
+			  <option value="check">Check</option>
+			  <option value="cash">Cash</option>
+			  <option value="debit card">Debit card</option>
+			  <option value="credit card">Credit card</option>
+			  <option value="online banking">Online banking</option>
+			</select>
 			<button type="submit" class="btn">Submit Test</button>
 			<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
 			<button type="reset" class="btn">Reset</button>

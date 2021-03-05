@@ -20,15 +20,24 @@ public class PaymentPK implements Serializable {
 
 	public PaymentPK() {
 	}
+	
+	public PaymentPK(String customernumber, String checknumber) {
+		setCustomernumber(Integer.valueOf(customernumber));
+		setChecknumber(checknumber);
+	}
+	
 	public Integer getCustomernumber() {
 		return this.customernumber;
 	}
+	
 	public void setCustomernumber(Integer customernumber) {
 		this.customernumber = customernumber;
 	}
+	
 	public String getChecknumber() {
 		return this.checknumber;
 	}
+	
 	public void setChecknumber(String checknumber) {
 		this.checknumber = checknumber;
 	}

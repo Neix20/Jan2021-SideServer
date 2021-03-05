@@ -66,6 +66,7 @@ public class PaymentServlet extends HttpServlet {
 	
 		String[] s = {
 			customernumber,
+			checknumber,
 			amount,	
 			paymentdate,
 			paymentmethod,

@@ -5,6 +5,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"
 %>
+<%
+Payment payment = (Payment) request.getAttribute("payment");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,11 +30,13 @@
 		background-color: #dddddd;
 	}
 </style>
+<script>
+	function setDropDownValue() {
+		document.querySelector("#paymentmethod").value = '<%= payment.getPaymentmethod() %>';
+	}
+</script>
 </head>
-<body>
-	<%
-	Payment payment = (Payment) request.getAttribute("payment");
-	%>
+<body onload="setDropDownValue()">
 	<form action="PaymentServlet" method="post">
 		<table>
 			<tr>
@@ -85,9 +90,6 @@
 					  <option value="credit card">Credit card</option>
 					  <option value="online banking">Online banking</option>
 					</select>
-					<script>
-						document.querySelector("#paymentmethod").value = ${ payment.paymentmethod };
-					</script>
 			    </td>
 			</tr>
 			<% //TODO How to link to customer? %>

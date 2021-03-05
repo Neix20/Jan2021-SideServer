@@ -130,14 +130,17 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 		String customernumber = s[0];
 		Customer customer = customerBean.findCustomer(customernumber);
 		
-		String amount = s[1];
+		String checknumber = s[1];
+		PaymentPK paymentId = new PaymentPK(customernumber, checknumber);
+		
+		String amount = s[2];
 		
 		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat dateFormat2 = new SimpleDateFormat("M/d/yyyy");
 		Date paymentdate = null;
 		
 		try {
-			paymentdate = dateFormat1.parse(s[2]);
+			paymentdate = dateFormat1.parse(s[3]);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -145,9 +148,9 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 		String paymentdateStr = "";
 		paymentdateStr = dateFormat2.format(paymentdate);
 		
-		String paymentmethod = s[3];
+		String paymentmethod = s[4];
 		
-		
+		payment.setId(paymentId);
 		payment.setCustomer(customer);
 		payment.setAmount(new BigDecimal(amount));
 		payment.setPaymentdate(paymentdateStr);
