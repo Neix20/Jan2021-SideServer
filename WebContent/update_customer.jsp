@@ -7,7 +7,6 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Update customer</title>
-	<link rel="stylesheet" href="${ pageContext.request.contextPath }/css/customer-page.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/fontawesome.min.css" 
@@ -25,6 +24,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
 			integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
 			crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="${ pageContext.request.contextPath }/css/customer-page.css">
 <style>
 	table {
 		font-family: arial, sans-serif;

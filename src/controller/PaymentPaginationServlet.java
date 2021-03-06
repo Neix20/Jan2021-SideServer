@@ -82,7 +82,7 @@ public class PaymentPaginationServlet extends HttpServlet {
 		request.setAttribute("recordsPerPage", recordsPerPage);
 		request.setAttribute("keyword", keyword);
 	
-		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_payment.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_payment2.jsp");
 		dispatcher.forward(request, response);
 	}
 
