@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import domain.Customer;
 import session_bean.CustomerSessionBeanLocal;
 
-@WebServlet("/CustomerPagination")
+@WebServlet(urlPatterns = {"/CustomerPagination"})
 public class CustomerPaginationServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -75,7 +75,7 @@ public class CustomerPaginationServlet extends HttpServlet {
 		request.setAttribute("recordsPerPage", recordsPerPage);
 		request.setAttribute("keyword", keyword);
 	
-		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_customer.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_customer2.jsp");
 		dispatcher.forward(request, response);
     }
 

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -111,7 +112,7 @@ public class Customer implements Serializable {
 	private Employee employee;
 	
 	//bi-directional many-to-one association to Payment
-	@OneToMany(mappedBy="customer")
+	@OneToMany(mappedBy="customer", cascade={CascadeType.REMOVE})
 	private List<Payment> payments;
 
 	public Customer() {

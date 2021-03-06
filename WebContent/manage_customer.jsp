@@ -90,12 +90,6 @@
 >
 </head>
 <body class="m-3">
-	<%
-	int currentPage = (int) request.getAttribute("currentPage");
-	int recordsPerPage = (int) request.getAttribute("recordsPerPage");
-	int nOfPages = (int) request.getAttribute("nOfPages");
-	String keyword = (String) request.getAttribute("keyword");
-	%>
 	<form class="form-inline md-form mr-auto mb-4"
 		action="PaginationServlet" method="get"
 	>
@@ -128,6 +122,11 @@
 				<th>Credit limit</th>
 			</tr>
 			<%
+			int currentPage = (int) request.getAttribute("currentPage");
+			int recordsPerPage = (int) request.getAttribute("recordsPerPage");
+			int nOfPages = (int) request.getAttribute("nOfPages");
+			String keyword = (String) request.getAttribute("keyword");
+
 			List<Customer> customers = (List<Customer>) request.getAttribute("customers");
 			
 			if (customers.size() != 0) {

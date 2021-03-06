@@ -1,0 +1,217 @@
+@charset "ISO-8859-1";
+
+body {
+	color: #566787;
+	background: #fff;
+	font-family: 'Roboto', sans-serif;
+	width: auto;
+	height: auto;
+	padding: 0;
+	margin: 0;
+}
+
+.table-responsive {
+	margin: 0 0;
+	height: 100%;
+}
+
+.table-wrapper {
+	max-width: 75%;
+	max-height: 450px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	display:inline-block;
+}
+
+.table-title {
+	font-size: 15px;
+	min-height: 45px;
+}
+
+.table-title .btn {
+	color: #fff;
+	float: right;
+	font-size: 13px;
+	border: none;
+	min-width: 50px;
+	border-radius: 2px;
+	border: none;
+	outline: none !important;
+	margin-left: 10px;
+}
+
+.table-title h2 {
+	margin: 5px 0 0;
+	font-size: 24px;
+}
+
+.table-title select {
+	border-color: #ddd;
+	border-width: 0 0 1px 0;
+	padding: 3px 10px 3px 5px;
+	margin: 0 5px;
+}
+
+.table-title .show-entries {
+	margin-top: 7px;
+}
+
+.search-box {
+	position: relative;
+	float: right;
+}
+
+.search-box .input-group {
+	min-width: 200px;
+}
+
+.search-box .input-group-addon,
+.search-box input {
+	border-color: #ddd;
+	border-radius: 0;
+}
+
+.search-box .input-group-addon {
+	border: none;
+	border: none;
+	background: transparent;
+	position: absolute;
+	z-index: 9;
+}
+
+.search-box input {
+	height: 34px;
+	padding-left: 28px;
+	box-shadow: none !important;
+	border-width: 0 0 1px 0;
+}
+
+.search-box input:focus {
+	border-color: #3FBAE4;
+}
+
+.search-box i {
+	color: #a0a5b1;
+	font-size: 19px;
+	position: relative;
+	top: 8px;
+}
+
+table.table tr th,
+table.table tr td {
+	border-color: #e9e9e9;
+}
+
+table.table th i {
+	font-size: 13px;
+	margin: 0 5px;
+	cursor: pointer;
+}
+
+table.table td:last-child {
+	width: 130px;
+}
+
+table.table td a {
+	color: #a0a5b1;
+	display: inline-block;
+	margin: 0 5px;
+}
+
+table.table td a.view {
+	color: #03A9F4;
+}
+
+table.table td a.edit {
+	color: #FFC107;
+}
+
+table.table td a.delete {
+	color: #E34724;
+}
+
+table.table td i {
+	font-size: 19px;
+}
+
+.pagination li a:hover {
+	color: #666;
+}
+
+.pagination li.active a {
+	background: #03A9F4;
+}
+
+.pagination li.active a:hover {
+	background: #0397d6;
+}
+
+.pagination li.disabled i {
+	color: #ccc;
+}
+
+.pagination li i {
+	font-size: 16px;
+	padding-top: 6px
+}
+
+.hint-text {
+	float: left;
+	margin-top: 10px;
+	font-size: 13px;
+}
+
+.table-wrapper th,
+td {
+	white-space: nowrap;
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+	bottom: .5em;
+}
+
+.small {
+	font-size: 50%;
+}
+
+/* Modal styles */
+.modal .modal-dialog {
+	max-width: 400px;
+}
+.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+	padding: 20px 30px;
+}
+.modal .modal-content {
+	border-radius: 3px;
+	font-size: 14px;
+}
+.modal .modal-footer {
+	background: #ecf0f1;
+	border-radius: 0 0 3px 3px;
+}
+.modal .modal-title {
+	display: inline-block;
+}
+.modal .form-control {
+	border-radius: 2px;
+	box-shadow: none;
+	border-color: #dddddd;
+}
+.modal textarea.form-control {
+	resize: vertical;
+}
+.modal .btn {
+	border-radius: 2px;
+	min-width: 100px;
+}	
+.modal form label {
+	font-weight: normal;
+}
