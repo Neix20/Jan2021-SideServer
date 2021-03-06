@@ -11,7 +11,7 @@
 	List<Productline> ProductlineList = (List<Productline>) request.getAttribute("ProductlineList");
 	int currentPage = (Integer) request.getAttribute("currentPage");
 	int nOfPage = (Integer) request.getAttribute("nOfPage");
-	String category = (String) request.getAttribute("category");
+	String[] category = (String[]) request.getAttribute("category");
 	String sort = (String) request.getAttribute("sort_keyword");
 	String link;
 %>
@@ -36,57 +36,18 @@
 
 <script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
 <script>
-	$(function() {
-		$('#category').change(function() {
-			$("#query_form").submit();
-		});
-
-		$('#sort').change(function() {
-			$("#query_form").submit();
-		});
-	});
-</script>
+        $(function(){
+            $(".btnDropDown").on("click", e => {
+                let str = $(e.target).siblings(".detail_board").css("display");
+                (str == "none") ? $(e.target).siblings(".detail_board").css("display", "hidden") : $(e.target).siblings(".detail_board").css("display", "none");
+            });
+        });
+    </script>
 
 </head>
 
 <body>
-	<!-- ***** Preloader Start ***** -->
-	<div id="js-preloader" class="js-preloader">
-		<div class="preloader-inner">
-			<span class="dot"></span>
-			<div class="dots">
-				<span></span> <span></span> <span></span>
-			</div>
-		</div>
-	</div>
-	<!-- ***** Preloader End ***** -->
-
-
-	<!-- ***** Header Area Start ***** -->
-	<header class="header-area header-sticky">
-		<div class="container">
-			<div class="row">
-				<div class="col-12">
-					<nav class="main-nav">
-						<!-- ***** Logo Start ***** -->
-						<a href="index.html" class="logo">Vehicle Models <em>Website</em></a>
-						<!-- ***** Logo End ***** -->
-						<!-- ***** Menu Start ***** -->
-						<ul class="nav">
-							<li><a href="index.html">Home</a></li>
-							<li><a href="productCatalog">Vehicle Models</a></li>
-							<li><a href="frontend/shoppingCart.jsp">Shopping Cart</a></li>
-							<li><a href="contact.html">Contact</a></li>
-						</ul>
-						<a class='menu-trigger'> <span>Menu</span>
-						</a>
-						<!-- ***** Menu End ***** -->
-					</nav>
-				</div>
-			</div>
-		</div>
-	</header>
-	<!-- ***** Header Area End ***** -->
+	<%@ include file="header.jsp"%>
 
 	<!-- ***** Call to Action Start ***** -->
 	<section class="section section-bg" id="call-to-action"
@@ -111,33 +72,43 @@
 	<!-- ***** Fleet Starts ***** -->
 	<section class="section" id="trainers">
 		<div class="container">
-			<form action="ProductServlet" method="GET" id="query_form">
+			<form action="ProductServlet" method="GET">
 				<div class="row py-3">
-					<div class="col-2 text-right">Category:</div>
 					<div class="col-2">
-						<select id="category" name="category">
-							<option value="all"></option>
-							<option value="all">All</option>
+						<button type="button" class="btn btn-primary btnDropDown">Category
+							&#9660;</button>
+						<div class="detail_board p-1"
+							style="height: 240px; width: 100%; background-color: rgb(211, 211, 211); display: none; position: absolute; z-index: 2; right: -12px;">
 							<%
-								for (Productline p : ProductlineList) {
+								for (Productline pl : ProductlineList) {
 							%>
-							<option value="<%out.print(p.getProductline());%>">
-								out.print(p.getProductline());</option>
+							<input type="checkbox" name="category"
+								value="<%out.print(pl.getProductline());%>" /> <label
+								for="all"> <% out.print(pl.getProductline()); %>
+							</label><br />
 							<%
 								}
 							%>
-						</select>
+						</div>
 					</div>
-					<div class="col-4"></div>
-					<div class="col-2 text-right">Sort By:</div>
 					<div class="col-2">
-						<select id="sort" name="sort_keyword">
-							<option value="name_ASC"></option>
-							<option value="name_ASC">Name &#9650;</option>
-							<option value="name_DESC">Name &#9660;</option>
-							<option value="price_ASC">Price &#9650;</option>
-							<option value="price_DESC">Price &#9660;</option>
-						</select>
+						<button type="button" class="btn btn-primary btnDropDown">Sort
+							By &#9660;</button>
+						<div class="detail_board p-1"
+							style="height: 135px; width: 100px; background-color: rgb(211, 211, 211); display: none; position: absolute; z-index: 2; right: 75px;">
+							<input type="radio" name="sort_keyword" value="name_asc" /> <label
+								for="name_asc">Name &#9650;</label><br /> <input type="radio"
+								name="sort_keyword" value="name_desc" /> <label for="name_desc">Name
+								&#9660;</label><br /> <input type="radio" name="sort_keyword"
+								value="price_asc" /> <label for="price_asc">Price
+								&#9650;</label><br /> <input type="radio" name="sort_keyword"
+								value="price_desc" /> <label for="price_desc">Price
+								&#9660;</label>
+						</div>
+					</div>
+					<div class="col-7"></div>
+					<div class="col-1">
+						<button class="btn btn-primary">Submit</button>
 					</div>
 				</div>
 			</form>
@@ -157,16 +128,26 @@
 				<div class="col-lg-4">
 					<div class="trainer-item">
 						<div class="image-thumb">
-							<img src="frontend/assets/images/<% out.print(type + "_" + number); %>.jpg" alt="" style="width: 100%;">
+							<img
+								src="frontend/assets/images/<%out.print(type + "_" + number);%>.jpg"
+								alt="" style="width: 100%;">
 						</div>
 						<div class="down-content">
-							<span> <sup>RM</sup><% out.print(p.getMsrp().toString()); %>
+							<span> <sup>RM</sup> <%
+ 	out.print(p.getMsrp().toString());
+ %>
 							</span>
 
-							<h4><% out.print(p.getProductname()); %></h4>
+							<h4>
+								<%
+									out.print(p.getProductname());
+								%>
+							</h4>
 
 							<ul class="social-icons">
-								<li><a href="productDetails?productCode=<% out.print(p.getProductcode()); %>&image_url=<% out.print(type + "_" + number + ".jpg"); %>">+ View Model</a></li>
+								<li><a
+									href="productDetails?productCode=<%out.print(p.getProductcode());%>&image_url=<%out.print(type + "_" + number + ".jpg");%>">+
+										View Model</a></li>
 							</ul>
 						</div>
 					</div>
@@ -183,7 +164,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage > 2) {
-								link = "<a class=\"page-link\" href=\"ProductServlet?category=" + category + "&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage - 2)
 										+ "\" aria-label=\"Previous\"><span aria-hidden=\"true\">&laquo;</span><span class=\"sr-only\">Previous</span></a>";
 								out.println(link);
@@ -193,7 +174,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage > 1) {
-								link = "<a class=\"page-link\" href=\"ProductServlet?category=" + category + "&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage - 1) + "\">" + (currentPage - 1) + "</a>";
 								out.println(link);
 							}
@@ -201,7 +182,7 @@
 					</li>
 					<li class="page-item">
 						<%
-							link = "<a class=\"page-link\" href=\"ProductServlet?category=" + category + "&sort_keyword=" + sort
+							link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 									+ "&currentPage=" + currentPage + "\"><b>" + currentPage + "</b></a>";
 							out.println(link);
 						%>
@@ -209,7 +190,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage < nOfPage) {
-								link = "<a class=\"page-link\" href=\"ProductServlet?category=" + category + "&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage + 1) + "\">" + (currentPage + 1) + "</a>";
 								out.println(link);
 							}
@@ -218,7 +199,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage < nOfPage - 1) {
-								link = "<a class=\"page-link\" href=\"ProductServlet?category=" + category + "&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage + 2)
 										+ "\" aria-label=\"Next\"><span aria-hidden=\"true\">&raquo;</span><span class=\"sr-only\">Next</span></a>";
 								out.println(link);

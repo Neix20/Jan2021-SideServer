@@ -42,4 +42,13 @@ public class html_generator {
 				+ "productCode=" + code + "&image_url=" + type + "_" + number + ".jpg"
 				+"\">+ View Model</a></li></ul></div></div></div>";
 	}
+	
+	public static String getParameterArrayValues(String parameter, String[] text) {
+		String txt = "";
+		for(String s : text) {
+			txt += parameter + "=" + s + "&";
+		}
+		txt = txt.substring(0, txt.length() - 1);
+		return txt;
+	}
 }

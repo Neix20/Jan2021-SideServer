@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,18 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import domain.ShoppingCart;
+import domain.ShoppingCartItem;
 
 /**
- * Servlet implementation class test
+ * Servlet implementation class ShoppingCartServlet
  */
-@WebServlet("/test")
-public class test extends HttpServlet {
+@WebServlet(name="Shopping Cart Servlet", urlPatterns = {"/ShoppingCart", "/shoppingCart"})
+public class ShoppingCartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public test() {
+    public ShoppingCartServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,10 +33,30 @@ public class test extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		ShoppingCart scList = new ShoppingCart();
 		HttpSession session = request.getSession();
-		session.setAttribute("ShoppingCart", scList);
-		response.sendRedirect("productCatalog");
+		ShoppingCart scList = (ShoppingCart) session.getAttribute("ShoppingCart");
+		if(scList == null) scList = new ShoppingCart();
+		String productName = request.getParameter("productName");
+		if (productName != null) {
+			ShoppingCartItem tmp = scList.getShoppingCartItem(productName);
+			String type = request.getParameter("type");
+			switch (type) {
+				case "plus" :
+					tmp.addItem();
+					break;
+				case "minus" :
+					tmp.removeItem();
+					break;
+				case "remove" :
+					scList.removeItem(tmp);
+					break;
+				default:
+					break;
+			}
+			scList.countTotalPrice();
+		}
+		RequestDispatcher req = request.getRequestDispatcher("frontend/shoppingCart.jsp");
+		req.forward(request, response);
 	}
 
 	/**

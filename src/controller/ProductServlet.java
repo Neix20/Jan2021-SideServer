@@ -56,10 +56,11 @@ public class ProductServlet extends HttpServlet {
 		
 		//Testing
 		List<Productline> productlineList = productlineBean.getAllProductline();
-		String category = request.getParameter("category");
+		String[] category = request.getParameterValues("category");
 		String sort = request.getParameter("sort_keyword");
+		String[] tmp = {"all"};
 		
-		category = (category == null) ? "all" : category;
+		category = (category == null) ? tmp : category;
 		sort = (sort == null) ? "name_ASC" : sort;
 		
 		List<Product> productList = productBean.getProductList(category, sort);
