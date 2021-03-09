@@ -1,7 +1,9 @@
 package domain;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  * The primary key class for the orderdetails database table.
@@ -12,14 +14,20 @@ public class OrderdetailPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(insertable=false, updatable=false)
+	@Column(name="ordernumber")
 	private Integer ordernumber;
 
-	@Column(insertable=false, updatable=false)
+	@Column(name="productcode")
 	private String productcode;
 
 	public OrderdetailPK() {
 	}
+	
+	public OrderdetailPK(Integer ordernumber, String productcode) {
+		this.ordernumber = ordernumber;
+		this.productcode = productcode;
+	}
+
 	public Integer getOrdernumber() {
 		return this.ordernumber;
 	}

@@ -35,6 +35,10 @@ import javax.persistence.Table;
 		name="Product.findByKeyword", 
 		query="SELECT p FROM Product p where concat(p.productcode,p.productdescription,p.productname,p.productscale,p.productvendor)" +
 				"like ?1"
+	),
+	@NamedQuery(
+		name="Product.getLastId",
+		query="Select p FROM Product p ORDER BY p.productcode DESC"
 	)
 })
 public class Product implements Serializable {

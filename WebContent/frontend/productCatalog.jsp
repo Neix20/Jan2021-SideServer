@@ -72,7 +72,7 @@
 	<!-- ***** Fleet Starts ***** -->
 	<section class="section" id="trainers">
 		<div class="container">
-			<form action="ProductServlet" method="GET">
+			<form action="ProductCatalog" method="GET">
 				<div class="row py-3">
 					<div class="col-2">
 						<button type="button" class="btn btn-primary btnDropDown">Category
@@ -115,21 +115,14 @@
 
 			<div class="row">
 				<%
-					HashMap<String, Integer> map = new HashMap<String, Integer>();
-					for (Productline pl : ProductlineList)
-						map.put(pl.getProductline().split(" ")[0], 1);
 					for (Product p : Productlist) {
 						String type = p.getProductline().split(" ")[0];
-						int number = map.get(type);
-						if (number > 6)
-							number = 0;
-						map.put(type, number + 1);
 				%>
 				<div class="col-lg-4">
 					<div class="trainer-item">
 						<div class="image-thumb">
 							<img
-								src="frontend/assets/images/<%out.print(type + "_" + number);%>.jpg"
+								src="frontend/assets/images/<%=type%>.jpg"
 								alt="" style="width: 100%;">
 						</div>
 						<div class="down-content">
@@ -146,7 +139,7 @@
 
 							<ul class="social-icons">
 								<li><a
-									href="productDetails?productCode=<%out.print(p.getProductcode());%>&image_url=<%out.print(type + "_" + number + ".jpg");%>">+
+									href="productDetails?productCode=<%out.print(p.getProductcode());%>&image_url=<%=type%>.jpg">+
 										View Model</a></li>
 							</ul>
 						</div>
@@ -164,7 +157,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage > 2) {
-								link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage - 2)
 										+ "\" aria-label=\"Previous\"><span aria-hidden=\"true\">&laquo;</span><span class=\"sr-only\">Previous</span></a>";
 								out.println(link);
@@ -174,7 +167,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage > 1) {
-								link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage - 1) + "\">" + (currentPage - 1) + "</a>";
 								out.println(link);
 							}
@@ -182,7 +175,7 @@
 					</li>
 					<li class="page-item">
 						<%
-							link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+							link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 									+ "&currentPage=" + currentPage + "\"><b>" + currentPage + "</b></a>";
 							out.println(link);
 						%>
@@ -190,7 +183,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage < nOfPage) {
-								link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage + 1) + "\">" + (currentPage + 1) + "</a>";
 								out.println(link);
 							}
@@ -199,7 +192,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage < nOfPage - 1) {
-								link = "<a class=\"page-link\" href=\"ProductServlet?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage + 2)
 										+ "\" aria-label=\"Next\"><span aria-hidden=\"true\">&raquo;</span><span class=\"sr-only\">Next</span></a>";
 								out.println(link);

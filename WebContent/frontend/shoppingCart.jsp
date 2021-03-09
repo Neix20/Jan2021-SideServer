@@ -6,7 +6,8 @@
 <%@ page import="java.util.HashMap"%>
 <%
 	ShoppingCart scList = (ShoppingCart) session.getAttribute("ShoppingCart");
-	if(scList == null) scList = new ShoppingCart();
+	if (scList == null)
+		scList = new ShoppingCart();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +25,8 @@
 <link rel="stylesheet" type="text/css"
 	href="frontend/assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="frontend/assets/css/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- jQuery -->
 <script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
@@ -123,21 +125,13 @@ input[type=number] {
 							</h5>
 
 							<%
-								HashMap<String, Integer> map = new HashMap<String, Integer>();
 								for (ShoppingCartItem sc : scList.getList()) {
 									String type = sc.getProductline().split(" ")[0];
-									if (!map.containsKey(type))
-										map.put(type, 1);
-									int number = map.get(type) + 1;
-									if (number > 6)
-										number = 1;
-									map.put(type, number);
 							%>
 							<form action="/SideServerAssignment/ShoppingCart" method="post">
 								<div class="row mb-4">
 									<div class="col-md-5 col-lg-3 col-xl-3">
-										<img
-											src="frontend/assets/images/<%out.print(type + "_" + number + ".jpg");%>"
+										<img src="frontend/assets/images/<%=type%>.jpg"
 											style="width: 100%;" />
 									</div>
 									<div class="col-md-7 col-lg-9 col-xl-9">
@@ -178,7 +172,8 @@ input[type=number] {
 															class="text-right buy_quantity" style="width: 50px;"
 															name="buy_quantity"
 															value="<%out.print(sc.getQuantity());%>" type="number"
-															min="1" max="<%out.print(sc.getQuantityinstock());%>" disabled />
+															min="1" max="<%out.print(sc.getQuantityinstock());%>"
+															disabled />
 														<button name="type" value="plus"
 															class="btn btn-primary plus">&#9650;</button>
 													</div>
@@ -191,9 +186,10 @@ input[type=number] {
 												class="d-flex justify-content-between align-items-center">
 												<div>
 													<button name="type" value="remove"
-														class="btn btn-primary text-uppercase mr-3"><i
-														style="font-size: 24px" class="fa">&#xf014;</i> Remove
-														item </button>
+														class="btn btn-primary text-uppercase mr-3">
+														<i style="font-size: 24px" class="fa">&#xf014;</i> Remove
+														item
+													</button>
 												</div>
 												<p class="mb-0">
 													<span><strong id="summary">RM<%
