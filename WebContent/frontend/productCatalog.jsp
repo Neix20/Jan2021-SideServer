@@ -29,12 +29,12 @@
 	rel="stylesheet">
 <title>Product Catalog</title>
 <link rel="stylesheet" type="text/css"
-	href="frontend/assets/css/bootstrap.min.css">
+	href="${pageContext.request.contextPath}/frontend/assets/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
-	href="frontend/assets/css/font-awesome.css">
-<link rel="stylesheet" href="frontend/assets/css/style.css">
+	href="${pageContext.request.contextPath}/frontend/assets/css/font-awesome.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
 
-<script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
 <script>
         $(function(){
             $(".btnDropDown").on("click", e => {
@@ -51,7 +51,7 @@
 
 	<!-- ***** Call to Action Start ***** -->
 	<section class="section section-bg" id="call-to-action"
-		style="background-image: url(assets/images/banner-image-1-1920x500.jpg)">
+		style="background-image: url(frontend/assets/images/banner-image-1-1920x500.jpg)">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
@@ -122,7 +122,7 @@
 					<div class="trainer-item">
 						<div class="image-thumb">
 							<img
-								src="frontend/assets/images/<%=type%>.jpg"
+								src="${pageContext.request.contextPath}/frontend/assets/images/<%=type%>.jpg"
 								alt="" style="width: 100%;">
 						</div>
 						<div class="down-content">
@@ -222,22 +222,22 @@
 	</footer>
 
 	<!-- jQuery -->
-	<script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
 
 	<!-- Bootstrap -->
-	<script src="frontend/assets/js/popper.js"></script>
-	<script src="frontend/assets/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/popper.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/bootstrap.min.js"></script>
 
 	<!-- Plugins -->
-	<script src="frontend/assets/js/scrollreveal.min.js"></script>
-	<script src="frontend/assets/js/waypoints.min.js"></script>
-	<script src="frontend/assets/js/jquery.counterup.min.js"></script>
-	<script src="frontend/assets/js/imgfix.min.js"></script>
-	<script src="frontend/assets/js/mixitup.js"></script>
-	<script src="frontend/assets/js/accordions.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/scrollreveal.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/waypoints.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery.counterup.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/imgfix.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/mixitup.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/accordions.js"></script>
 
 	<!-- Global Init -->
-	<script src="frontend/assets/js/custom.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/custom.js"></script>
 </body>
 
 </html>

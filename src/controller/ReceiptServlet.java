@@ -33,11 +33,11 @@ public class ReceiptServlet extends HttpServlet {
 		
 		if (purchasedOrderProduct == null) {
 			response.setHeader("Refresh", "8; URL="+request.getContextPath()+"/Checkout");
-			RequestDispatcher req = request.getRequestDispatcher("frontend/receipt_error.jsp");
+			RequestDispatcher req = request.getRequestDispatcher("receipt_error.jsp");
 			req.forward(request, response);
 		}
 		else {
-			RequestDispatcher req = request.getRequestDispatcher("frontend/receipt.jsp");
+			RequestDispatcher req = request.getRequestDispatcher("receipt.jsp");
 			req.forward(request, response);
 		}
 	}

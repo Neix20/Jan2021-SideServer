@@ -71,16 +71,9 @@ public class ProductSessionBean implements ProductSessionBeanLocal {
 		return em.createQuery(text, Product.class)
 			.getResultList();
 	}
-	
-	@Override
-	public List<Product> getLastId() throws EJBException {
-		return em.createNamedQuery("Product.getLastId", Product.class)
-				.getResultList();
-	}
 
 	@Override
 	public List<Product> getLastId() throws EJBException {
-		// TODO Auto-generated method stub
 		return em.createNamedQuery("Product.getLastId", Product.class)
 				.getResultList();
 	}

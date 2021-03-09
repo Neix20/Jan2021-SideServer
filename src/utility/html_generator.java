@@ -35,7 +35,7 @@ public class html_generator {
 	
 	public static String productItem_html(String name, String type, int number, String price, String code) {
 		return "<div class=\"col-lg-4\"><div class=\"trainer-item\"><div class=\"image-thumb\">"
-				+ "<img src=\"frontend/assets/images/" + type + "_" + number + ".jpg"
+				+ "<img src=\"${pageContext.request.contextPath}/frontend/assets/images/" + type + "_" + number + ".jpg"
 				+ "\" alt=\"\"></div><div class=\"down-content\"><span><sup>RM</sup>" + price
 				+ "</span><h3>" + name
 				+ "</h3><ul class=\"social-icons\"><li><a href=\"productDetails?"

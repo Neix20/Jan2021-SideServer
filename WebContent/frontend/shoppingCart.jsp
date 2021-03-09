@@ -23,17 +23,17 @@
 	rel="stylesheet">
 <title>Shopping Cart Page</title>
 <link rel="stylesheet" type="text/css"
-	href="frontend/assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="frontend/assets/css/style.css">
+	href="${pageContext.request.contextPath}/frontend/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- jQuery -->
-<script src="assets/js/jquery-2.1.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
 
 <!-- Bootstrap -->
-<script src="assets/js/popper.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/frontend/assets/js/popper.js"></script>
+<script src="${pageContext.request.contextPath}/frontend/assets/js/bootstrap.min.js"></script>
 
 <style>
 /* Chrome, Safari, Edge, Opera */
@@ -86,7 +86,7 @@ input[type=number] {
 
 	<!-- ***** Call to Action Start ***** -->
 	<section class="section section-bg" id="call-to-action"
-		style="background-image: url(assets/images/banner-image-1-1920x500.jpg)">
+		style="background-image: url(${pageContext.request.contextPath}/frontend/assets/images/banner-image-1-1920x500.jpg)">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
@@ -131,7 +131,7 @@ input[type=number] {
 							<form action="/SideServerAssignment/ShoppingCart" method="post">
 								<div class="row mb-4">
 									<div class="col-md-5 col-lg-3 col-xl-3">
-										<img src="frontend/assets/images/<%=type%>.jpg"
+										<img src="${pageContext.request.contextPath}/frontend/assets/images/<%=type%>.jpg"
 											style="width: 100%;" />
 									</div>
 									<div class="col-md-7 col-lg-9 col-xl-9">
@@ -284,7 +284,7 @@ input[type=number] {
 								</li>
 							</ul>
 
-							<a href="Checkout" type="submit" class="btn btn-primary btn-block">go
+							<a href="${pageContext.request.contextPath}/Checkout" type="submit" class="btn btn-primary btn-block">go
 								to checkout</a>
 						</div>
 					</div>
@@ -314,15 +314,15 @@ input[type=number] {
 		</div>
 	</footer>
 	<!-- Plugins -->
-	<script src="assets/js/scrollreveal.min.js"></script>
-	<script src="assets/js/waypoints.min.js"></script>
-	<script src="assets/js/jquery.counterup.min.js"></script>
-	<script src="assets/js/imgfix.min.js"></script>
-	<script src="assets/js/mixitup.js"></script>
-	<script src="assets/js/accordions.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/scrollreveal.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/waypoints.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery.counterup.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/imgfix.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/mixitup.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/accordions.js"></script>
 
 	<!-- Global Init -->
-	<script src="assets/js/custom.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/custom.js"></script>
 
 </body>
 

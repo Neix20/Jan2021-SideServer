@@ -31,7 +31,7 @@ ShoppingCart purchasedOrderProduct = (ShoppingCart) request.getAttribute("purcha
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
 		integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
 		crossorigin="anonymous"></script>
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
 <style>
 	body{
 		margin-top:20px;
@@ -168,7 +168,7 @@ ShoppingCart purchasedOrderProduct = (ShoppingCart) request.getAttribute("purcha
 	
 	<!-- ***** Call to Action Start ***** -->
     <section class="section section-bg" id="call-to-action"
-        style="background-image: url(assets/images/banner-image-1-1920x500.jpg)">
+        style="background-image: url(frontend/assets/images/banner-image-1-1920x500.jpg)">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">

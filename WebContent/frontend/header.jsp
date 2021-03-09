@@ -13,22 +13,22 @@
 	<title>Template</title>
 	
 	<!-- jQuery -->
-	<script src="assets/js/jquery-2.1.0.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
 	
 	<!-- Bootstrap -->
-	<script src="assets/js/popper.js"></script>
-	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/popper.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/bootstrap.min.js"></script>
 	
     <!-- Plugins -->
-    <script src="assets/js/scrollreveal.min.js"></script>
-    <script src="assets/js/waypoints.min.js"></script>
-    <script src="assets/js/jquery.counterup.min.js"></script>
-    <script src="assets/js/imgfix.min.js"></script>
-    <script src="assets/js/mixitup.js"></script>
-    <script src="assets/js/accordions.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/scrollreveal.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/waypoints.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/jquery.counterup.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/imgfix.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/mixitup.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/accordions.js"></script>
 
     <!-- Global Init -->
-    <script src="assets/js/custom.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/custom.js"></script>
 </head>
 <body>
 	<!-- ***** Preloader Start ***** -->
@@ -49,13 +49,13 @@
 	            <div class="col-12">
 	                <nav class="main-nav">
 	                    <!-- ***** Logo Start ***** -->
-	                    <a href="index.html" class="logo">Vehicle Models <em>Website</em></a>
+	                    <a href="${pageContext.request.contextPath}" class="logo">Vehicle Models <em>Website</em></a>
 	                    <!-- ***** Logo End ***** -->
 	                    <!-- ***** Menu Start ***** -->
 	                    <ul class="nav">
-	                        <li><a href="index.html">Home</a></li>
-	                        <li><a href="/SideServerAssignment/productCatalog">Vehicle Models</a></li>
-	                        <li><a href="/SideServerAssignment/frontend/shoppingCart.jsp">Shopping Cart</a></li>
+	                        <li><a href="${pageContext.request.contextPath}">Home</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/productCatalog">Vehicle Models</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/shoppingCart">Shopping Cart</a></li>
 	                    </ul>
 	                    <a class='menu-trigger'> <span>Menu</span>
 	                    </a>

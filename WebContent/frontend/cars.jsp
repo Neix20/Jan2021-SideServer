@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,10 +11,10 @@
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
     <title>PHPJabbers.com | Free Car Dealer Website Template</title>
-    <link rel="stylesheet" type="text/css" href="frontend/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="frontend/assets/css/font-awesome.css">
-    <link rel="stylesheet" href="frontend/assets/css/style.css">
-    <script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/frontend/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/frontend/assets/css/font-awesome.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
     <script>
         $(function(){
             $(".btnDropDown").on("click", e => {
@@ -67,7 +69,7 @@
 
     <!-- ***** Call to Action Start ***** -->
     <section class="section section-bg" id="call-to-action"
-        style="background-image: url(assets/images/banner-image-1-1920x500.jpg)">
+        style="background-image: url(frontend/assets/images/banner-image-1-1920x500.jpg)">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
@@ -113,7 +115,7 @@
                 <div class="col-lg-4">
                     <div class="trainer-item">
                         <div class="image-thumb">
-                            <img src="frontend/assets/images/cars_1.jpg" alt="" style="width: 100%;">
+                            <img src="${pageContext.request.contextPath}/frontend/assets/images/cars_1.jpg" alt="" style="width: 100%;">
                         </div>
                         <div class="down-content">
                             <span>
@@ -131,7 +133,7 @@
                 <div class="col-lg-4">
                     <div class="trainer-item">
                         <div class="image-thumb">
-                            <img src="frontend/assets/images/cars_2.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/frontend/assets/images/cars_2.jpg" alt="">
                         </div>
                         <div class="down-content">
                             <span>
@@ -149,26 +151,7 @@
                 <div class="col-lg-4">
                     <div class="trainer-item">
                         <div class="image-thumb">
-                            <img src="frontend/assets/images/cars_3.jpg" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>
-                                <sup>$</sup>11779
-                            </span>
-
-                            <h4>Lorem ipsum dolor sit amet, consectetur</h4>
-
-                            <ul class="social-icons">
-                                <li><a href="car-details.html">+ View Model</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="frontend/assets/images/cars_4.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/frontend/assets/images/cars_3.jpg" alt="">
                         </div>
                         <div class="down-content">
                             <span>
@@ -187,7 +170,26 @@
                 <div class="col-lg-4">
                     <div class="trainer-item">
                         <div class="image-thumb">
-                            <img src="frontend/assets/images/cars_5.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/frontend/assets/images/cars_4.jpg" alt="">
+                        </div>
+                        <div class="down-content">
+                            <span>
+                                <sup>$</sup>11779
+                            </span>
+
+                            <h4>Lorem ipsum dolor sit amet, consectetur</h4>
+
+                            <ul class="social-icons">
+                                <li><a href="car-details.html">+ View Model</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="trainer-item">
+                        <div class="image-thumb">
+                            <img src="${pageContext.request.contextPath}/frontend/assets/images/cars_5.jpg" alt="">
                         </div>
                         <div class="down-content">
                             <span>
@@ -205,7 +207,7 @@
                 <div class="col-lg-4">
                     <div class="trainer-item">
                         <div class="image-thumb">
-                            <img src="frontend/assets/images/cars_6.jpg" alt="">
+                            <img src="${pageContext.request.contextPath}/frontend/assets/images/cars_6.jpg" alt="">
                         </div>
                         <div class="down-content">
                             <span>
@@ -264,22 +266,22 @@
     </footer>
 
     <!-- jQuery -->
-    <script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
 
     <!-- Bootstrap -->
-    <script src="frontend/assets/js/popper.js"></script>
-    <script src="frontend/assets/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/popper.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/bootstrap.min.js"></script>
 
     <!-- Plugins -->
-    <script src="frontend/assets/js/scrollreveal.min.js"></script>
-    <script src="frontend/assets/js/waypoints.min.js"></script>
-    <script src="frontend/assets/js/jquery.counterup.min.js"></script>
-    <script src="frontend/assets/js/imgfix.min.js"></script>
-    <script src="frontend/assets/js/mixitup.js"></script>
-    <script src="frontend/assets/js/accordions.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/scrollreveal.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/waypoints.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/jquery.counterup.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/imgfix.min.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/mixitup.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/accordions.js"></script>
 
     <!-- Global Init -->
-    <script src="frontend/assets/js/custom.js"></script>
+    <script src="${pageContext.request.contextPath}/frontend/assets/js/custom.js"></script>
 
 </body>
 

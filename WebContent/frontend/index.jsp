@@ -14,19 +14,10 @@
 	rel="stylesheet">
 <title>Vehicle Model Website</title>
 <link rel="stylesheet" type="text/css"
-	href="frontend/assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="frontend/assets/css/style.css">
+	href="${pageContext.request.contextPath}/frontend/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<!-- jQuery -->
-<script src="frontend/assets/jquery-2.1.0.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="frontend/assets/popper.js"></script>
-<script src="frontend/assets/bootstrap.min.js"></script>
-</head>
-
 <body>
 
 	<%@ include file="header.jsp"%>
@@ -34,7 +25,7 @@
 	<!-- ***** Main Banner Area Start ***** -->
 	<div class="main-banner" id="top">
 		<video autoplay muted loop id="bg-video">
-			<source src="frontend/assets/images/video.mp4" type="video/mp4" />
+			<source src="${pageContext.request.contextPath}/frontend/assets/images/video.mp4" type="video/mp4" />
 		</video>
 
 		<div class="video-overlay header-text">
@@ -57,7 +48,7 @@
 						<h2>
 							Featured <em>Vehicle Model</em>
 						</h2>
-						<img src="frontend/assets/images/line-dec.png" alt="">
+						<img src="${pageContext.request.contextPath}/frontend/assets/images/line-dec.png" alt="">
 						<p>Nunc urna sem, laoreet ut metus id, aliquet consequat
 							magna. Sed viverra ipsum dolor, ultricies fermentum massa
 							consequat eu.</p>
@@ -68,7 +59,7 @@
 				<div class="col-lg-4">
 					<div class="trainer-item">
 						<div class="image-thumb">
-							<img src="frontend/assets/images/Vintage_4.jpg" alt=""
+							<img src="${pageContext.request.contextPath}/frontend/assets/images/Vintage_4.jpg" alt=""
 								style="width: 100%;">
 						</div>
 						<div class="down-content">
@@ -88,7 +79,7 @@
 				<div class="col-lg-4">
 					<div class="trainer-item">
 						<div class="image-thumb">
-							<img src="frontend/assets/images/Motorcycles_4.jpg" alt=""
+							<img src="${pageContext.request.contextPath}/frontend/assets/images/Motorcycles_4.jpg" alt=""
 								style="width: 100%;">
 						</div>
 						<div class="down-content">
@@ -108,7 +99,7 @@
 				<div class="col-lg-4">
 					<div class="trainer-item">
 						<div class="image-thumb">
-							<img src="frontend/assets/images/Planes_3.jpg" alt=""
+							<img src="${pageContext.request.contextPath}/frontend/assets/images/Planes_3.jpg" alt=""
 								style="width: 100%;">
 						</div>
 						<div class="down-content">
@@ -137,7 +128,7 @@
 	<!-- ***** Cars Ends ***** -->
 
 	<section class="section section-bg" id="schedule"
-		style="background-image: url(assets/images/about-fullscreen-1-1920x700.jpg)">
+		style="background-image: url(${pageContext.request.contextPath}/frontend/assets/images/about-fullscreen-1-1920x700.jpg)">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 offset-lg-3">
@@ -145,7 +136,7 @@
 						<h2>
 							Read <em>About Us</em>
 						</h2>
-						<img src="frontend/assets/images/line-dec.png" alt="">
+						<img src="${pageContext.request.contextPath}/frontend/assets/images/line-dec.png" alt="">
 						<p>Nunc urna sem, laoreet ut metus id, aliquet consequat
 							magna. Sed viverra ipsum dolor, ultricies fermentum massa
 							consequat eu.</p>
@@ -181,7 +172,7 @@
 						<h2>
 							Read our <em>Testimonials</em>
 						</h2>
-						<img src="frontend/assets/images/line-dec.png" alt="waves">
+						<img src="${pageContext.request.contextPath}/frontend/assets/images/line-dec.png" alt="waves">
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 							Voluptatem incidunt alias minima tenetur nemo necessitatibus?</p>
 					</div>
@@ -190,7 +181,7 @@
 					<ul class="features-items">
 						<li class="feature-item">
 							<div class="left-icon">
-								<img src="frontend/assets/images/features-first-icon.png"
+								<img src="${pageContext.request.contextPath}/frontend/assets/images/features-first-icon.png"
 									alt="First One">
 							</div>
 							<div class="right-content">
@@ -204,7 +195,7 @@
 						</li>
 						<li class="feature-item">
 							<div class="left-icon">
-								<img src="frontend/assets/images/features-first-icon.png"
+								<img src="${pageContext.request.contextPath}/frontend/assets/images/features-first-icon.png"
 									alt="second one">
 							</div>
 							<div class="right-content">
@@ -222,7 +213,7 @@
 					<ul class="features-items">
 						<li class="feature-item">
 							<div class="left-icon">
-								<img src="frontend/assets/images/features-first-icon.png"
+								<img src="${pageContext.request.contextPath}/frontend/assets/images/features-first-icon.png"
 									alt="fourth muscle">
 							</div>
 							<div class="right-content">
@@ -236,7 +227,7 @@
 						</li>
 						<li class="feature-item">
 							<div class="left-icon">
-								<img src="frontend/assets/images/features-first-icon.png"
+								<img src="${pageContext.request.contextPath}/frontend/assets/images/features-first-icon.png"
 									alt="training fifth">
 							</div>
 							<div class="right-content">
@@ -270,25 +261,6 @@
 			</div>
 		</div>
 	</footer>
-
-	<!-- jQuery -->
-	<script src="frontend/assets/jquery-2.1.0.min.js"></script>
-
-	<!-- Bootstrap -->
-	<script src="frontend/assets/popper.js"></script>
-	<script src="frontend/assets/bootstrap.min.js"></script>
-
-	<!-- Plugins -->
-	<script src="frontend/assets/scrollreveal.min.js"></script>
-	<script src="frontend/assets/waypoints.min.js"></script>
-	<script src="frontend/assets/jquery.counterup.min.js"></script>
-	<script src="frontend/assets/imgfix.min.js"></script>
-	<script src="frontend/assets/mixitup.js"></script>
-	<script src="frontend/assets/accordions.js"></script>
-
-	<!-- Global Init -->
-	<script src="frontend/assets/custom.js"></script>
-
 </body>
 
 </html>

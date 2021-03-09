@@ -14,6 +14,6 @@
 	</welcome-file-list>
 	<context-param> 
     <param-name>image_save_dir</param-name>
-    <param-value>/frontend/assets/images</param-value>
+    <param-value>/${pageContext.request.contextPath}/frontend/assets/images</param-value>
 </context-param>
 </web-app>

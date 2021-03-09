@@ -64,12 +64,4 @@ public class OrderDetailSessionBean implements OrderDetailSessionBeanLocal {
 		em.remove(em.contains(od) ? od : em.merge(od));
 	}
 
-	@Override
-	public Orderdetail getOrderdetail(int ordernumber, String productcode) throws EJBException {
-		return em.createNamedQuery("Orderdetail.findByOrderNumberAndProductCode", Orderdetail.class)
-				.setParameter(1, ordernumber)
-				.setParameter(2, productcode)
-				.getSingleResult();
-	}
-
 }
