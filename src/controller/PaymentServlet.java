@@ -19,7 +19,7 @@ import utility.ValidateManageLogic;
 /**
  * Servlet implementation class PaymentServlet
  */
-@WebServlet("/PaymentServlet")
+@WebServlet({"frontend/Payment", "/Payment", "/payment"})
 public class PaymentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     

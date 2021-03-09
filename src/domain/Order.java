@@ -3,8 +3,13 @@ package domain;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,27 +21,52 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="orders", schema="classicmodels")
-@NamedQuery(name="Order.findAll", query="SELECT o FROM Order o")
+@NamedQueries({ 
+	@NamedQuery(
+		name = "Order.findAll", 
+		query = "SELECT o FROM Order o"
+	),
+	@NamedQuery(
+		name = "Order.findByOrderNumber",
+		query = "SELECT o FROM Order o WHERE o.ordernumber = ?1"
+	),
+	@NamedQuery(
+		name = "Order.findByCustomernumber",
+		query = "SELECT o FROM Order o WHERE o.customernumber = ?1"
+	),
+	@NamedQuery(
+			name="Order.locateNextPK", 
+			query="SELECT MAX(o.ordernumber) FROM Order o"
+	),
+})
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name="ordernumber")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer ordernumber;
 
-	private String comments;
-
-	private Integer customernumber;
-
+	@Column(name="orderdate", length=10)
 	private String orderdate;
 
+	@Column(name="requireddate", length=10)
 	private String requireddate;
 
+	@Column(name="shippeddate", length=10)
 	private String shippeddate;
 
+	@Column(name="status", length=10)
 	private String status;
+	
+	@Column(name="comments", length=189)
+	private String comments;
+	
+	@Column(name="customernumber")
+	private Integer customernumber;
 
 	//bi-directional many-to-one association to Orderdetail
-	@OneToMany(mappedBy="order")
+	@OneToMany(mappedBy="order", cascade={CascadeType.REMOVE})
 	private List<Orderdetail> orderdetails;
 
 	public Order() {
@@ -120,4 +150,20 @@ public class Order implements Serializable {
 		return orderdetail;
 	}
 
+	public void setEverything(String[] arr) {
+		String comments = null;
+		Integer customernumber = Integer.valueOf(arr[0]);
+		String orderdate = arr[1];
+		String requireddate = arr[2];
+		String shippeddate = null;
+		String status = "In Process";
+		
+		this.setComments(comments);
+		this.setCustomernumber(customernumber);
+		this.setOrderdate(orderdate);
+		this.setRequireddate(requireddate);
+		this.setShippeddate(shippeddate);
+		this.setStatus(status);
+	}
+	
 }

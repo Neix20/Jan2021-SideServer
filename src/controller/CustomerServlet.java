@@ -18,7 +18,7 @@ import utility.ValidateManageLogic;
 /**
  * Servlet implementation class CustomerController
  */
-@WebServlet("/CustomerServlet")
+@WebServlet({"frontend/CustomerServlet", "/CustomerServlet"})
 public class CustomerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

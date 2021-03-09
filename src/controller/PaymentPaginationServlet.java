@@ -18,7 +18,7 @@ import session_bean.PaymentSessionBeanLocal;
 /**
  * Servlet implementation class PaymentPaginationServlet
  */
-@WebServlet("/PaymentPagination")
+@WebServlet({"frontend/PaymentPagination", "/PaymentPagination"})
 public class PaymentPaginationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     

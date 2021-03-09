@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,6 +26,16 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "customers", schema="classicmodels")
+@NamedQueries({
+	@NamedQuery(
+			name="Customer.findByEmail",
+			query="SELECT c FROM Customer c WHERE c.email = :email"
+	),
+	@NamedQuery(
+			name="Customer.locateNextPK", 
+			query="SELECT MAX(c.customernumber) FROM Customer c"
+	),
+})
 @NamedNativeQueries({
 	@NamedNativeQuery(
 			name = "Customer.findAll", 
@@ -69,42 +81,42 @@ public class Customer implements Serializable {
 	@Column(name="customernumber")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer customernumber;
-
-	@Column(name="addressline1")
-	private String addressline1;
-
-	@Column(name="addressline2")
-	private String addressline2;
-
-	@Column(name="city")
-	private String city;
-
-	@Column(name="contactfirstname")
-	private String contactfirstname;
-
-	@Column(name="contactlastname")
-	private String contactlastname;
-
-	@Column(name="country")
-	private String country;
-
-	@Column(name="creditlimit")
-	private BigDecimal creditlimit;
-
-	@Column(name="customername")
+	
+	@Column(name="customername", length=34)
 	private String customername;
+	
+	@Column(name="contactlastname", length=15)
+	private String contactlastname;	
 
-	@Column(name="email")
-	private String email;
-
-	@Column(name="phone")
+	@Column(name="contactfirstname", length=11)
+	private String contactfirstname;
+	
+	@Column(name="phone", length=18)
 	private String phone;
 
-	@Column(name="postalcode")
+	@Column(name="addressline1", length=32)
+	private String addressline1;
+
+	@Column(name="addressline2", length=24)
+	private String addressline2;
+
+	@Column(name="city", length=17)
+	private String city;
+	
+	@Column(name="state", length=13)
+	private String state;
+	
+	@Column(name="postalcode", length=9)
 	private String postalcode;
 
-	@Column(name="state")
-	private String state;
+	@Column(name="country", length=12)
+	private String country;
+
+	@Column(name="creditlimit", precision=8, scale=2)
+	private BigDecimal creditlimit;
+
+	@Column(name="email", length=50)
+	private String email;
 
 	//bi-directional many-to-one association to Employee
 	@ManyToOne

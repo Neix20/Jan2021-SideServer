@@ -1,15 +1,20 @@
 package session_bean;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.List;
 
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import domain.Customer;
 import domain.Employee;
@@ -110,14 +115,20 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 	}
 	
     @Override
-    public void addCustomer(String[] s) throws EJBException {
+    public Integer addCustomer(String[] s) throws EJBException {
 		Customer customer = new Customer();
 		customer = setValues(s, customer);	
+		
+		TypedQuery<Integer> query = em.createNamedQuery("Customer.locateNextPK", Integer.class);
+		Integer customernumber = (Integer) query.getSingleResult();
+		
 		em.merge(customer);
+		
+		return customernumber;
     }
 	    
 	private Customer setValues(String s[], Customer customer) {
-				
+		
 		String customername = s[0];
 		String contactfirstname = s[1];
 		String contactlastname = s[2];
@@ -130,7 +141,25 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		String postalcode = s[9];
 		String country = s[10];
 		String salesrepemployeenumber = s[11];
-		BigDecimal creditlimit = new BigDecimal(s[12]);
+		
+		
+		int scale = 0;
+		int precision = 0;	
+		Field f = null;
+		try {
+			f = Customer.class.getDeclaredField("creditlimit");
+		} catch (NoSuchFieldException | SecurityException e) {
+			e.printStackTrace();
+		}
+		Column creditlimitColumn = f.getAnnotation(Column.class);
+		if (creditlimitColumn != null){
+			precision = creditlimitColumn.precision();
+			scale = creditlimitColumn.scale();
+		}
+		
+		MathContext creditlimitMc = new MathContext(precision);
+		BigDecimal creditlimit = new BigDecimal(s[12], creditlimitMc);
+		creditlimit.setScale(scale);
 		
 		//TODO Implement the find function from other members.
 		Employee salesrepemployee = null;
@@ -151,6 +180,16 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		// customer.setEmployee(salesrepemployee);
 		
 		return customer;
+	}
+
+	@Override
+	public Customer findCustomerByEmail(String email) throws EJBException {
+		TypedQuery<Customer> query = em.createNamedQuery("Customer.findByEmail", Customer.class);
+		query.setParameter("email", email);
+		List<Customer> matchCustomer = (List<Customer>) query.getResultList();
+		if (matchCustomer.isEmpty()) return null;
+        else if (matchCustomer.size() == 1) return matchCustomer.get(0);
+        throw new NonUniqueResultException();
 	}
     
 }

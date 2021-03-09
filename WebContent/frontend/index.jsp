@@ -20,11 +20,11 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- jQuery -->
-<script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
+<script src="frontend/assets/jquery-2.1.0.min.js"></script>
 
 <!-- Bootstrap -->
-<script src="frontend/assets/js/popper.js"></script>
-<script src="frontend/assets/js/bootstrap.min.js"></script>
+<script src="frontend/assets/popper.js"></script>
+<script src="frontend/assets/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -137,7 +137,7 @@
 	<!-- ***** Cars Ends ***** -->
 
 	<section class="section section-bg" id="schedule"
-		style="background-image: url(frontend/assets/images/about-fullscreen-1-1920x700.jpg)">
+		style="background-image: url(assets/images/about-fullscreen-1-1920x700.jpg)">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 offset-lg-3">
@@ -272,22 +272,22 @@
 	</footer>
 
 	<!-- jQuery -->
-	<script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
+	<script src="frontend/assets/jquery-2.1.0.min.js"></script>
 
 	<!-- Bootstrap -->
-	<script src="frontend/assets/js/popper.js"></script>
-	<script src="frontend/assets/js/bootstrap.min.js"></script>
+	<script src="frontend/assets/popper.js"></script>
+	<script src="frontend/assets/bootstrap.min.js"></script>
 
 	<!-- Plugins -->
-	<script src="frontend/assets/js/scrollreveal.min.js"></script>
-	<script src="frontend/assets/js/waypoints.min.js"></script>
-	<script src="frontend/assets/js/jquery.counterup.min.js"></script>
-	<script src="frontend/assets/js/imgfix.min.js"></script>
-	<script src="frontend/assets/js/mixitup.js"></script>
-	<script src="frontend/assets/js/accordions.js"></script>
+	<script src="frontend/assets/scrollreveal.min.js"></script>
+	<script src="frontend/assets/waypoints.min.js"></script>
+	<script src="frontend/assets/jquery.counterup.min.js"></script>
+	<script src="frontend/assets/imgfix.min.js"></script>
+	<script src="frontend/assets/mixitup.js"></script>
+	<script src="frontend/assets/accordions.js"></script>
 
 	<!-- Global Init -->
-	<script src="frontend/assets/js/custom.js"></script>
+	<script src="frontend/assets/custom.js"></script>
 
 </body>
 

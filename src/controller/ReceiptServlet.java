@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 
-import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,22 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import domain.Product;
-import session_bean.ProductSessionBeanLocal;
+import domain.ShoppingCart;
 
 /**
- * Servlet implementation class ProductDetailsServlet
+ * Servlet implementation class Receipt
  */
-@WebServlet(name="Product Details Servlet", urlPatterns = {"/ProductDetailsServlet", "/productDetails"})
-public class ProductDetailsServlet extends HttpServlet {
+@WebServlet({ "frontend/Receipt", "/Receipt", "/receipt" })
+public class ReceiptServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
-	@EJB
-	private ProductSessionBeanLocal productBean;
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ProductDetailsServlet() {
+    public ReceiptServlet() {
         super();
     }
 
@@ -33,15 +29,17 @@ public class ProductDetailsServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String productCode = request.getParameter("productCode");
-		String image_url = request.getParameter("image_url");
+		ShoppingCart purchasedOrderProduct = (ShoppingCart) request.getAttribute("purchased_order_product");
 		
-		Product p = productBean.getProduct(productCode);
-		
-		request.setAttribute("Product", p);
-		request.setAttribute("image_url", image_url);
-		RequestDispatcher req = request.getRequestDispatcher("frontend/productDetails.jsp");
-		req.forward(request, response);
+		if (purchasedOrderProduct == null) {
+			response.setHeader("Refresh", "8; URL="+request.getContextPath()+"/Checkout");
+			RequestDispatcher req = request.getRequestDispatcher("frontend/receipt_error.jsp");
+			req.forward(request, response);
+		}
+		else {
+			RequestDispatcher req = request.getRequestDispatcher("frontend/receipt.jsp");
+			req.forward(request, response);
+		}
 	}
 
 	/**

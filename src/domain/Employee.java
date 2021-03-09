@@ -3,6 +3,7 @@ package domain;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -22,33 +23,42 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e"),
 	@NamedQuery(name = "Employee.findbyId", query = "SELECT e FROM Employee e WHERE e.employeenumber = :employee_id"),
+	@NamedQuery(name="Employee.findAllEmail", query="SELECT e.email FROM Employee e"),
+	@NamedQuery(name="Employee.findbyEmail", query="SELECT e FROM Employee e WHERE e.email = :email"),
 })
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name="employeenumber")
 	private Integer employeenumber;
 
-	private String email;
-
-	private String extension;
-
-	private String firstname;
-
-	private String jobtitle;
-
+	@Column(name="lastname", length=9)
 	private String lastname;
 
-	private String reportsto;
-
-	//bi-directional many-to-one association to Customer
-	@OneToMany(mappedBy="employee")
-	private List<Customer> customers;
-
+	@Column(name="firstname", length=8)
+	private String firstname;
+	
+	@Column(name="extension", length=5)
+	private String extension;
+	
+	@Column(name="email", length=31)
+	private String email;
+	
 	//bi-directional many-to-one association to Office
 	@ManyToOne
 	@JoinColumn(name="officecode",insertable=false, updatable=false)
 	private Office office;
+
+	@Column(name="reportsto", length=4)
+	private String reportsto;
+	
+	@Column(name="jobtitle", length=20)
+	private String jobtitle;
+
+	//bi-directional many-to-one association to Customer
+	@OneToMany(mappedBy="employee")
+	private List<Customer> customers;
 
 	public Employee() {
 	}

@@ -3,6 +3,7 @@ package domain;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
@@ -21,22 +22,31 @@ public class Office implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name="officecode")
 	private Integer officecode;
-
-	private String addressline1;
-
-	private String addressline2;
-
+	
+	@Column(name="city", length=13)
 	private String city;
-
-	private String country;
-
+	
+	@Column(name="phone", length=16)
 	private String phone;
 
-	private String postalcode;
+	@Column(name="addressline1", length=24)
+	private String addressline1;
 
+	@Column(name="addressline2", length=9)
+	private String addressline2;
+
+	@Column(name="state", length=10)
 	private String state;
 
+	@Column(name="country", length=9)
+	private String country;
+
+	@Column(name="postalcode", length=8)
+	private String postalcode;
+
+	@Column(name="territory", length=5)
 	private String territory;
 
 	//bi-directional many-to-one association to Employee

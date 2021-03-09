@@ -30,14 +30,12 @@ public class ProductlineServlet extends HttpServlet {
      */
     public ProductlineServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		List<Productline> list = productlineBean.getAllProductline();
 		String keyword = request.getParameter("keyword");
 		List<Productline> SearchResult = (keyword != null) ? productlineBean.getSearchResult(keyword) : new ArrayList<Productline>();
@@ -51,7 +49,6 @@ public class ProductlineServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		String type = request.getParameter("type");
 		String[] parameter = Productline.getParameter();
 		String[] arr = new String[parameter.length];

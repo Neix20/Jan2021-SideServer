@@ -1,7 +1,9 @@
 package session_bean;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,11 +14,13 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import domain.Customer;
+import domain.Orderdetail;
 import domain.Payment;
 import domain.PaymentPK;
 
@@ -133,7 +137,23 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 		String checknumber = s[1];
 		PaymentPK paymentId = new PaymentPK(customernumber, checknumber);
 		
-		String amount = s[2];
+		int scale = 0;
+		int precision = 0;
+		Field f = null;
+		try {
+			f = Payment.class.getDeclaredField("amount");
+		} catch (NoSuchFieldException | SecurityException e) {
+			e.printStackTrace();
+		}
+		Column amountColumn = f.getAnnotation(Column.class);
+		if (amountColumn != null){
+			precision = amountColumn.precision();
+			scale = amountColumn.scale();
+		}
+		
+		MathContext amountMc = new MathContext(precision);
+		BigDecimal amount = new BigDecimal(s[2], amountMc);
+		amount.setScale(scale);
 		
 		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat dateFormat2 = new SimpleDateFormat("M/d/yyyy");
@@ -152,7 +172,7 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 		
 		payment.setId(paymentId);
 		payment.setCustomer(customer);
-		payment.setAmount(new BigDecimal(amount));
+		payment.setAmount(amount);
 		payment.setPaymentdate(paymentdateStr);
 		payment.setPaymentmethod(paymentmethod);
 		

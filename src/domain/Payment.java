@@ -63,13 +63,13 @@ public class Payment implements Serializable {
 	@EmbeddedId
 	private PaymentPK id;
 
-	@Column(name="amount")
+	@Column(name="paymentdate", length=10)
+	private String paymentdate;
+	
+	@Column(name="amount", precision=8, scale=2)
 	private BigDecimal amount;
 
-	@Column(name="paymentdate")
-	private String paymentdate;
-
-	@Column(name="paymentmethod")
+	@Column(name="paymentmethod", length=14)
 	private String paymentmethod;
 
 	//bi-directional many-to-one association to Customer

@@ -140,6 +140,7 @@
 										<label for="selectAll"></label>
 									</span>
 								</th>
+								<th scope="col">Action</th>
 								<th scope="col">Customer no</th>
 								<th scope="col">Check no</th>
 								<th scope="col">Amount</th>
@@ -160,7 +161,7 @@
 								out.println("<td><span class='custom-checkbox'>"+
 								"<input type='checkbox' id='"+customernumber+"' name='selected_customers' "+
 								"value='"+customernumber+"'><label for='"+customernumber+"'></label></span></td>");
-								String href = "'PaymentServlet?customernumber="+customernumber+"&checknumber="+checknumber+"'";
+								String href = "'Payment?customernumber="+customernumber+"&checknumber="+checknumber+"'";
 
 								out.println("<td><a title='Edit' class='view'"+
 								" href="+href+">"+
@@ -282,7 +283,7 @@
 	<div id="addPaymentModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="PaymentServlet" method="post">
+				<form action="Payment" method="post">
 					<div class="modal-header">
 						<h4 class="modal-title">Add payment</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

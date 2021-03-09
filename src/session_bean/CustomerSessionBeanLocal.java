@@ -21,5 +21,8 @@ public interface CustomerSessionBeanLocal {
 
 	public void deleteCustomer(String customernumber) throws EJBException;
 
-	public void addCustomer(String[] s) throws EJBException;
+	public Integer addCustomer(String[] s) throws EJBException;
+	
+	public Customer findCustomerByEmail(String email) throws EJBException;
+	
 }

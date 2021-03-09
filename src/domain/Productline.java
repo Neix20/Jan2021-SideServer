@@ -39,17 +39,17 @@ public class Productline implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "productline")
+	@Column(name = "productline", length=16)
 	private String productline;
+	
+	@Column(name = "textdescription", length=735)
+	private String textdescription;
 
-	@Column(name = "htmldescription")
+	@Column(name = "htmldescription", length=1)
 	private String htmldescription;
 
-	@Column(name = "image")
+	@Column(name = "image", length=10)
 	private String image;
-
-	@Column(name = "textdescription")
-	private String textdescription;
 
 	//bi-directional many-to-one association to Product
 	@OneToMany(mappedBy="productlineBean")

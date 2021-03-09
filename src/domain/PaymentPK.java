@@ -15,7 +15,7 @@ public class PaymentPK implements Serializable {
 	@Column(name="customernumber", insertable=false, updatable=false)
 	private Integer customernumber;
 
-	@Column(name="checknumber")
+	@Column(name="checknumber", length=11)
 	private String checknumber;
 
 	public PaymentPK() {

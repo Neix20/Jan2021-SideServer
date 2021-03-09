@@ -35,36 +35,44 @@ import javax.persistence.Table;
 		name="Product.findByKeyword", 
 		query="SELECT p FROM Product p where concat(p.productcode,p.productdescription,p.productname,p.productscale,p.productvendor)" +
 				"like ?1"
+	),
+	@NamedQuery(
+			name="Product.getLastId",
+			query="Select p FROM Product p ORDER BY p.productcode DESC"
 	)
 })
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="productcode")
+	@Column(name="productcode", length=9)
 	private String productcode;
-
-	@Column(name="buyprice")
-	private BigDecimal buyprice;
-
-	@Column(name="msrp")
-	private BigDecimal msrp;
-
-	@Column(name="productdescription")
-	private String productdescription;
-
-	@Column(name="productname")
+	
+	@Column(name="productname", length=43)
 	private String productname;
+	
+	//Foreign Key
+	@Column(name="productline", nullable = true, length=16)
+	private String productline;
 
-	@Column(name="productscale")
+	@Column(name="productscale", length=5)
 	private String productscale;
-
-	@Column(name="productvendor")
+	
+	@Column(name="productvendor", length=25)
 	private String productvendor;
 
+	@Column(name="productdescription", length=495)
+	private String productdescription;
+	
 	@Column(name="quantityinstock")
 	private Integer quantityinstock;
+	
+	@Column(name="buyprice", precision=5, scale=2)
+	private BigDecimal buyprice;
 
+	@Column(name="msrp", precision=5, scale=2)
+	private BigDecimal msrp;
+	
 	//bi-directional many-to-one association to Orderdetail
 	@OneToMany(mappedBy="product")
 	private List<Orderdetail> orderdetails;
@@ -74,9 +82,7 @@ public class Product implements Serializable {
 	@JoinColumn(name="productline",insertable=false, updatable=false)
 	private Productline productlineBean;
 	
-	//Foreign Key
-	@Column(name="productline", nullable = true)
-	private String productline;
+
 			
 	public Product() {
 	}

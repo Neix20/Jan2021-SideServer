@@ -87,7 +87,7 @@ $(document).ready(function () {
 			Payment Details
 			<span class="page-text font-weight-light small"><%= customernumber %>/<%= checknumber %></span>
 		</h1>
-		<form id="payment-form" action="PaymentServlet" class="p-3" method="post">
+		<form id="payment-form" action="Payment" class="p-3" method="post">
 				<div class="row">
 					<div class="col-9 table-wrapper scroll-bar">
 						<div class="form-group">
@@ -151,7 +151,7 @@ $(document).ready(function () {
 	<div id="quitPaymentModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="PaymentServlet" method="post">
+				<form action="Payment" method="post">
 					<div class="modal-header">						
 						<h4 class="modal-title">Confirm quit</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
