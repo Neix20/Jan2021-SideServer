@@ -3,7 +3,6 @@ package controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -162,7 +161,7 @@ public class CheckoutServlet extends HttpServlet {
 				requiredDateStr
 			};
 			Order order = new Order();
-			order.setEverything(s3);
+			order.setEverything2(s3);
 			Integer ordernumber = orderbean.locateNextPK();
 			orderbean.addOrder(order);
 		
