@@ -19,24 +19,24 @@ import domain.OrderdetailPK;
 @LocalBean
 @Transactional
 public class OrderDetailSessionBean implements OrderDetailSessionBeanLocal {
+	
+	@PersistenceContext(unitName = "Jan2021-SideServer")
+	EntityManager em;
 
-    @PersistenceContext(unitName = "Jan2021-SideServer")
-    EntityManager em;
-    	
     /**
      * Default constructor. 
      */
     public OrderDetailSessionBean() {
     }
-    
-    @Override
+
+	@Override
 	public List<Orderdetail> getAllOrderDetails() throws EJBException {
 		return em.createNamedQuery("Orderdetail.findAll", Orderdetail.class)
 				.getResultList();
 	}
 
 	@Override
-	public List<Orderdetail> getAllOrderDetails(String ordernumber) throws EJBException {
+	public List<Orderdetail> getAllOrderDetails(int ordernumber) throws EJBException {
 		return em.createNamedQuery("Orderdetail.findByOrderNumber", Orderdetail.class)
 				.setParameter(1, ordernumber)
 				.getResultList();
@@ -44,9 +44,8 @@ public class OrderDetailSessionBean implements OrderDetailSessionBeanLocal {
 
 	@Override
 	public Orderdetail getOrderdetail(OrderdetailPK id) throws EJBException {
-		return em.createNamedQuery("Orderdetail.findByOrderNumberAndProductCode", Orderdetail.class)
-				.setParameter(1, id.getOrdernumber())
-				.setParameter(2, id.getProductcode())
+		return em.createNamedQuery("Orderdetail.findByOrderDetailPK", Orderdetail.class)
+				.setParameter(1, id)
 				.getSingleResult();
 	}
 
@@ -72,4 +71,5 @@ public class OrderDetailSessionBean implements OrderDetailSessionBeanLocal {
 				.setParameter(2, productcode)
 				.getSingleResult();
 	}
+
 }

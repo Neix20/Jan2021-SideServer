@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
 import domain.Order;
 
@@ -16,17 +17,18 @@ import domain.Order;
  */
 @Stateless
 @LocalBean
+@Transactional
 public class OrderSessionBean implements OrderSessionBeanLocal {
 
-    @PersistenceContext(unitName = "Jan2021-SideServer")
-    EntityManager em;
-	
-    /**
-     * Default constructor. 
-     */
-    public OrderSessionBean() {
-    }
-    
+	@PersistenceContext(unitName = "Jan2021-SideServer")
+	EntityManager em;
+
+	/**
+	 * Default constructor.
+	 */
+	public OrderSessionBean() {
+	}
+
 	@Override
 	public List<Order> getAllOrders() throws EJBException {
 		return em.createNamedQuery("Order.findAll", Order.class).getResultList();
@@ -37,7 +39,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 		return em.createNamedQuery("Order.findByCustomernumber", Order.class).setParameter(1, customernumber)
 				.getResultList();
 	}
-    
+
 	@Override
 	public Order getOrder(String ordernumber) throws EJBException {
 		return em.createNamedQuery("Order.findByOrderNumber", Order.class).setParameter(1, ordernumber)
@@ -55,7 +57,7 @@ public class OrderSessionBean implements OrderSessionBeanLocal {
 		Integer ordernumber = (Integer) query.getSingleResult();
 		return ordernumber;
 	}
-	
+
 	@Override
 	public void updateOrder(Order o) throws EJBException {
 		em.merge(o);

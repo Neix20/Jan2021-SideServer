@@ -14,7 +14,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
 /**
  * The persistent class for the orders database table.
  * 
@@ -37,7 +36,7 @@ import javax.persistence.Table;
 	@NamedQuery(
 			name="Order.locateNextPK", 
 			query="SELECT MAX(o.ordernumber) FROM Order o"
-	),
+	)
 })
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -149,8 +148,22 @@ public class Order implements Serializable {
 
 		return orderdetail;
 	}
-
+	
+	public static String[] getParameter() {
+		String[] s = {"orderDate", "requiredDate", "shippedDate", "comment", "customerId"};
+		return s;
+	}
+	
 	public void setEverything(String[] arr) {
+		this.setOrderdate(arr[0]);
+		this.setRequireddate(arr[1]);
+		this.setShippeddate(arr[2]);
+		this.setComments(arr[3]);
+		this.setCustomernumber(Integer.valueOf(arr[4]));
+		this.setStatus("Shipped");
+	}
+
+	public void setEverything2(String[] arr) {
 		String comments = null;
 		Integer customernumber = Integer.valueOf(arr[0]);
 		String orderdate = arr[1];

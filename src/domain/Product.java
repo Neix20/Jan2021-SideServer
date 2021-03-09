@@ -37,8 +37,8 @@ import javax.persistence.Table;
 				"like ?1"
 	),
 	@NamedQuery(
-			name="Product.getLastId",
-			query="Select p FROM Product p ORDER BY p.productcode DESC"
+		name="Product.getLastId",
+		query="Select p FROM Product p ORDER BY p.productcode DESC"
 	)
 })
 public class Product implements Serializable {
