@@ -32,6 +32,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
 			integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
 			crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="${ pageContext.request.contextPath }/frontend/assets/css/font-awesome.css">
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/css/customer-page.css">
 	<script>
 		$(document).ready(function () {
@@ -178,12 +179,35 @@
 				<table class="table table-striped table-hover table-light scroll-bar" id="table-container">
 					<thead>
 						<tr>
+							<%
+							String url = request.getContextPath() + "/backend/Payment?user_action=SORT";
+							%>
 							<th scope="col">Action</th>
-							<th scope="col" class="customernumber">Customer no</th>
-							<th scope="col" class="checknumber">Check no</th>
-							<th scope="col" class="amount">Amount</th>
-							<th scope="col" class="paymentdate">Payment date</th>
-							<th scope="col" class="paymentmethod">Payment method</th>
+							<th scope="col" class="customernumber">
+								<a href="<%=url%>&sort=customernumber">
+									Customer no <i class="fa fa-sort" aria-hidden="true"></i>
+								</a>
+							</th>
+							<th scope="col" class="checknumber">
+								<a href="<%=url%>&sort=checknumber">
+									Check no <i class="fa fa-sort" aria-hidden="true"></i>
+								</a>
+							</th>
+							<th scope="col" class="amount">
+								<a href="<%=url%>&sort=amount">
+									Amount <i class="fa fa-sort" aria-hidden="true"></i>
+								</a>
+							</th>
+							<th scope="col" class="paymentdate">
+								<a href="<%=url%>&sort=paymentdate">
+									Payment date <i class="fa fa-sort" aria-hidden="true"></i>
+								</a>
+							</th>
+							<th scope="col" class="paymentmethod">
+								<a href="<%=url%>&sort=paymentmethod">
+									Payment method <i class="fa fa-sort" aria-hidden="true"></i>
+								</a>
+							</th>
 						</tr>
 					</thead>
 					<tbody>

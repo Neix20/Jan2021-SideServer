@@ -15,6 +15,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
 
 import domain.Customer;
 import domain.Employee;
@@ -62,12 +63,18 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 	
 		} else {
 	
-		    q = em.createNamedQuery("Customer.findByKeyword", Customer.class);
-			
+		    // q = em.createNamedQuery("Customer.findByKeyword", Customer.class);
+			 
+		    CustomerQueryConstructor queryConstructor = new CustomerQueryConstructor(em.getCriteriaBuilder());
+		    CriteriaQuery<Customer> cq = queryConstructor.queryCustomer(keyword, "", "");
+		    q = em.createQuery(cq);
+		    
 		    int start = currentPage * recordsPerPage - recordsPerPage;
-		    q.setParameter(1, "%" + keyword + "%");
-		    q.setParameter(2, Integer.valueOf(start));
-		    q.setParameter(3, Integer.valueOf(recordsPerPage));
+		    q.setFirstResult(start);
+		    q.setMaxResults(recordsPerPage);
+//		    q.setParameter(1, "%" + keyword + "%");
+//		    q.setParameter(2, Integer.valueOf(start));
+//		    q.setParameter(3, Integer.valueOf(recordsPerPage));
 
 		}
 	

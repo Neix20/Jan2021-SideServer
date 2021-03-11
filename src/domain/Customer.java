@@ -62,14 +62,6 @@ import javax.persistence.Table;
 				  "phone, addressline1, addressline2, city, state, postalCode, country, " + 
 				  "salesrepemployeenumber, creditlimit) LIKE ?"
 	),
-	@NamedNativeQuery(
-		name = "Customer.findByKeyword", 
-		query = "SELECT * from classicmodels.customers WHERE concat(customernumber ,customername, " +
-			    "contactlastname, contactfirstname, phone, addressline1, addressline2, city, state, " +
-			    "postalCode, country, salesrepemployeenumber, creditlimit) LIKE ? " +
-			    "order by customernumber OFFSET ? LIMIT ?",
-		resultClass = Customer.class
-	),
 })
 public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;

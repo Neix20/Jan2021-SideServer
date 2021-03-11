@@ -58,9 +58,6 @@ import javax.persistence.Transient;
 })
 public class Payment implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Transient
-	transient private String allAttrs;
 	
 	@EmbeddedId
 	private PaymentPK id;
@@ -120,14 +117,6 @@ public class Payment implements Serializable {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
-	}
-
-	public String getAllAttrs() {
-		return id.getCustomernumber()+id.getChecknumber()+paymentdate+amount+paymentmethod;
-	}
-
-	public void setAllAttrs(String allAttrs) {
-		this.allAttrs = allAttrs;
 	}
 
 }

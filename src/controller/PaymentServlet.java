@@ -39,8 +39,7 @@ public class PaymentServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String customernumber = request.getParameter("customernumber");
 		String checknumber = request.getParameter("checknumber");
-		
-		
+
 		try {
 		    Payment payment = paymentBean.findPayment(customernumber, checknumber);
 		    request.setAttribute("payment", payment);
@@ -48,6 +47,7 @@ public class PaymentServlet extends HttpServlet {
 		    RequestDispatcher req = request.getRequestDispatcher("update_payment.jsp");
 		    req.forward(request, response);
 		} catch (EJBException ex) {
+			throw ex;
 		}
 	}
 

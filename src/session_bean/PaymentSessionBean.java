@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
 
 import domain.Customer;
 import domain.Payment;
@@ -70,15 +71,22 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 		    
 		} else {
 	
-		    q = em.createNamedQuery("Payment.findByKeyword", Payment.class);
+		    //q = em.createNamedQuery("Payment.findByKeyword", Payment.class);
 	
+			PaymentQueryConstructor queryConstructor = new PaymentQueryConstructor(em.getCriteriaBuilder());
+		    CriteriaQuery<Payment> cq = queryConstructor.queryPayment(keyword, "", "");
+		    q = em.createQuery(cq);
+		    
 		    int start = currentPage * recordsPerPage - recordsPerPage;
-		    q.setParameter(1, "%" + keyword + "%");
-		    q.setParameter(2, Integer.valueOf(start));
-		    q.setParameter(3, Integer.valueOf(recordsPerPage));
+		    q.setFirstResult(start);
+		    q.setMaxResults(recordsPerPage);
+//		    q.setParameter(1, "%" + keyword + "%");
+//		    q.setParameter(2, Integer.valueOf(start));
+//		    q.setParameter(3, Integer.valueOf(recordsPerPage));
 		    
 		}
 	
+		// CriteriaQuery<Foo> criteriaQuery = criteriaBuilder.createQuery(Foo.class);
 		List<Payment> results = q.getResultList();
 
 		return results;

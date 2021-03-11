@@ -43,6 +43,7 @@ public class PaymentPaginationServlet extends HttpServlet {
 		int currentPage = 1;
 		int recordsPerPage = 30;
 		String keyword = ""; 
+		String sortItem = "";
 				
 		if (request.getParameter("currentPage") != null) {
 			currentPage = Integer.valueOf(request.getParameter("currentPage"));
@@ -54,6 +55,10 @@ public class PaymentPaginationServlet extends HttpServlet {
 		
 		if (request.getParameter("keyword") != null) {
 			keyword = request.getParameter("keyword");
+		}
+		
+		if (request.getParameter("sort") != null) {
+			sortItem = request.getParameter("sort");
 		}
 	
 		try {
@@ -68,8 +73,11 @@ public class PaymentPaginationServlet extends HttpServlet {
 		    if (currentPage > nOfPages && nOfPages != 0) {
 		    	currentPage = nOfPages;
 		    }
-
-		    List<Payment> lists = paymentBean.readPayment(currentPage, recordsPerPage, keyword);
+		    
+		    List<Payment> lists;
+			String action = request.getParameter("user_action");
+			lists = paymentBean.readPayment(currentPage, recordsPerPage, keyword);
+		    
 		    request.setAttribute("payments", lists);
 		} catch (EJBException ex) {
 			throw ex;

@@ -41,7 +41,7 @@ public class PaymentPK implements Serializable {
 	public void setChecknumber(String checknumber) {
 		this.checknumber = checknumber;
 	}
-
+	
 	public boolean equals(Object other) {
 		if (this == other) {
 			return true;
@@ -63,4 +63,9 @@ public class PaymentPK implements Serializable {
 		
 		return hash;
 	}
+	
+	@Override
+	public String toString(){
+		  return customernumber+""+checknumber;  
+	}  
 }
