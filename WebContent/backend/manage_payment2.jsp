@@ -35,28 +35,46 @@
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/css/customer-page.css">
 	<script>
 		$(document).ready(function () {
-
-			// Activate tooltip
-			// $('[data-toggle="tooltip"]').tooltip();
 			
-			// Select/Deselect checkboxes
-			var checkbox = $('table tbody input[type="checkbox"]');
-			$("#selectAll").click(function(){
-				if(this.checked){
-					checkbox.each(function(){
-						this.checked = true;                        
+			$('input[type="checkbox"]').attr('checked', 'checked');
+			var checkboxes = $('input[name=filtercolumn]');
+
+			function filterColumn(checkbox) {
+				let id = checkbox.attr("id");
+				let columns = $('.'+id);
+				
+				if (checkbox.prop('checked')) {
+					$.each(columns, function(index, column) {
+						column.style.display= "";
 					});
-				} else{
-					checkbox.each(function(){
-						this.checked = false;                        
+				} else {
+					$("#selectAll").prop("checked", false);
+					$.each(columns, function(index, column) {
+						column.style.display= "none";
+					});	
+				}
+			}
+			
+			$("#selectAll").on("change", function(){
+				let checkbox;			
+				if($("#selectAll").prop("checked")){
+					checkboxes.each(function(){
+						checkbox = $(this)
+						checkbox.prop("checked", true);
+						filterColumn(checkbox);         
+					});
+				} else {
+					checkboxes.each(function(){
+						checkbox = $(this)
+						checkbox.prop("checked", false);
+						filterColumn(checkbox);              
 					});
 				} 
 			});
-			
-			checkbox.click(function(){
-				if(!this.checked){
-					$("#selectAll").prop("checked", false);
-				}
+						 
+			checkboxes.on("change", function(){
+				let checkbox = $(this);
+				filterColumn(checkbox);
 			});
 			
 			// Animate select box length
@@ -83,7 +101,10 @@
 			$('#search').on('click', function() {
 				$('#search-form').submit();
 			});
-			
+
+			// Activate tooltip
+			// $('[data-toggle="tooltip"]').tooltip();
+
 // 			$('.scroll-bar').DataTable({
 // 				"scrollX": true,
 // 				"scrollY": 200,
@@ -154,15 +175,15 @@
 		</div>
 		<div class="row container-fluid">
 			<div class="col-9 table-responsive table-wrapper" style="min-width: 500px;">
-				<table class="table table-striped table-hover table-light scroll-bar">
+				<table class="table table-striped table-hover table-light scroll-bar" id="table-container">
 					<thead>
 						<tr>
 							<th scope="col">Action</th>
-							<th scope="col">Customer no</th>
-							<th scope="col">Check no</th>
-							<th scope="col">Amount</th>
-							<th scope="col">Payment date</th>
-							<th scope="col">Payment method</th>
+							<th scope="col" class="customernumber">Customer no</th>
+							<th scope="col" class="checknumber">Check no</th>
+							<th scope="col" class="amount">Amount</th>
+							<th scope="col" class="paymentdate">Payment date</th>
+							<th scope="col" class="paymentmethod">Payment method</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -187,12 +208,12 @@
 							" href="+href+">"+
 							"<i class='material-icons'>&#xE872;</i></a></td>");
 							
-						    out.println("<td scope='row'>" + customernumber + "</td>");
-						    out.println("<td scope='row'>" + checknumber + "</td>");
-						    out.println("<td>" + payment.getAmount() + "</td>");
-						    out.println("<td>" + payment.getPaymentdate() + "</td>");
-						    out.println("<td>" + payment.getPaymentmethod() + "</td>");	
-							out.println("</tr>");		
+						    out.println("<td scope='row' class='customernumber'>" + customernumber + "</td>");
+						    out.println("<td scope='row' class='checknumber'>" + checknumber + "</td>");
+						    out.println("<td class='amount'>" + payment.getAmount() + "</td>");
+						    out.println("<td class='paymentdate'>" + payment.getPaymentdate() + "</td>");
+						    out.println("<td class='paymentmethod'>" + payment.getPaymentmethod() + "</td>");	
+							out.println("</tr>");
 						}
 						} else {
 							out.println("<tr>");
@@ -211,35 +232,22 @@
 					<div class="col d-flex mt-3 px-3 flex-column justify-content-start align-items-center">
 						<h3>Filter by columns</h3>
 						<div class="form-check">
-								<input class="form-check-input" type="checkbox" value="customernumber" id="customernumber">
-								<label for="customernumber">Customer number</label><br>
-								<input class="form-check-input" type="checkbox" value="customername" id="customername">
-								<label for="customername">Customer name</label><br>
-								<input class="form-check-input" type="checkbox" value="contact_firstname" id="contact_firstname">
-								<label for="contact_firstname">Contact first name</label><br>
-								<input class="form-check-input" type="checkbox" value="contact_lastname" id="contact_lastname">
-								<label for="contact_lastname">Contact last name</label><br>
-								<input class="form-check-input" type="checkbox" value="phone" id="phone">
-								<label for="phone">Phone</label><br>
-								<input class="form-check-input" type="checkbox" value="email" id="email">
-								<label for="email">Email</label><br>
-								<input class="form-check-input" type="checkbox" value="addressline1" id="addressline1">
-								<label for="addressline1">Address line 1</label><br>
-								<input class="form-check-input" type="checkbox" value="addressline2" id="addressline2">
-								<label for="addressline2">Address line 2</label><br>
-								<input class="form-check-input" type="checkbox" value="city" id="city">
-								<label for="city">City</label><br>
-								<input class="form-check-input" type="checkbox" value="state" id="state">
-								<label for="state">State</label><br>
-								<input class="form-check-input" type="checkbox" value="postalcode" id="postalcode">
-								<label for="postalcode">Postal code</label><br>
-								<input class="form-check-input" type="checkbox" value="country" id="country">
-								<label for="country">Country</label><br>
+							<input class="form-check-input" type="checkbox" name="selectAll" id="selectAll">
+							<label for="selectAll">Select all</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="customernumber" id="customernumber">
+							<label for="customernumber">Customer number</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="checknumber" id="checknumber">
+							<label for="checknumber">Check number</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="amount" id="amount">
+							<label for="amount">Amount</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="paymentdate" id="paymentdate">
+							<label for="paymentdate">Payment date</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="paymentmethod" id="paymentmethod">
+							<label for="paymentmethod">Payment method</label><br>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 	</div>
 	<!-- Add Modal HTML -->
 	<div id="addPaymentModal" class="modal fade">

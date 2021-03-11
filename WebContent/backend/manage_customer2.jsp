@@ -35,31 +35,49 @@
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/css/customer-page.css">
 	<script>
 		$(document).ready(function () {
-
-			// Activate tooltip
-			// $('[data-toggle="tooltip"]').tooltip();
 			
-			// Select/Deselect checkboxes
-			var checkbox = $('table tbody input[type="checkbox"]');
-			$("#selectAll").click(function(){
-				if(this.checked){
-					checkbox.each(function(){
-						this.checked = true;                        
+			$('input[type="checkbox"]').attr('checked', 'checked');
+			var checkboxes = $('input[name=filtercolumn]');
+
+			function filterColumn(checkbox) {
+				let id = checkbox.attr("id");
+				let columns = $('.'+id);
+				
+				if (checkbox.prop('checked')) {
+					$.each(columns, function(index, column) {
+						column.style.display= "";
 					});
-				} else{
-					checkbox.each(function(){
-						this.checked = false;                        
+				} else {
+					$("#selectAll").prop("checked", false);
+					$.each(columns, function(index, column) {
+						column.style.display= "none";
+					});	
+				}
+			}
+			
+			$("#selectAll").on("change", function(){
+				let checkbox;			
+				if($("#selectAll").prop("checked")){
+					checkboxes.each(function(){
+						checkbox = $(this)
+						checkbox.prop("checked", true);
+						filterColumn(checkbox);         
+					});
+				} else {
+					checkboxes.each(function(){
+						checkbox = $(this)
+						checkbox.prop("checked", false);
+						filterColumn(checkbox);              
 					});
 				} 
 			});
-			
-			checkbox.click(function(){
-				if(!this.checked){
-					$("#selectAll").prop("checked", false);
-				}
+						 
+			checkboxes.on("change", function(){
+				let checkbox = $(this);
+				filterColumn(checkbox);
 			});
 			
-			// Animate select box length
+			// Animate  box length
 			var searchInput = $(".search-box input");
 			var inputGroup = $(".search-box .input-group");
 			var boxWidth = inputGroup.width();
@@ -83,13 +101,16 @@
 			$('#search').on('click', function() {
 				$('#search-form').submit();
 			});
+
+			// Activate tooltip
+			// $('[data-toggle="tooltip"]').tooltip();
 			
 // 			$('.scroll-bar').DataTable({
 // 				"scrollX": true,
 // 				"scrollY": 200,
 // 			});
 
-// 			$('.dataTables_length').addClass('bs-select');
+// 			$('.dataTables_length').addClass('bs-');
 		});
 	</script>
 </head>
@@ -158,20 +179,20 @@
 					<thead>
 						<tr>
                             <th scope="col">Action</th>
-                            <th scope="col">Customer no</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Contact first name</th>
-                            <th scope="col">Contact last name</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Address line 1</th>
-                            <th scope="col">Address line 2</th>
-                            <th scope="col">City</th>
-                            <th scope="col">State</th>
-                            <th scope="col">Postal code</th>
-                            <th scope="col">Country</th>
-                            <th scope="col">Sales representative no</th>
-                            <th scope="col">Credit limit</th>
+                            <th scope="col" class="customernumber">Customer no</th>
+                            <th scope="col" class="customername">Name</th>
+                            <th scope="col" class="contactfirstname">Contact first name</th>
+                            <th scope="col" class="contactlastname">Contact last name</th>
+                            <th scope="col" class="phone">Phone</th>
+                            <th scope="col" class="email">Email</th>
+                            <th scope="col" class="addressline1">Address line 1</th>
+                            <th scope="col" class="addressline2">Address line 2</th>
+                            <th scope="col" class="city">City</th>
+                            <th scope="col" class="state">State</th>
+                            <th scope="col" class="postalcode">Postal code</th>
+                            <th scope="col" class="country">Country</th>
+                            <th scope="col" class="salesrepresentativeno">Sales representative no</th>
+                            <th scope="col" class="creditlimit">Credit limit</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -195,21 +216,21 @@
 							" href="+href+">"+
 							"<i class='material-icons'>&#xE872;</i></a></td>");
 							
-                            out.println("<td scope='row'>" + customernumber + "</td>");
-                            out.println("<td>" + customer.getCustomername() + "</td>");
-                            out.println("<td>" + customer.getContactfirstname() + "</td>");
-                            out.println("<td>" + customer.getContactlastname() + "</td>");
-                            out.println("<td>" + customer.getPhone() + "</td>");
-                            out.println("<td>" + customer.getEmail() + "</td>");
-                            out.println("<td>" + customer.getAddressline1() + "</td>");
-                            out.println("<td>" + customer.getAddressline2() + "</td>");
-                            out.println("<td>" + customer.getCity() + "</td>");
-                            out.println("<td>" + customer.getState() + "</td>");
-                            out.println("<td>" + customer.getPostalcode() + "</td>");
-                            out.println("<td>" + customer.getCountry() + "</td>");
-                            //TODO Link this employee to another page
-                            out.println("<td>" + customer.getEmployee() + "</td>");
-                            out.println("<td>" + customer.getCreditlimit().doubleValue() + "</td>");
+							out.println("<td scope='row' class='customernumber'>" + customernumber + "</td>");
+							out.println("<td class='customername'>" + customer.getCustomername() + "</td>");
+							out.println("<td class='contactfirstname'>" + customer.getContactfirstname() + "</td>");
+							out.println("<td class='contactlastname'>" + customer.getContactlastname() + "</td>");
+							out.println("<td class='phone'>" + customer.getPhone() + "</td>");
+							out.println("<td class='email'>" + customer.getEmail() + "</td>");
+							out.println("<td class='addressline1'>" + customer.getAddressline1() + "</td>");
+							out.println("<td class='addressline2'>" + customer.getAddressline2() + "</td>");
+							out.println("<td class='city'>" + customer.getCity() + "</td>");
+							out.println("<td class='state'>" + customer.getState() + "</td>");
+							out.println("<td class='postalcode'>" + customer.getPostalcode() + "</td>");
+							out.println("<td class='country'>" + customer.getCountry() + "</td>");
+							//TODO Link this employee to another page
+							out.println("<td class='salesrepresentativeno'>" + customer.getEmployee() + "</td>");
+							out.println("<td class='creditlimit'>" + customer.getCreditlimit().doubleValue() + "</td>");
                             //TODO Display payment record
                             // out.println("<td>" + customer.getCustomers() + "</td>");
                             out.println("</tr>");
@@ -231,36 +252,41 @@
 					<div class="col d-flex mt-3 px-3 flex-column justify-content-start align-items-center">
 						<h3>Filter by columns</h3>
 						<div class="form-check">
-								<input class="form-check-input" type="checkbox" value="customernumber" id="customernumber">
-								<label for="customernumber">Customer number</label><br>
-								<input class="form-check-input" type="checkbox" value="customername" id="customername">
-								<label for="customername">Customer name</label><br>
-								<input class="form-check-input" type="checkbox" value="contact_firstname" id="contact_firstname">
-								<label for="contact_firstname">Contact first name</label><br>
-								<input class="form-check-input" type="checkbox" value="contact_lastname" id="contact_lastname">
-								<label for="contact_lastname">Contact last name</label><br>
-								<input class="form-check-input" type="checkbox" value="phone" id="phone">
-								<label for="phone">Phone</label><br>
-								<input class="form-check-input" type="checkbox" value="email" id="email">
-								<label for="email">Email</label><br>
-								<input class="form-check-input" type="checkbox" value="addressline1" id="addressline1">
-								<label for="addressline1">Address line 1</label><br>
-								<input class="form-check-input" type="checkbox" value="addressline2" id="addressline2">
-								<label for="addressline2">Address line 2</label><br>
-								<input class="form-check-input" type="checkbox" value="city" id="city">
-								<label for="city">City</label><br>
-								<input class="form-check-input" type="checkbox" value="state" id="state">
-								<label for="state">State</label><br>
-								<input class="form-check-input" type="checkbox" value="postalcode" id="postalcode">
-								<label for="postalcode">Postal code</label><br>
-								<input class="form-check-input" type="checkbox" value="country" id="country">
-								<label for="country">Country</label><br>
+							<input class="form-check-input" type="checkbox" name="selectAll" id="selectAll">
+							<label for="selectAll">Select all</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="customernumber" id="customernumber">
+							<label for="customernumber">Customer number</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="customername" id="customername">
+							<label for="customername">Customer name</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="contactfirstname" id="contactfirstname">
+							<label for="contactfirstname">Contact first name</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="contactlastname" id="contactlastname">
+							<label for="contactlastname">Contact last name</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="phone" id="phone">
+							<label for="phone">Phone</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="email" id="email">
+							<label for="email">Email</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="addressline1" id="addressline1">
+							<label for="addressline1">Address line 1</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="addressline2" id="addressline2">
+							<label for="addressline2">Address line 2</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="city" id="city">
+							<label for="city">City</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="state" id="state">
+							<label for="state">State</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="postalcode" id="postalcode">
+							<label for="postalcode">Postal code</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="country" id="country">
+							<label for="country">Country</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="salesrepresentativeno" id="salesrepresentativeno">
+							<label for="salesrepresentativeno">Sales person</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="creditlimit" id="creditlimit">
+							<label for="creditlimit">Credit limit</label><br>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	<!-- Add Modal HTML -->
 	<div id="addCustomerModal" class="modal fade">
 		<div class="modal-dialog">
