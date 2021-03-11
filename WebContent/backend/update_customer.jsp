@@ -82,56 +82,56 @@ $(document).ready(function () {
 			Customer Details
 			<span class="page-text font-weight-light small">${ customer.customernumber }</span>
 		</h1>
-		<form id="customer-form" action="CustomerServlet" class="p-3" method="post">
+		<form id="customer-form" action="Customer" class="p-3" method="post">
 				<div class="row">
 					<div class="col-9 table-wrapper scroll-bar">
 						<div class="form-group">
 						    <label for="customernumber">Customer no:</label>
-						    <input class="form-control" type="text" id="customernumber" name="customernumber" value=${ customer.customernumber } readonly required>
+						    <input class="form-control" type="text" id="customernumber" name="customernumber" value="${ customer.customernumber }" readonly required>
 						</div>
 						<div class="form-group">
 						    <label for="customername">Customer name:</label>
-						    <input class="form-control" type="text" id="customername" name="customername" value=${ customer.customername } required>
+						    <input class="form-control" type="text" id="customername" name="customername" value="${ customer.customername }" required>
 						</div>
 						<div class="form-group">
 						    <label for="contact_firstname">Contact first name:</label>
-						    <input class="form-control" type="text" id="contact_firstname" name="contact_firstname" value=${ customer.contactfirstname } required>
+						    <input class="form-control" type="text" id="contact_firstname" name="contact_firstname" value="${ customer.contactfirstname }" required>
 						</div>
 						<div class="form-group">
 						    <label for="contact_lastname">Contact last name:</label>
-						    <input class="form-control" type="text" id="contact_lastname" name="contact_lastname" value=${ customer.contactlastname } required>
+						    <input class="form-control" type="text" id="contact_lastname" name="contact_lastname" value="${ customer.contactlastname }" required>
 						</div>
 						<div class="form-group">
 						    <label for="phone">Phone:</label>
-						    <input class="form-control" type="text" id="phone" name="phone" value=${ customer.phone } required>
+						    <input class="form-control" type="text" id="phone" name="phone" value="${ customer.phone }" required>
 						</div>
 						<div class="form-group">
 						    <label for="email">Email:</label>
-						    <input class="form-control" type="email" id="email" name="email" value=${ customer.email } required>
+						    <input class="form-control" type="email" id="email" name="email" value="${ customer.email }" required>
 						</div>
 						<div class="form-group">
 						    <label for="addressline1">Address line 1:</label>
-						    <input class="form-control" type="text" id="addressline1" name="addressline1" value=${ customer.addressline1 } required>
+						    <input class="form-control" type="text" id="addressline1" name="addressline1" value="${ customer.addressline1 }" required>
 						</div>
 						<div class="form-group">
 						    <label for="addressline2">Address line 2:</label>
-						    <input class="form-control" type="text" id="addressline2" name="addressline2" value=${ customer.addressline2 }>
+						    <input class="form-control" type="text" id="addressline2" name="addressline2" value="${ customer.addressline2 }">
 						</div>
 						<div class="form-group">
 						    <label for="city">City:</label>
-						    <input class="form-control" type="text" id="city" name="city" value=${ customer.city } required>
+						    <input class="form-control" type="text" id="city" name="city" value="${ customer.city }" required>
 						</div>
 						<div class="form-group">
 						    <label for="state">State:</label>
-						    <input class="form-control" type="text" id="state" name="state" value=${ customer.state }>
+						    <input class="form-control" type="text" id="state" name="state" value="${ customer.state }">
 						</div>
 						<div class="form-group">
 						    <label for="postalcode">Postal code:</label>
-						    <input class="form-control" type="text" id="postalcode" name="postalcode" value=${ customer.postalcode }>
+						    <input class="form-control" type="text" id="postalcode" name="postalcode" value="${ customer.postalcode }">
 						</div>
 						<div class="form-group">
 						    <label for="country">Country:</label>
-						    <input class="form-control" type="text" id="country" name="country" value=${ customer.country } required>
+						    <input class="form-control" type="text" id="country" name="country" value="${ customer.country }" required>
 						</div>
 						<!-- 
 						<%//TODO Link sales person to Hui Kei's part%>
@@ -146,7 +146,7 @@ $(document).ready(function () {
 						 -->
 						<div class="form-group">
 						    <label for="creditlimit">Credit limit:</label>
-						    <input class="form-control" type="number" id="creditlimit" name="creditlimit" step="0.01" min="0" value="0" value=${ customer.creditlimit } >
+						    <input class="form-control" type="number" id="creditlimit" name="creditlimit" step="0.01" min="0" value="${ customer.creditlimit }" >
 					</div>
 				</div>
 				<div class="col-3 d-flex flex-column justify-content-around align-items-center">
@@ -169,7 +169,7 @@ $(document).ready(function () {
 	<div id="quitCustomerModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="CustomerServlet" method="post">
+				<form action="Customer" method="post">
 					<div class="modal-header">						
 						<h4 class="modal-title">Confirm quit</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

@@ -20,7 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
-/**
+/*
  * The persistent class for the customers database table.
  * 
  */
@@ -35,43 +35,40 @@ import javax.persistence.Table;
 			name="Customer.locateNextPK", 
 			query="SELECT MAX(c.customernumber) FROM Customer c"
 	),
+	@NamedQuery(
+			name = "Customer.findAll", 
+			query = "SELECT c FROM Customer c"
+	),
+	@NamedQuery(
+			name="Customer.findAll2", 
+			query="SELECT c FROM Customer c order by c.customernumber"
+	),
+	@NamedQuery(
+			name="Customer.findTotalRows", 
+			query="SELECT COUNT(c) AS totalrow FROM Customer c"
+	),
+	@NamedQuery(
+			name = "Customer.findbyCustomerNumber", 
+			query = "SELECT c FROM Customer c WHERE c.customernumber = ?1"
+	),
 })
 @NamedNativeQueries({
+	// Native Queries are used
+	// Since both implicit and explicit CAST to String is not supported in current version of JPQL
 	@NamedNativeQuery(
-			name = "Customer.findAll", 
-			query = "SELECT * FROM classicmodels.customers",
-			resultClass = Customer.class
-	),
-	@NamedNativeQuery(
-			name="Customer.findAll2", 
-			query="SELECT * FROM classicmodels.customers order by customernumber OFFSET ? LIMIT ?",
-			resultClass = Customer.class	
-	),
-	@NamedNativeQuery(
-			name="Customer.findTotalRows", 
-			query="SELECT COUNT(*) AS totalrow FROM classicmodels.customers",
-			resultClass = Customer.class
-	),
-	@NamedNativeQuery(
-			name="Customer.findTotalRows2", 
-			query="SELECT COUNT(*) AS totalrow from classicmodels.customers WHERE " +
+		name="Customer.getTotalRowsByKeyword", 
+		query="SELECT COUNT(*) AS totalrow from classicmodels.customers WHERE " +
 				  "concat(customernumber ,customername, contactlastname, contactfirstname, " + 
 				  "phone, addressline1, addressline2, city, state, postalCode, country, " + 
-				  "salesrepemployeenumber, creditlimit) LIKE ?",
-			resultClass = Customer.class
+				  "salesrepemployeenumber, creditlimit) LIKE ?"
 	),
 	@NamedNativeQuery(
-			name = "Customer.findbyCustomerNumber", 
-			query = "SELECT * FROM classicmodels.customers c WHERE c.customernumber = ?",
-			resultClass = Customer.class
-	),
-	@NamedNativeQuery(
-			name = "Customer.findByKeyword", 
-			query = "SELECT * from classicmodels.customers WHERE concat(customernumber ,customername, " +
-				    "contactlastname, contactfirstname, phone, addressline1, addressline2, city, state, " +
-				    "postalCode, country, salesrepemployeenumber, creditlimit) LIKE ? " +
-				    "order by customernumber OFFSET ? LIMIT ?",
-			resultClass = Customer.class
+		name = "Customer.findByKeyword", 
+		query = "SELECT * from classicmodels.customers WHERE concat(customernumber ,customername, " +
+			    "contactlastname, contactfirstname, phone, addressline1, addressline2, city, state, " +
+			    "postalCode, country, salesrepemployeenumber, creditlimit) LIKE ? " +
+			    "order by customernumber OFFSET ? LIMIT ?",
+		resultClass = Customer.class
 	),
 })
 public class Customer implements Serializable {

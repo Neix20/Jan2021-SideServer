@@ -18,7 +18,7 @@ import utility.ValidateManageLogic;
 /**
  * Servlet implementation class CustomerController
  */
-@WebServlet({"frontend/CustomerServlet", "/CustomerServlet"})
+@WebServlet({"backend/Customer", "backend/customer"})
 public class CustomerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -40,7 +40,7 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
-		String id = request.getParameter("id");
+		String id = request.getParameter("customernumber");
 	
 		try {
 		    Customer customer = customerBean.findCustomer(id);

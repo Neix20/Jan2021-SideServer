@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import domain.Customer;
 import session_bean.CustomerSessionBeanLocal;
 
-@WebServlet(urlPatterns = {"frontend/CustomerPagination", "/CustomerPagination"})
+@WebServlet(urlPatterns = {"backend/CustomerPagination", "backend/customerpagination"})
 public class CustomerPaginationServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

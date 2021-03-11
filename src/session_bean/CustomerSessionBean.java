@@ -43,33 +43,32 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
     @Override
     public Customer findCustomer(String customernumber) throws EJBException {
-		Query q = em.createNamedQuery("Customer.findbyCustomerNumber");
+		TypedQuery<Customer> q = em.createNamedQuery("Customer.findbyCustomerNumber", Customer.class);
 		q.setParameter(1, Integer.valueOf(customernumber));
 		return (Customer) q.getSingleResult();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Customer> readCustomer(int currentPage, int recordsPerPage, String keyword) throws EJBException {
-		Query q = null;
+		TypedQuery<Customer> q = null;
 	
 		if (keyword.isEmpty()) {
 			
-			q = em.createNamedQuery("Customer.findAll2");
+			q = em.createNamedQuery("Customer.findAll2", Customer.class);
 
 		    int start = currentPage * recordsPerPage - recordsPerPage;
-		    q.setParameter(1, Integer.valueOf(start));
-		    q.setParameter(2, Integer.valueOf(recordsPerPage));
+		    q.setFirstResult(start);
+		    q.setMaxResults(recordsPerPage);
 	
 		} else {
 	
-		    q = em.createNamedQuery("Customer.findByKeyword");
-	
+		    q = em.createNamedQuery("Customer.findByKeyword", Customer.class);
+			
 		    int start = currentPage * recordsPerPage - recordsPerPage;
 		    q.setParameter(1, "%" + keyword + "%");
 		    q.setParameter(2, Integer.valueOf(start));
 		    q.setParameter(3, Integer.valueOf(recordsPerPage));
-	
+
 		}
 	
 		List<Customer> results = q.getResultList();
@@ -79,24 +78,20 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
     @Override
     public int getNumberOfRows(String keyword) throws EJBException {
-		Query q = null;
-
+		int i = 0;
+		
 		if (keyword.isEmpty()) {
-		    // q = em.createNamedQuery("Customer.findTotalRows");
-			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM classicmodels.customers");
-		} else {
-		    q = em.createNativeQuery(
-		    		"SELECT COUNT(*) AS totalrow from classicmodels.customers WHERE " +
-		    		"concat(customernumber ,customername, contactlastname, contactfirstname, " + 
-					"phone, addressline1, addressline2, city, state, postalCode, country, " + 
-					"salesrepemployeenumber, creditlimit) LIKE ?"
-				);
-		    
+			TypedQuery<Long> q = (TypedQuery<Long>) em.createNamedQuery("Customer.findTotalRows", Long.class);
+			Long results = q.getSingleResult();
+			i = results.intValue();
+		} 
+		
+		else {
+		    Query q = em.createNamedQuery("Customer.getTotalRowsByKeyword");
 		    q.setParameter(1, "%" + keyword + "%");
+		    BigInteger results = (BigInteger) q.getSingleResult();
+		    i = results.intValue();
 		}
-	
-		BigInteger results = (BigInteger) q.getSingleResult();
-		int i = results.intValue();
 		
 		return i;
     }
@@ -122,7 +117,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		TypedQuery<Integer> query = em.createNamedQuery("Customer.locateNextPK", Integer.class);
 		Integer customernumber = (Integer) query.getSingleResult();
 		
-		em.merge(customer);
+		em.persist(customer);
 		
 		return customernumber;
     }

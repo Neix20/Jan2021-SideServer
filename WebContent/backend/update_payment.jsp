@@ -96,11 +96,11 @@ $(document).ready(function () {
                         </div>
                         <div class="form-group">
                             <label for="checknumber">Check no:</label><br>
-                            <input class="form-control" type="text" id="checknumber" name="checknumber" value=<%= checknumber %> readonly required><br>
+                            <input class="form-control" type="text" id="checknumber" name="checknumber" value="<%= checknumber %>" readonly required><br>
                         </div>
                         <div class="form-group">
                             <label for="amount">Amount:</label><br>
-                            <input class="form-control" type="number" id="amount" name="amount" step="0.01" min="0" value=${ payment.amount } required><br>
+                            <input class="form-control" type="number" id="amount" name="amount" step="0.01" min="0" value="${ payment.amount }" required><br>
                         </div>
                         <div class="form-group">
                             <label for="paymentdate">Payment date:</label><br>

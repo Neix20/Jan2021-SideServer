@@ -18,7 +18,7 @@ import session_bean.PaymentSessionBeanLocal;
 /**
  * Servlet implementation class PaymentPaginationServlet
  */
-@WebServlet({"frontend/PaymentPagination", "/PaymentPagination"})
+@WebServlet({"backend/PaymentPagination", "backend/paymentpagination"})
 public class PaymentPaginationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
@@ -57,32 +57,30 @@ public class PaymentPaginationServlet extends HttpServlet {
 		}
 	
 		try {
-	
 		    int rows = paymentBean.getNumberOfRows(keyword);
 		    nOfPages = rows / recordsPerPage;
 		    System.out.println("At servlet" + nOfPages);
-	
+
 		    if (rows % recordsPerPage != 0) {
 		    	nOfPages++;
 		    }
-	
+
 		    if (currentPage > nOfPages && nOfPages != 0) {
 		    	currentPage = nOfPages;
 		    }
-	
+
 		    List<Payment> lists = paymentBean.readPayment(currentPage, recordsPerPage, keyword);
 		    request.setAttribute("payments", lists);
-	
 		} catch (EJBException ex) {
 			throw ex;
 		}
-		
+
 		request.setAttribute("nOfPages", nOfPages);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("recordsPerPage", recordsPerPage);
 		request.setAttribute("keyword", keyword);
 	
-		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_payment2.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_payment.jsp");
 		dispatcher.forward(request, response);
 	}
 

@@ -18,9 +18,9 @@ import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import domain.Customer;
-import domain.Orderdetail;
 import domain.Payment;
 import domain.PaymentPK;
 
@@ -42,43 +42,41 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
      */
     public PaymentSessionBean() {
     }
-
-	@SuppressWarnings("unchecked")
+    
 	@Override
 	public List<Payment> getAllPayment() throws EJBException {
-		return em.createNamedQuery("Payment.findAll").getResultList();
+		return em.createNamedQuery("Payment.findAll", Payment.class).getResultList();
 	}
 
 	@Override
 	public Payment findPayment(String customernumber, String checknumber) throws EJBException {
-		Query q = em.createNamedQuery("Payment.findbyPaymentId");
+		TypedQuery<Payment> q = em.createNamedQuery("Payment.findbyPaymentId", Payment.class);
 		q.setParameter(1, Integer.valueOf(customernumber));
 		q.setParameter(2, checknumber);
 		return (Payment) q.getSingleResult();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Payment> readPayment(int currentPage, int recordsPerPage, String keyword) throws EJBException {
-		Query q = null;
+		TypedQuery<Payment> q = null;
 		
 		if (keyword.isEmpty()) {
 			
-			q = em.createNamedQuery("Payment.findAll2");
+			q = em.createNamedQuery("Payment.findAll", Payment.class);
 
 		    int start = currentPage * recordsPerPage - recordsPerPage;
-		    q.setParameter(1, Integer.valueOf(start));
-		    q.setParameter(2, Integer.valueOf(recordsPerPage));
-	
+		    q.setFirstResult(start);
+		    q.setMaxResults(recordsPerPage);
+		    
 		} else {
 	
-		    q = em.createNamedQuery("Payment.findByKeyword");
+		    q = em.createNamedQuery("Payment.findByKeyword", Payment.class);
 	
 		    int start = currentPage * recordsPerPage - recordsPerPage;
 		    q.setParameter(1, "%" + keyword + "%");
 		    q.setParameter(2, Integer.valueOf(start));
 		    q.setParameter(3, Integer.valueOf(recordsPerPage));
-	
+		    
 		}
 	
 		List<Payment> results = q.getResultList();
@@ -88,24 +86,20 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 
 	@Override
 	public int getNumberOfRows(String keyword) throws EJBException {
-		Query q = null;
-
+		int i = 0;
+		
 		if (keyword.isEmpty()) {
-		    // q = em.createNamedQuery("Payment.findTotalRows");
-		    q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM classicmodels.payments");
-		    
-		} else {
-		    // q = em.createNamedQuery("Payment.findTotalRows2");
-		    q = em.createNativeQuery(
-		    		"SELECT COUNT(*) AS totalrow from classicmodels.payments" +
-					" WHERE concat(customernumber ,checknumber, paymentdate, " + 
-					"amount, paymentmethod) LIKE ? "
-		    	);
+			TypedQuery<Long> q = (TypedQuery<Long>) em.createNamedQuery("Payment.findTotalRows", Long.class);
+			Long results = q.getSingleResult();
+			i = results.intValue();
+		} 
+		
+		else {
+		    Query q = em.createNamedQuery("getTotalRowsByKeyword");
 		    q.setParameter(1, "%" + keyword + "%");
+		    BigInteger results = (BigInteger) q.getSingleResult();
+		    i = results.intValue();
 		}
-	
-		BigInteger results = (BigInteger) q.getSingleResult();
-		int i = results.intValue();
 		
 		return i;
 	}
@@ -127,7 +121,7 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 	public void addPayment(String[] s) throws EJBException {
 		Payment payment = new Payment();
 		payment = setValues(s, payment);	
-		em.merge(payment);
+		em.persist(payment);
 	}
 	
 	public Payment setValues(String[] s, Payment payment) throws EJBException {

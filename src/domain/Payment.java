@@ -2,7 +2,6 @@ package domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -11,7 +10,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 /**
@@ -20,34 +22,31 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="payments", schema="classicmodels")
-@NamedNativeQueries({
-	@NamedNativeQuery(
+@NamedQueries({
+	@NamedQuery(
 			name = "Payment.findAll", 
-			query = "SELECT * FROM classicmodels.payments",
-			resultClass = Payment.class
+			query = "SELECT p FROM Payment p ORDER BY p.id.customernumber, p.id.checknumber"
 	),
-	@NamedNativeQuery(
-			name="Payment.findAll2", 
-			query="SELECT * FROM classicmodels.payments order by customernumber, checknumber OFFSET ? LIMIT ?",
-			resultClass = Payment.class	
-	),
-	@NamedNativeQuery(
+	@NamedQuery(
 			name="Payment.findTotalRows", 
-			query="SELECT COUNT(*) AS totalrow FROM classicmodels.payments",
-			resultClass = Payment.class
+			query="SELECT COUNT(p) AS totalrow FROM Payment p"
 	),
+
+	@NamedQuery(
+			name = "Payment.findbyPaymentId", 
+			query = "SELECT p FROM Payment p "+
+			"WHERE p.id.customernumber = ?1 AND p.id.checknumber = ?2"
+	),
+})
+@NamedNativeQueries({
+	// Native Queries are used
+	// Since both implicit and explicit CAST to String is not supported in current version of JPQL
+	// Also CONCAT between integer attribute and string attribute is not allowed in JPQL
 	@NamedNativeQuery(
-			name="Payment.findTotalRows2", 
+			name="getTotalRowsByKeyword", 
 			query="SELECT COUNT(*) AS totalrow from classicmodels.payments" +
 				  " WHERE concat(customernumber ,checknumber, paymentdate, " + 
-				  "amount, paymentmethod) LIKE ? ",
-			resultClass = Payment.class
-	),
-	@NamedNativeQuery(
-			name = "Payment.findbyPaymentId", 
-			query = "SELECT * FROM classicmodels.payments p "+
-			"WHERE p.customernumber = ? AND p.checknumber = ?",
-			resultClass = Payment.class
+				  "amount, paymentmethod) LIKE ? "
 	),
 	@NamedNativeQuery(
 			name = "Payment.findByKeyword", 
@@ -60,6 +59,9 @@ import javax.persistence.Table;
 public class Payment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Transient
+	transient private String allAttrs;
+	
 	@EmbeddedId
 	private PaymentPK id;
 
@@ -118,6 +120,14 @@ public class Payment implements Serializable {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public String getAllAttrs() {
+		return id.getCustomernumber()+id.getChecknumber()+paymentdate+amount+paymentmethod;
+	}
+
+	public void setAllAttrs(String allAttrs) {
+		this.allAttrs = allAttrs;
 	}
 
 }

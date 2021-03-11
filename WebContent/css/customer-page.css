@@ -215,3 +215,7 @@ table.dataTable thead .sorting_desc_disabled:before {
 .modal form label {
 	font-weight: normal;
 }
+
+a.page-link {
+	color: #566787 !important;
+}
