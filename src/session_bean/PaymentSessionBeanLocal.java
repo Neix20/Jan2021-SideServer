@@ -14,7 +14,7 @@ public interface PaymentSessionBeanLocal {
 
 	public Payment findPayment(String customernumber, String checknumber) throws EJBException;
 
-	public List<Payment> readPayment(int currentPage, int recordsPerPage, String keyword) throws EJBException;
+	public List<Payment> readPayment(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException;
 
 	public int getNumberOfRows(String keyword) throws EJBException;
 

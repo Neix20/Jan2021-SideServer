@@ -3,10 +3,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <% 
 	String pageDisplay= "";
-	int currentPage=(int) request.getAttribute("currentPage");
-	int recordsPerPage=(int) request.getAttribute("recordsPerPage");
-	int nOfPages=(int) request.getAttribute("nOfPages");
-	String keyword=(String) request.getAttribute("keyword");
+	int currentPage= (int) request.getAttribute("currentPage");
+	int recordsPerPage= (int) request.getAttribute("recordsPerPage");
+	int nOfPages= (int) request.getAttribute("nOfPages");
+	String keyword= (String) request.getAttribute("keyword");
+	String sortItem = (String) request.getAttribute("sortItem");
+	String sortType = (String) request.getAttribute("sortType");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,16 +104,6 @@
 			$('#search').on('click', function() {
 				$('#search-form').submit();
 			});
-
-			// Activate tooltip
-			// $('[data-toggle="tooltip"]').tooltip();
-
-// 			$('.scroll-bar').DataTable({
-// 				"scrollX": true,
-// 				"scrollY": 200,
-// 			});
-
-// 			$('.dataTables_length').addClass('bs-select');
 		});
 	</script>
 </head>
@@ -180,34 +172,70 @@
 					<thead>
 						<tr>
 							<%
-							String url = request.getContextPath() + "/backend/Payment?user_action=SORT";
+							String url = request.getContextPath() + 
+										 "/backend/PaymentPagination"+
+										 "?keyword="+keyword+
+										 "&currentPage="+currentPage+
+										 "&recordsPerPage="+recordsPerPage;
 							%>
 							<th scope="col">Action</th>
-							<th scope="col" class="customernumber">
-								<a href="<%=url%>&sort=customernumber">
-									Customer no <i class="fa fa-sort" aria-hidden="true"></i>
-								</a>
-							</th>
-							<th scope="col" class="checknumber">
-								<a href="<%=url%>&sort=checknumber">
-									Check no <i class="fa fa-sort" aria-hidden="true"></i>
-								</a>
-							</th>
-							<th scope="col" class="amount">
-								<a href="<%=url%>&sort=amount">
-									Amount <i class="fa fa-sort" aria-hidden="true"></i>
-								</a>
-							</th>
-							<th scope="col" class="paymentdate">
-								<a href="<%=url%>&sort=paymentdate">
-									Payment date <i class="fa fa-sort" aria-hidden="true"></i>
-								</a>
-							</th>
-							<th scope="col" class="paymentmethod">
-								<a href="<%=url%>&sort=paymentmethod">
-									Payment method <i class="fa fa-sort" aria-hidden="true"></i>
-								</a>
-							</th>
+							<%
+							final int NUM_OF_COLUMNS = 5;
+							String urls[] = new String[NUM_OF_COLUMNS];
+							String[] sortIcons = new String[NUM_OF_COLUMNS];
+							
+							String[] sortItemsLookup = {
+									"customernumber", 
+									"checknumber", 
+									"amount", 
+									"paymentdate", 
+									"paymentmethod",
+							};
+							
+							String[] columnName = {
+									"Customer no", 
+									"Check no", 
+									"Amount",
+									"Payment date",
+									"Payment method",
+							};
+							
+							String[] columnTypes = {
+									"number",
+									"alphabet",
+									"number",
+									"number",
+									"alphabet"
+							};
+							
+							for (int idx = 0; idx < sortItemsLookup.length; idx++) {
+								urls[idx] = url + "&sortItem=" + sortItemsLookup[idx];
+								if (sortItem.equals(sortItemsLookup[idx])) {
+									if (sortType.equals("ASC")) {
+										if (columnTypes[idx].equals("number"))
+											sortIcons[idx] = "fa fa-sort-numeric-asc";
+										else
+											sortIcons[idx] = "fa fa-sort-alpha-asc";
+										urls[idx] += "&sortType=DESC";
+									} else if (sortType.equals("DESC")){
+										if (columnTypes[idx].equals("number"))
+											sortIcons[idx] = "fa fa-sort-numeric-desc";
+										else
+											sortIcons[idx] = "fa fa-sort-alpha-desc";
+										urls[idx] += "&sortType=ASC";
+									}
+								} else {
+									sortIcons[idx] = "fa fa-sort";
+									urls[idx] += "&sortType=ASC";
+								}
+								out.print("<th scope='col' class='"+sortItemsLookup[idx]+"'>");
+								out.print("<a href='"+urls[idx]+"'>");
+								out.print(columnName[idx]);
+								out.print("<i class='"+sortIcons[idx]+"' aria-hidden='true'>");
+								out.print("</a>");
+								out.print("</th>");
+							}
+							%>
 						</tr>
 					</thead>
 					<tbody>

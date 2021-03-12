@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
 import domain.Customer;
@@ -23,7 +24,7 @@ public class CustomerQueryConstructor {
     	this.cb = cb;
     }
     
-    public CriteriaQuery<Customer> queryCustomer(String keyword, String orderItem, String orderType) {
+    public CriteriaQuery<Customer> queryCustomer(String keyword, String sortItem, String sortType) {
     	
     	// To create a typesafe query, specify the type of the query when you create the CriteriaQuery object.
     	CriteriaQuery<Customer> cq = cb.createQuery(Customer.class);
@@ -33,19 +34,68 @@ public class CustomerQueryConstructor {
     	cq.select(customer);
     	
     	// CONCAT(... ALL ATTRIBUTES) = '%keyword%'
-    	List<Expression<String>> expressions = setAll(customer);
-    	Expression<String> stringConcat = concat("", expressions);
-    	cq.where(cb.like(stringConcat, "%"+keyword+"%"));
+    	if (!keyword.equals("")) {
+	    	List<Expression<String>> expressions = setAll(customer);
+	    	Expression<String> stringConcat = concat("", expressions);
+	    	cq.where(cb.like(stringConcat, "%"+keyword+"%"));
+    	}
     	
     	// ORDER BY specific_column
-    	//TODO Specify specific column
-    	if (orderType.equals("ASC")) {
-    		cq.orderBy(cb.asc(customer.get(Customer_.customernumber)));
-    	} else if (orderType.equals("DESC")) {
-    		cq.orderBy(cb.desc(customer.get(Customer_.customernumber)));
+    	sortItem = validateColumnName(sortItem);
+    	Order queryOrder = null;
+    	if (!sortType.equals("")) {
+    		if (sortItem.equals("salesrepresentativeno"))
+    			queryOrder = cb.asc(customer.get("employee").get("employeenumber"));
+    		else
+    			queryOrder = cb.asc(customer.get(sortItem));
+    	}
+    	if (sortType.equals("ASC")) {
+    		cq.orderBy(queryOrder);
+    	} else if (sortType.equals("DESC")) {
+    		queryOrder.reverse();
+    		cq.orderBy(queryOrder);
     	}
     			
     	return cq;
+    }
+    
+    private String validateColumnName(String sortItem) {
+      	
+    	switch (sortItem) {
+    	case "customernumber":
+    	    break;
+    	case "customername":
+    	    break;
+    	case "contactfirstname":
+    	    break;
+    	case "contactlastname":
+    	    break;
+    	case "phone":
+    	    break;
+    	case "email":
+    	    break;
+    	case "addressline1":
+    	    break;
+    	case "addressline2":
+    	    break;
+    	case "city":
+    	    break;
+    	case "state":
+    	    break;
+    	case "postalcode":
+    	    break;
+    	case "country":
+    	    break;
+    	case "salesrepresentativeno":
+    	    break;
+    	case "creditlimit":
+    	    break;
+    	default:
+    		sortItem = "customernumber";
+    		break;
+    	}
+    	
+    	return sortItem;
     }
     
     private List<Expression<String>> setAll(Root<Customer> customer) {
@@ -63,6 +113,7 @@ public class CustomerQueryConstructor {
     	Expression<String> country = customer.get(Customer_.country);
     	Expression<String> creditlimit = customer.get(Customer_.creditlimit).as(String.class);
     	Expression<String> email = customer.get(Customer_.email);
+    	Expression<String> salesrepresentativeno = customer.get(Customer_.employee).get("employeenumber");
     	
     	expressions.add(customerNo);
     	expressions.add(customername);
@@ -77,6 +128,7 @@ public class CustomerQueryConstructor {
     	expressions.add(country);
     	expressions.add(creditlimit);
     	expressions.add(email);
+    	expressions.add(salesrepresentativeno);
     	
     	return expressions;
     }

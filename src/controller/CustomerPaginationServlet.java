@@ -35,7 +35,9 @@ public class CustomerPaginationServlet extends HttpServlet {
 		int nOfPages = 0;
 		int currentPage = 1;
 		int recordsPerPage = 30;
-		String keyword = ""; 
+		String keyword = "";
+		String sortItem = "";
+		String sortType = "";
 				
 		if (request.getParameter("currentPage") != null) {
 			currentPage = Integer.valueOf(request.getParameter("currentPage"));
@@ -47,6 +49,16 @@ public class CustomerPaginationServlet extends HttpServlet {
 		
 		if (request.getParameter("keyword") != null) {
 			keyword = request.getParameter("keyword");
+		}
+		
+		if (request.getParameter("sortItem") != null) {
+			sortItem = request.getParameter("sortItem");
+			if (request.getParameter("sortType") != null) {
+				if (request.getParameter("sortType").equals("DESC"))
+					sortType = "DESC";	
+				else
+					sortType = "ASC";
+			}
 		}
 	
 		try {
@@ -63,7 +75,7 @@ public class CustomerPaginationServlet extends HttpServlet {
 		    	currentPage = nOfPages;
 		    }
 	
-		    List<Customer> lists = customerBean.readCustomer(currentPage, recordsPerPage, keyword);
+		    List<Customer> lists = customerBean.readCustomer(currentPage, recordsPerPage, keyword, sortItem, sortType);
 		    request.setAttribute("customers", lists);
 	
 		} catch (EJBException ex) {
@@ -74,6 +86,8 @@ public class CustomerPaginationServlet extends HttpServlet {
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("recordsPerPage", recordsPerPage);
 		request.setAttribute("keyword", keyword);
+		request.setAttribute("sortItem", sortItem);
+		request.setAttribute("sortType", sortType);
 	
 		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_customer.jsp");
 		dispatcher.forward(request, response);

@@ -1,11 +1,13 @@
 package session_bean;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
@@ -25,43 +27,76 @@ public class PaymentQueryConstructor {
     	this.cb = cb;
     }
     
-    public CriteriaQuery<Payment> queryPayment(String keyword, String orderItem, String orderType) {
+    public CriteriaQuery<Payment> queryPayment(String keyword, String sortItem, String sortType) {
     	
     	// To create a typesafe query, specify the type of the query when you create the CriteriaQuery object.
     	CriteriaQuery<Payment> cq = cb.createQuery(Payment.class);
     	// Call the from method of the query object to set the FROM clause of the query and to specify the root of the query:
-    	Root<Payment> customer = cq.from(Payment.class);
+    	Root<Payment> payment = cq.from(Payment.class);
     	// Call the select method of the query object, passing in the query root, to set the SELECT clause of the query:
-    	cq.select(customer);
+    	cq.select(payment);
     	
     	// CONCAT(... ALL ATTRIBUTES) = '%keyword%'
-    	List<Expression<String>> expressions = setAll(customer);
-    	Expression<String> stringConcat = concat("", expressions);
-    	cq.where(cb.like(stringConcat, "%"+keyword+"%"));
-    	
-    	// ORDER BY specific_column
-    	//TODO Specify specific column
-    	if (orderType.equals("ASC")) {
-    		// cq.orderBy(cb.asc(customer.get(Payment_.customernumber)));
-    	} else if (orderType.equals("DESC")) {
-    		// cq.orderBy(cb.desc(customer.get(Payment_.customernumber)));
+    	if (!keyword.equals("")) {
+        	List<Expression<String>> expressions = setAll(payment);
+        	Expression<String> stringConcat = concat("", expressions);
+        	cq.where(cb.like(stringConcat, "%"+keyword+"%"));
     	}
-    			
+
+    	// ORDER BY specific_column
+    	sortItem = validateColumnName(sortItem);
+    	Order queryOrder = null;
+    	if (!sortType.equals("")) {
+    		if (sortItem.equals("customernumber") || sortItem.equals("checknumber"))
+    			queryOrder = cb.asc(payment.get("id").get(sortItem));
+    		else if (sortItem.equals("paymentdate")) {
+    			queryOrder = cb.asc(payment.get(Payment_.paymentdate).as(Date.class));
+    		}
+        	else
+        		queryOrder = cb.asc(payment.get(sortItem));
+    	}
+    	if (sortType.equals("ASC")) {
+    		cq.orderBy(queryOrder);
+    	} else if (sortType.equals("DESC")) {
+    		queryOrder.reverse();
+    		cq.orderBy(queryOrder);
+    	}
+    	    			
     	return cq;
     }
     
-    private List<Expression<String>> setAll(Root<Payment> customer) {
+    private String validateColumnName(String sortItem) {
+  	
+    	switch (sortItem) {
+    	case "customernumber":
+    		break;
+    	case "checknumber":
+    		break;
+    	case "paymentdate":
+    		break;
+    	case "amount":
+    		break;
+    	case "paymentmethod":
+    		break;
+    	default:
+    		sortItem = "customernumber";
+    		break;
+    	}
+    	
+    	return sortItem;
+    }
+    
+    private List<Expression<String>> setAll(Root<Payment> payment) {
     	List<Expression<String>> expressions = new ArrayList<Expression<String>>();
-    	Path<PaymentPK> paymentId = customer.get(Payment_.id);
+    	Path<PaymentPK> paymentId = payment.get(Payment_.id);
     	Path<Integer> customerNumber = paymentId.get("customernumber");
     	Path<String> checkNumber = paymentId.get("checknumber");
     	
-    	// String checknumber = ;
     	Expression<String> customernumber = customerNumber.as(String.class);
     	Expression<String> checknumber = checkNumber;
-    	Expression<String> paymentdate = customer.get(Payment_.paymentdate);
-    	Expression<String> amount = customer.get(Payment_.amount).as(String.class);	
-    	Expression<String> paymentmethod = customer.get(Payment_.paymentmethod);
+    	Expression<String> paymentdate = payment.get(Payment_.paymentdate);
+    	Expression<String> amount = payment.get(Payment_.amount).as(String.class);	
+    	Expression<String> paymentmethod = payment.get(Payment_.paymentmethod);
     	
     	expressions.add(customernumber);
     	expressions.add(checknumber);

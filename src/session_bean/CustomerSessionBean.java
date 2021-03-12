@@ -19,6 +19,7 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import domain.Customer;
 import domain.Employee;
+import domain.Payment;
 
 /**
  * Session Bean implementation class CustomerSessionBean
@@ -50,34 +51,17 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
     }
 
     @Override
-    public List<Customer> readCustomer(int currentPage, int recordsPerPage, String keyword) throws EJBException {
+    public List<Customer> readCustomer(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException {
 		TypedQuery<Customer> q = null;
-	
-		if (keyword.isEmpty()) {
-			
-			q = em.createNamedQuery("Customer.findAll2", Customer.class);
-
-		    int start = currentPage * recordsPerPage - recordsPerPage;
-		    q.setFirstResult(start);
-		    q.setMaxResults(recordsPerPage);
-	
-		} else {
-	
-		    // q = em.createNamedQuery("Customer.findByKeyword", Customer.class);
-			 
-		    CustomerQueryConstructor queryConstructor = new CustomerQueryConstructor(em.getCriteriaBuilder());
-		    CriteriaQuery<Customer> cq = queryConstructor.queryCustomer(keyword, "", "");
-		    q = em.createQuery(cq);
-		    
-		    int start = currentPage * recordsPerPage - recordsPerPage;
-		    q.setFirstResult(start);
-		    q.setMaxResults(recordsPerPage);
-//		    q.setParameter(1, "%" + keyword + "%");
-//		    q.setParameter(2, Integer.valueOf(start));
-//		    q.setParameter(3, Integer.valueOf(recordsPerPage));
-
-		}
-	
+		
+		CustomerQueryConstructor queryConstructor = new CustomerQueryConstructor(em.getCriteriaBuilder());
+	    CriteriaQuery<Customer> cq = queryConstructor.queryCustomer(keyword, sortItem, sortType);
+	    q = em.createQuery(cq);
+	    
+	    int start = currentPage * recordsPerPage - recordsPerPage;
+	    q.setFirstResult(start);
+	    q.setMaxResults(recordsPerPage);
+	    
 		List<Customer> results = q.getResultList();
 
 		return results;

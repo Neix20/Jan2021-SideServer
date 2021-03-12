@@ -24,10 +24,6 @@ import javax.persistence.Transient;
 @Table(name="payments", schema="classicmodels")
 @NamedQueries({
 	@NamedQuery(
-			name = "Payment.findAll", 
-			query = "SELECT p FROM Payment p ORDER BY p.id.customernumber, p.id.checknumber"
-	),
-	@NamedQuery(
 			name="Payment.findTotalRows", 
 			query="SELECT COUNT(p) AS totalrow FROM Payment p"
 	),

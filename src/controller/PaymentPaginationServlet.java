@@ -44,6 +44,7 @@ public class PaymentPaginationServlet extends HttpServlet {
 		int recordsPerPage = 30;
 		String keyword = ""; 
 		String sortItem = "";
+		String sortType = "";
 				
 		if (request.getParameter("currentPage") != null) {
 			currentPage = Integer.valueOf(request.getParameter("currentPage"));
@@ -57,8 +58,14 @@ public class PaymentPaginationServlet extends HttpServlet {
 			keyword = request.getParameter("keyword");
 		}
 		
-		if (request.getParameter("sort") != null) {
-			sortItem = request.getParameter("sort");
+		if (request.getParameter("sortItem") != null) {
+			sortItem = request.getParameter("sortItem");
+			if (request.getParameter("sortType") != null) {
+				if (request.getParameter("sortType").equals("DESC"))
+					sortType = "DESC";	
+				else
+					sortType = "ASC";
+			}
 		}
 	
 		try {
@@ -75,8 +82,7 @@ public class PaymentPaginationServlet extends HttpServlet {
 		    }
 		    
 		    List<Payment> lists;
-			String action = request.getParameter("user_action");
-			lists = paymentBean.readPayment(currentPage, recordsPerPage, keyword);
+			lists = paymentBean.readPayment(currentPage, recordsPerPage, keyword, sortItem, sortType);
 		    
 		    request.setAttribute("payments", lists);
 		} catch (EJBException ex) {
@@ -87,6 +93,8 @@ public class PaymentPaginationServlet extends HttpServlet {
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("recordsPerPage", recordsPerPage);
 		request.setAttribute("keyword", keyword);
+		request.setAttribute("sortItem", sortItem);
+		request.setAttribute("sortType", sortType);
 	
 		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_payment.jsp");
 		dispatcher.forward(request, response);

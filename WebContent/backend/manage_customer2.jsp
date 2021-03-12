@@ -1,12 +1,15 @@
 <%@page import="java.util.List" %>
 <%@page import="domain.Customer" %>
+<%@page import="domain.Employee" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <% 
-	String pageDisplay= "";
-	int currentPage=(int) request.getAttribute("currentPage");
-	int recordsPerPage=(int) request.getAttribute("recordsPerPage");
-	int nOfPages=(int) request.getAttribute("nOfPages");
-	String keyword=(String) request.getAttribute("keyword");
+	String pageDisplay = "";
+	int currentPage =(int) request.getAttribute("currentPage");
+	int recordsPerPage =(int) request.getAttribute("recordsPerPage");
+	int nOfPages =(int) request.getAttribute("nOfPages");
+	String keyword =(String) request.getAttribute("keyword");
+	String sortItem = (String) request.getAttribute("sortItem");
+	String sortType = (String) request.getAttribute("sortType");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +35,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
 			integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
 			crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="${ pageContext.request.contextPath }/frontend/assets/css/font-awesome.css">
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/css/customer-page.css">
 	<script>
 		$(document).ready(function () {
@@ -178,21 +182,98 @@
 				<table class="table table-striped table-hover table-light scroll-bar">
 					<thead>
 						<tr>
-                            <th scope="col">Action</th>
-                            <th scope="col" class="customernumber">Customer no</th>
-                            <th scope="col" class="customername">Name</th>
-                            <th scope="col" class="contactfirstname">Contact first name</th>
-                            <th scope="col" class="contactlastname">Contact last name</th>
-                            <th scope="col" class="phone">Phone</th>
-                            <th scope="col" class="email">Email</th>
-                            <th scope="col" class="addressline1">Address line 1</th>
-                            <th scope="col" class="addressline2">Address line 2</th>
-                            <th scope="col" class="city">City</th>
-                            <th scope="col" class="state">State</th>
-                            <th scope="col" class="postalcode">Postal code</th>
-                            <th scope="col" class="country">Country</th>
-                            <th scope="col" class="salesrepresentativeno">Sales representative no</th>
-                            <th scope="col" class="creditlimit">Credit limit</th>
+						<%
+							String url = request.getContextPath() + 
+									 "/backend/CustomerPagination"+
+									 "?keyword="+keyword+
+									 "&currentPage="+currentPage+
+									 "&recordsPerPage="+recordsPerPage;
+							%>
+							<th scope="col">Action</th>
+							<%
+							final int NUM_OF_COLUMNS = 14;
+							String urls[] = new String[NUM_OF_COLUMNS];
+							String[] sortIcons = new String[NUM_OF_COLUMNS];
+							
+							String[] sortItemsLookup = {
+									"customernumber",
+									"customername",
+									"contactfirstname",
+									"contactlastname",
+									"phone",
+									"email",
+									"addressline1",
+									"addressline2",
+									"city",
+									"state",
+									"postalcode",
+									"country",
+									"salesrepresentativeno",
+									"creditlimit",
+							};
+							
+							String[] columnName = {
+									"Customer no",
+									"Name",
+									"Contact first name",
+									"Contact last name",
+									"Phone",
+									"Email",
+									"Address line 1",
+									"Address line 2",
+									"City",
+									"State",
+									"Postal code",
+									"Country",
+									"Sales representative no",
+									"Credit limit",
+							};
+							
+							String[] columnTypes = {
+									"number",
+									"alphabet",
+									"alphabet",
+									"alphabet",
+									"alphabet",
+									"alphabet",
+									"alphabet",
+									"alphabet",
+									"alphabet",
+									"alphabet",
+									"alphabet",
+									"alphabet",
+									"number",
+									"number",
+							};
+							
+							for (int idx = 0; idx < sortItemsLookup.length; idx++) {
+								urls[idx] = url + "&sortItem=" + sortItemsLookup[idx];
+								if (sortItem.equals(sortItemsLookup[idx])) {
+									if (sortType.equals("ASC")) {
+										if (columnTypes[idx].equals("number"))
+											sortIcons[idx] = "fa fa-sort-numeric-asc";
+										else
+											sortIcons[idx] = "fa fa-sort-alpha-asc";
+										urls[idx] += "&sortType=DESC";
+									} else if (sortType.equals("DESC")){
+										if (columnTypes[idx].equals("number"))
+											sortIcons[idx] = "fa fa-sort-numeric-desc";
+										else
+											sortIcons[idx] = "fa fa-sort-alpha-desc";
+										urls[idx] += "&sortType=ASC";
+									}
+								} else {
+									sortIcons[idx] = "fa fa-sort";
+									urls[idx] += "&sortType=ASC";
+								}
+								out.print("<th scope='col' class='"+sortItemsLookup[idx]+"'>");
+								out.print("<a href='"+urls[idx]+"'>");
+								out.print(columnName[idx]);
+								out.print("<i class='"+sortIcons[idx]+"' aria-hidden='true'>");
+								out.print("</a>");
+								out.print("</th>");
+							}
+							%>
 						</tr>
 					</thead>
 					<tbody>
@@ -229,7 +310,14 @@
 							out.println("<td class='postalcode'>" + customer.getPostalcode() + "</td>");
 							out.println("<td class='country'>" + customer.getCountry() + "</td>");
 							//TODO Link this employee to another page
-							out.println("<td class='salesrepresentativeno'>" + customer.getEmployee() + "</td>");
+							Employee salespersonrep = customer.getEmployee();
+							String salespersonrepHTML = "";	
+							if (salespersonrep == null) {
+								salespersonrepHTML = "N/A";
+							} else {
+								salespersonrepHTML = String.valueOf(customer.getEmployee().getEmployeenumber());
+							}	
+							out.println("<td class='salesrepresentativeno'>" + salespersonrepHTML + "</td>");
 							out.println("<td class='creditlimit'>" + customer.getCreditlimit().doubleValue() + "</td>");
                             //TODO Display payment record
                             // out.println("<td>" + customer.getCustomers() + "</td>");

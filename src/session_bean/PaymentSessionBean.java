@@ -58,35 +58,17 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 	}
 
 	@Override
-	public List<Payment> readPayment(int currentPage, int recordsPerPage, String keyword) throws EJBException {
+	public List<Payment> readPayment(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException {
 		TypedQuery<Payment> q = null;
 		
-		if (keyword.isEmpty()) {
-			
-			q = em.createNamedQuery("Payment.findAll", Payment.class);
-
-		    int start = currentPage * recordsPerPage - recordsPerPage;
-		    q.setFirstResult(start);
-		    q.setMaxResults(recordsPerPage);
-		    
-		} else {
-	
-		    //q = em.createNamedQuery("Payment.findByKeyword", Payment.class);
-	
-			PaymentQueryConstructor queryConstructor = new PaymentQueryConstructor(em.getCriteriaBuilder());
-		    CriteriaQuery<Payment> cq = queryConstructor.queryPayment(keyword, "", "");
-		    q = em.createQuery(cq);
-		    
-		    int start = currentPage * recordsPerPage - recordsPerPage;
-		    q.setFirstResult(start);
-		    q.setMaxResults(recordsPerPage);
-//		    q.setParameter(1, "%" + keyword + "%");
-//		    q.setParameter(2, Integer.valueOf(start));
-//		    q.setParameter(3, Integer.valueOf(recordsPerPage));
-		    
-		}
-	
-		// CriteriaQuery<Foo> criteriaQuery = criteriaBuilder.createQuery(Foo.class);
+		PaymentQueryConstructor queryConstructor = new PaymentQueryConstructor(em.getCriteriaBuilder());
+	    CriteriaQuery<Payment> cq = queryConstructor.queryPayment(keyword, sortItem, sortType);
+	    q = em.createQuery(cq);
+	    
+	    int start = currentPage * recordsPerPage - recordsPerPage;
+	    q.setFirstResult(start);
+	    q.setMaxResults(recordsPerPage);
+	    
 		List<Payment> results = q.getResultList();
 
 		return results;

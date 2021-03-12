@@ -13,7 +13,7 @@ public interface CustomerSessionBeanLocal {
 
 	public Customer findCustomer(String customernumber) throws EJBException;
 
-	public List<Customer> readCustomer(int currentPage, int recordsPerPage, String keyword) throws EJBException;
+	public List<Customer> readCustomer(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException;
 
 	public int getNumberOfRows(String keyword) throws EJBException;
 
