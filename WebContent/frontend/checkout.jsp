@@ -9,54 +9,123 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 <head>
 	<meta charset="ISO-8859-1">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Checkout</title>
-	<!-- ============================================================== -->
-	<!-- CSS styling -->
-	<!-- ============================================================== -->
-	<style>
-	    .panel-heading {
-			padding: 0;
-			border:0;
-		}
-		.panel-title>a, .panel-title>a:active{
-			display:block;
-			padding:15px;
-			color:#555;
-			font-size:16px;
-			font-weight:bold;
-			text-transform:uppercase;
-			letter-spacing:1px;
-			 word-spacing:3px;
-			text-decoration:none;
-		}
-		
-		[data-toggle="collapse"] .fa.icon-change:before {  
-		  content: "\f139";
-		}
-		
-		[data-toggle="collapse"].collapsed .fa.icon-change:before {
-		  content: "\f13a";
-		}
-		
-		body {
-		  background: #f5f5f5;
-		}
-		
-		.rounded-lg {
-		  border-radius: 1rem;
-		}
-		
-		.nav-pills .nav-link {
-		  color: #555;
-		}
-		
-		.nav-pills .nav-link.active {
-		  color: #fff;
-		}
-	</style>
-	<!-- ============================================================== -->
-	<!-- End CSS styling -->
-	<!-- ============================================================== -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/fontawesome.min.css"
+		integrity="sha512-shT5e46zNSD6lt4dlJHb+7LoUko9QZXTGlmWWx0qjI9UhQrElRb+Q5DM7SVte9G9ZNmovz2qIaV7IWv0xQkBkw=="
+		crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"
+		integrity="sha512-hCP3piYGSBPqnXypdKxKPSOzBHF75oU8wQ81a6OiGXHFMeKs9/8ChbgYl7pUvwImXJb03N4bs1o1DzmbokeeFw=="
+		crossorigin="anonymous"></script>
+	<link 
+	href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
+    rel="stylesheet">
+    <title>Checkout</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/frontend/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!--     jQuery -->
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
+	<!--     Bootstrap -->
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/popper.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/bootstrap.min.js"></script>
+	<!-- Plugins -->
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/scrollreveal.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/waypoints.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery.counterup.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/imgfix.min.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/mixitup.js"></script>
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/accordions.js"></script>
+	<!-- Global Init -->
+	<script src="${pageContext.request.contextPath}/frontend/assets/js/custom.js"></script>
+<style>
+    .panel-heading {
+		padding: 0;
+		border:0;
+	}
+	.panel-title>a, .panel-title>a:active{
+		display:block;
+		padding:15px;
+		color:#555;
+		font-size:16px;
+		font-weight:bold;
+		text-transform:uppercase;
+		letter-spacing:1px;
+		 word-spacing:3px;
+		text-decoration:none;
+	}
+	
+	[data-toggle="collapse"] .fa:before {  
+	  content: "\f139";
+	}
+	
+	[data-toggle="collapse"].collapsed .fa:before {
+	  content: "\f13a";
+	}
+	
+	body {
+	  background: #f5f5f5;
+	}
+	
+	.rounded-lg {
+	  border-radius: 1rem;
+	}
+	
+	.nav-pills .nav-link {
+	  color: #555;
+	}
+	
+	.nav-pills .nav-link.active {
+	  color: #fff;
+	}
+</style>
+<script>
+	$(document).ready(function () {
+		$('#collapseOne').collapse('toggle');
+
+		$('#continue_billing').on('click', function() {
+			$('#continue_billing').fadeOut();
+			$('#continue_payment').fadeIn();
+			$('#collapseOne').collapse('toggle');
+			// $('#collapseOne').collapse('toggle');
+		});
+
+		$('#continue_payment').on('click', function() {
+			$('#continue_payment').fadeOut();
+			// document.getElementById('collapseThree').scrollIntoView();
+			$('#collapseTwo').collapse('toggle');
+		});
+
+		$('#pay-btn').on('click', function() {
+			let chosenEmail = $("#sales_person_email").val();
+			let obj = $("#sales_person_emails").find("option[value='" + chosenEmail + "']");
+			if (obj != null && obj.length > 0) {
+				$('#payment_form').submit();
+			}
+			else {
+				$('#form_error_modal').modal();
+			}
+		});
+
+		$('#bank_payment_method').on('click', function() {
+			$('#payment_method').val('bank');
+		});
+
+		$('#card_payment_method').on('click', function() {
+			$('#payment_method').val('card');
+		});
+
+		let today = new Date();
+		let day = String(today.getDate()).padStart(2, '0');
+		let month = String(today.getMonth() + 1).padStart(2, '0');
+		let year = today.getFullYear();
+		today = year + '-' + month + '-' + day;
+
+		$('#required_date').attr('min', today);
+
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>
 </head>
 
 <body>
@@ -65,7 +134,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	
 	<!-- ***** Call to Action Start ***** -->
     <section class="section section-bg" id="call-to-action"
-        style="background-image: url(frontend/assets/images/banner-image-1-1920x500.jpg)">
+        style="background-image: url(${pageContext.request.contextPath}/frontend/assets/images/banner-image-1-1920x500.jpg)">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
@@ -94,56 +163,33 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						<hr>
 						<div class="shopping_cart">
 							<form class="form-horizontal" role="form" action="Checkout" method="post" id="payment_form">
-								<!-- ============================================================== -->
-								<!-- Review order -->
-								<!-- ============================================================== -->
+								<!-- Include Review Order JSP -->
 								<jsp:include page="review_order.jsp" /> 
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<span style="text-align: center; width:100%;">
-												<a id="continue_billing" style="width:100%;"
-														data-toggle="collapse" data-parent="#accordion"
-														href="#collapseTwo" class=" btn btn-success">
-														Continue to Billing Information 
-														<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-												</a>
-											</span>
+											<span style="text-align: center; width:100%;"><a id="continue_billing" style="width:100%;"
+													data-toggle="collapse" data-parent="#accordion"
+													href="#collapseTwo" class=" btn btn-success">
+													Continue to Billing Information�</a></span>
 										</h4>
 									</div>
 								</div>
-								<!-- ============================================================== -->
-								<!-- End review order -->
-								<!-- ============================================================== -->
-								<!-- ============================================================== -->
-								<!-- Order form (a.k.a. customer information) -->
-								<!-- ============================================================== -->
+								<!-- Include Bill Information JSP -->
 								<jsp:include page="order_form.jsp" />  
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
-											<span style="text-align: center;">
-												<a id="continue_payment" data-toggle="collapse"
-														data-parent="#accordion" href="#collapseThree"
-														class=" btn   btn-success"
-														style="width:100%;display: none;">
-														Enter Payment Information
-														<i class="fa fa-angle-double-right" aria-hidden="true"></i>
-												</a>
+											<span style="text-align: center;"><a id="continue_payment" data-toggle="collapse"
+													data-parent="#accordion" href="#collapseThree"
+													class=" btn   btn-success"
+													style="width:100%;display: none;">Enter Payment Information �</a>
 											</span>
 										</h4>
 									</div>
 								</div>
-								<!-- ============================================================== -->
-								<!-- End order form -->
-								<!-- ============================================================== -->
-								<!-- ============================================================== -->
-								<!-- Payment form -->
-								<!-- ============================================================== -->
+								<!-- Include Payment JSP -->
 								<jsp:include page="payment.jsp" />
-								<!-- ============================================================== -->
-								<!-- End payment form -->
-								<!-- ============================================================== -->
 							</form>
 						</div>
 					</div>
@@ -154,70 +200,4 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	<!-- Include Footer JSP -->
 	<jsp:include page="footer.jsp" />  
 </body>
-	<!-- ============================================================== -->
-	<!-- Custom JQuery script -->
-	<!-- ============================================================== -->
-	<script>
-		$(document).ready(function () {
-			/* Expand "Review order" section on page load
-			*/ 
-			$('#collapseOne').collapse('toggle');
-
-			/* Expand "Billing information/order information" section and 
-			   collpase "Review order" section when user clicks "Continue 
-			   to Billing Information"
-			*/
-			$('#continue_billing').on('click', function() {
-				$('#continue_billing').fadeOut();
-				$('#continue_payment').fadeIn();
-				$('#collapseOne').collapse('toggle');
-			});
-
-			/* Expand "Payment form" section and collpase "Billing information"
-			   section when user clicks "Enter Payment Information"
-			*/
-			$('#continue_payment').on('click', function() {
-				$('#continue_payment').fadeOut();
-				$('#collapseTwo').collapse('toggle');
-			});
-
-			/* Submit the checkout form when user clicks "Pay Now"
-			*/
-			$('#pay-btn').on('click', function() {
-				<% //TODO Validate form input before submitting %>
-				let chosenEmail = $("#sales_person_email").val();
-				let obj = $("#sales_person_email").find("option[value='" + chosenEmail + "']");
-				if (obj != null && obj.length > 0 && chosenEmail !== "") {
-					$('#payment_form').submit();
-				}
-				else {
-					$('#form_error_modal').modal();
-				}
-			});
-
-			/* Switch the payment method between 'bank' and 'card' depending 
-			   on user's interaction
-			*/
-			$('#bank_payment_method').on('click', function() {
-				$('#payment_method').val('bank');
-			});
-	
-			$('#card_payment_method').on('click', function() {
-				$('#payment_method').val('card');
-			});
-
-			/* Set the minimum date of "required date" to today's date
-			*/
-			let today = new Date();
-			let day = String(today.getDate()).padStart(2, '0');
-			let month = String(today.getMonth() + 1).padStart(2, '0');
-			let year = today.getFullYear();
-			today = year + '-' + month + '-' + day;
-	
-			$('#required_date').attr('min', today);
-		});
-	</script>
-	<!-- ============================================================== -->
-	<!-- End custom JQuery script -->
-	<!-- ============================================================== -->
 </html>

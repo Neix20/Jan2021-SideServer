@@ -51,7 +51,11 @@
 
 	<!-- ***** Call to Action Start ***** -->
 	<section class="section section-bg" id="call-to-action"
+<<<<<<< Updated upstream
 		style="background-image: url(frontend/assets/images/banner-image-1-1920x500.jpg)">
+=======
+		style="background-image: url(${pageContext.request.contextPath}/frontend/assets/images/banner-image-1-1920x500.jpg)">
+>>>>>>> Stashed changes
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
