@@ -8,6 +8,8 @@
 	ShoppingCart scList = (ShoppingCart) session.getAttribute("ShoppingCart");
 	if (scList == null)
 		scList = new ShoppingCart();
+ 	BigDecimal temp = scList.getTotalPrice();
+ 	temp = temp.multiply(new BigDecimal(1.06));
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,17 +25,29 @@
 	rel="stylesheet">
 <title>Shopping Cart Page</title>
 <link rel="stylesheet" type="text/css"
-	href="frontend/assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="frontend/assets/css/style.css">
+	href="${pageContext.request.contextPath}/frontend/assets/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- jQuery -->
+<<<<<<< Updated upstream
 <script src="frontend/assets/js/jquery-2.1.0.min.js"></script>
 
 <!-- Bootstrap -->
 <script src="frontend/assets/js/popper.js"></script>
 <script src="frontend/assets/js/bootstrap.min.js"></script>
+=======
+<script
+	src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
+
+<!-- Bootstrap -->
+<script
+	src="${pageContext.request.contextPath}/frontend/assets/js/popper.js"></script>
+<script
+	src="${pageContext.request.contextPath}/frontend/assets/js/bootstrap.min.js"></script>
+>>>>>>> Stashed changes
 
 <style>
 /* Chrome, Safari, Edge, Opera */
@@ -86,7 +100,11 @@ input[type=number] {
 
 	<!-- ***** Call to Action Start ***** -->
 	<section class="section section-bg" id="call-to-action"
+<<<<<<< Updated upstream
 		style="background-image: url(frontend/assets/images/banner-image-1-1920x500.jpg)">
+=======
+		style="background-image: url(${pageContext.request.contextPath}/frontend/assets/images/banner-image-1-1920x500.jpg)">
+>>>>>>> Stashed changes
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
@@ -131,7 +149,8 @@ input[type=number] {
 							<form action="/SideServerAssignment/ShoppingCart" method="post">
 								<div class="row mb-4">
 									<div class="col-md-5 col-lg-3 col-xl-3">
-										<img src="frontend/assets/images/<%=type%>.jpg"
+										<img
+											src="${pageContext.request.contextPath}/frontend/assets/images/<%=type%>.jpg"
 											style="width: 100%;" />
 									</div>
 									<div class="col-md-7 col-lg-9 col-xl-9">
@@ -139,27 +158,19 @@ input[type=number] {
 											<div class="d-flex justify-content-between">
 												<div>
 													<h5>
-														<%
-															out.println(sc.getProductname());
-														%>
+														<%=sc.getProductname()%>
 													</h5>
 													<p class="mb-3 text-muted text-uppercase small">
 														Model:
-														<%
-														out.print(sc.getProductline());
-													%>
+														<%=sc.getProductline()%>
 													</p>
 													<p class="mb-2 text-muted text-uppercase small">
 														Vendor:
-														<%
-														out.print(sc.getProductvendor());
-													%>
+														<%=sc.getProductvendor()%>
 													</p>
 													<p class="mb-3 text-muted text-uppercase small">
 														Scale:
-														<%
-														out.print(sc.getProductscale());
-													%>
+														<%=sc.getProductscale()%>
 													</p>
 												</div>
 												<div>
@@ -167,13 +178,11 @@ input[type=number] {
 														class="def-number-input number-input safari_only mb-0 w-100">
 														<button name="type" value="minus"
 															class="btn btn-primary minus">&#9660;</button>
-														<input name="productName"
-															value="<%out.print(sc.getProductname());%>" hidden /> <input
-															class="text-right buy_quantity" style="width: 50px;"
-															name="buy_quantity"
-															value="<%out.print(sc.getQuantity());%>" type="number"
-															min="1" max="<%out.print(sc.getQuantityinstock());%>"
-															disabled />
+														<input name="productName" value="<%=sc.getProductname()%>"
+															hidden /> <input class="text-right buy_quantity"
+															style="width: 50px;" name="buy_quantity"
+															value="<%=sc.getQuantity()%>" type="number" min="1"
+															max="<%=sc.getQuantityinstock()%>" disabled />
 														<button name="type" value="plus"
 															class="btn btn-primary plus">&#9650;</button>
 													</div>
@@ -192,9 +201,7 @@ input[type=number] {
 													</button>
 												</div>
 												<p class="mb-0">
-													<span><strong id="summary">RM<%
-														out.print(sc.getSubPriceString());
-													%></strong></span>
+													<span><strong id="summary">RM <%=sc.getSubPriceString()%></strong></span>
 												</p>
 											</div>
 										</div>
@@ -260,9 +267,7 @@ input[type=number] {
 							<ul class="list-group list-group-flush">
 								<li
 									class="list-group-item d-flex justify-content-between align-items-center px-0 pb-0">
-									Temporary amount <span>RM<%
-									out.print(scList.getTotalPrice().toString());
-								%></span>
+									Temporary amount <span>RM<%=scList.getTotalPrice().toString()%></span>
 								</li>
 								<li
 									class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
@@ -274,19 +279,28 @@ input[type=number] {
 										<strong>The total amount of</strong> <strong>
 											<p class="mb-0">(including GST)</p>
 										</strong>
+<<<<<<< Updated upstream
 									</div> <span> <strong>RM <%
  	BigDecimal temp = scList.getTotalPrice();
  	temp = temp.multiply(new BigDecimal(1.06));
  	out.print(String.format("%.2f", temp.doubleValue()));
  %>
+=======
+									</div> <span> <strong>RM <%=String.format("%.2f", temp.doubleValue())%>
+>>>>>>> Stashed changes
 									</strong>
 								</span>
 								</li>
 							</ul>
 
+<<<<<<< Updated upstream
 							<button type="button" class="btn btn-primary btn-block">go
 								to checkout</button>
 
+=======
+							<a href="Checkout" type="submit"
+								class="btn btn-primary btn-block">go to checkout</a>
+>>>>>>> Stashed changes
 						</div>
 					</div>
 					<!-- Card -->
@@ -315,6 +329,7 @@ input[type=number] {
 		</div>
 	</footer>
 	<!-- Plugins -->
+<<<<<<< Updated upstream
 	<script src="frontend/assets/js/scrollreveal.min.js"></script>
 	<script src="frontend/assets/js/waypoints.min.js"></script>
 	<script src="frontend/assets/js/jquery.counterup.min.js"></script>
@@ -324,6 +339,24 @@ input[type=number] {
 
 	<!-- Global Init -->
 	<script src="frontend/assets/js/custom.js"></script>
+=======
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/scrollreveal.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/waypoints.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/jquery.counterup.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/imgfix.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/mixitup.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/accordions.js"></script>
+
+	<!-- Global Init -->
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/custom.js"></script>
+>>>>>>> Stashed changes
 
 </body>
 
