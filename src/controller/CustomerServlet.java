@@ -13,10 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import domain.Customer;
 import session_bean.CustomerSessionBeanLocal;
-import utility.ValidateManageLogic;
+import utility.PaginationRequestProcessor;
+import utility.UrlGenerator;
+import utility.Redirect;
 
 /**
- * Servlet implementation class CustomerController
+ * Servlet implementation class CustomerServlet
+ * 
+* @author  Yap Jheng Khin
+* @version 1.0
+* @since   2021-03-12 
  */
 @WebServlet({"backend/Customer", "backend/customer"})
 public class CustomerServlet extends HttpServlet {
@@ -26,36 +32,34 @@ public class CustomerServlet extends HttpServlet {
     @EJB
     private CustomerSessionBeanLocal customerBean;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public CustomerServlet() {
     	super();
     }
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     *      response)
-     */
+	/**
+	 * Find the customer's record that matches with the customernumber
+	 * from the client's request.
+	 */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 		String id = request.getParameter("customernumber");
 	
 		try {
-		    Customer customer = customerBean.findCustomer(id);
+			//TODO Handle special case if customernumber and checknumber not found?
+		    Customer customer = customerBean.findCustomerById(id);
 		    request.setAttribute("customer", customer);
 	
+		    //TODO Remove forward, since we are going to use AJAX, forward is not needed
 		    RequestDispatcher req = request.getRequestDispatcher("update_customer.jsp");
 		    req.forward(request, response);
 		} catch (EJBException ex) {
 		}
     }
 
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     *      response)
-     */
+	/**
+	 * To perform add, update, delete operation on customer's record.
+	 */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
@@ -102,14 +106,27 @@ public class CustomerServlet extends HttpServlet {
 		    	customerBean.deleteCustomer(customernumber);
 		    } else {
 		    	customerBean.addCustomer(s);
-		    }
-	
-		    //TODO: Redirect to a page, Have a pop up?
-		    ValidateManageLogic.navigateJS(out, "CustomerPagination");
-	
+		    }	
 		} catch (EJBException ex) {
 			throw ex;
 		}
+		
+		// Use custom class to process the request's parameter to reduce redundancy
+		PaginationRequestProcessor requestProcessor = new PaginationRequestProcessor();
+		requestProcessor.process(request);
+		int nOfPages = requestProcessor.getnOfPages();
+		int currentPage = requestProcessor.getCurrentPage();
+		int recordsPerPage = requestProcessor.getRecordsPerPage();
+		String keyword = requestProcessor.getKeyword();
+		String sortItem = requestProcessor.getSortItem();
+		String sortType = requestProcessor.getSortType();
+		
+		String absoluteLink = request.getContextPath();		
+		UrlGenerator urlGenerator = new UrlGenerator(absoluteLink, nOfPages, currentPage, 
+													 recordsPerPage, keyword, sortItem, sortType);
+		request.setAttribute("urlGenerator", urlGenerator);
+
+	    Redirect.navigateJS(out, urlGenerator.toString(), action);
     }
 
 }

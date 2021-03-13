@@ -1,3 +1,8 @@
+<%--
+Author	  : Yap Jheng Khin
+Page info : Display this page when the shopping cart is empty
+Reminder  : Please enable Internet connection to load third party libraries: Thank you
+--%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -5,8 +10,8 @@
 
 <head>
 	<title>Checkout error</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
+	<meta charset="ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 
 <body>

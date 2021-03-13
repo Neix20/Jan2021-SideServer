@@ -12,21 +12,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
-/*
+/**
  * The persistent class for the customers database table.
  * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
  */
 @Entity
 @Table(name = "customers", schema="classicmodels")
 @NamedQueries({
+	@NamedQuery(
+			name = "Customer.findbyCustomerNumber", 
+			query = "SELECT c FROM Customer c WHERE c.customernumber = ?1"
+	),
 	@NamedQuery(
 			name="Customer.findByEmail",
 			query="SELECT c FROM Customer c WHERE c.email = :email"
@@ -34,33 +39,6 @@ import javax.persistence.Table;
 	@NamedQuery(
 			name="Customer.locateNextPK", 
 			query="SELECT MAX(c.customernumber) FROM Customer c"
-	),
-	@NamedQuery(
-			name = "Customer.findAll", 
-			query = "SELECT c FROM Customer c"
-	),
-	@NamedQuery(
-			name="Customer.findAll2", 
-			query="SELECT c FROM Customer c order by c.customernumber"
-	),
-	@NamedQuery(
-			name="Customer.findTotalRows", 
-			query="SELECT COUNT(c) AS totalrow FROM Customer c"
-	),
-	@NamedQuery(
-			name = "Customer.findbyCustomerNumber", 
-			query = "SELECT c FROM Customer c WHERE c.customernumber = ?1"
-	),
-})
-@NamedNativeQueries({
-	// Native Queries are used
-	// Since both implicit and explicit CAST to String is not supported in current version of JPQL
-	@NamedNativeQuery(
-		name="Customer.getTotalRowsByKeyword", 
-		query="SELECT COUNT(*) AS totalrow from classicmodels.customers WHERE " +
-				  "concat(customernumber ,customername, contactlastname, contactfirstname, " + 
-				  "phone, addressline1, addressline2, city, state, postalCode, country, " + 
-				  "salesrepemployeenumber, creditlimit) LIKE ?"
 	),
 })
 public class Customer implements Serializable {

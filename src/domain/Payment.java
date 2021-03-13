@@ -8,48 +8,25 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 
 /**
  * The persistent class for the payments database table.
  * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
  */
 @Entity
 @Table(name="payments", schema="classicmodels")
 @NamedQueries({
 	@NamedQuery(
-			name="Payment.findTotalRows", 
-			query="SELECT COUNT(p) AS totalrow FROM Payment p"
-	),
-
-	@NamedQuery(
 			name = "Payment.findbyPaymentId", 
 			query = "SELECT p FROM Payment p "+
 			"WHERE p.id.customernumber = ?1 AND p.id.checknumber = ?2"
-	),
-})
-@NamedNativeQueries({
-	// Native Queries are used
-	// Since both implicit and explicit CAST to String is not supported in current version of JPQL
-	// Also CONCAT between integer attribute and string attribute is not allowed in JPQL
-	@NamedNativeQuery(
-			name="getTotalRowsByKeyword", 
-			query="SELECT COUNT(*) AS totalrow from classicmodels.payments" +
-				  " WHERE concat(customernumber ,checknumber, paymentdate, " + 
-				  "amount, paymentmethod) LIKE ? "
-	),
-	@NamedNativeQuery(
-			name = "Payment.findByKeyword", 
-			query = "SELECT * from classicmodels.payments WHERE concat(customernumber ,checknumber, " +
-				    "paymentdate, amount, paymentmethod) LIKE ? " +
-				    "order by customernumber, checknumber OFFSET ? LIMIT ?",
-			resultClass = Payment.class
 	),
 })
 public class Payment implements Serializable {

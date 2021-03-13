@@ -1,3 +1,8 @@
+<%--
+Author	  : Yap Jheng Khin
+Page info : 'Review order' section of the checkout page
+Reminder  : Please enable Internet connection to load third party libraries: Thank you
+--%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="domain.ShoppingCart"%>
@@ -10,8 +15,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Review Order</title>
+	<meta charset="ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Review Order</title>
 </head>
 <body>
 	<div class="panel-group" id="accordion">
@@ -19,14 +25,19 @@
 			<div class="panel-heading">
 				<h4 class="panel-title mb-3">			
 					<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-					<i class="fa" aria-hidden="true"></i>
+					<i class="fa icon-change" aria-hidden="true"></i>
 					Review Your Order
 					</a>
 				</h4>
 			</div>
 			<div id="collapseOne" class="panel-collapse collapse in">
 				<div class="panel-body">
-					<div class="items">												<%
+					<!-- ============================================================== -->
+					<!-- Display ordered products for review -->
+					<!-- ============================================================== -->
+					<div class="items">
+						<%
+						// Reference: My fellow teammate Xi En's code
 						HashMap<String, Integer> map = new HashMap<String, Integer>();
 						for (ShoppingCartItem order : orderList.getList()) {
 							String type = order.getProductline().split(" ")[0];
@@ -66,22 +77,27 @@
 										<td>RM<%out.print(order.getSubPriceString());%></td>
 									</tr>
 								</table>
-								<!--<div class="def-number-input number-input safari_only mb-0 w-100"> -->
-								<%--<p class="text-right buy_quantity"><%out.print(order.getQuantity());%></p> --%>
-								<%--<%//TODO Want to check quantity in stock when checkout?// out.print(order.getQuantityinstock());%>" --%>
-								<!--</div> -->
 							</div>
 						</div>
 						<% } %>
+						<!-- ============================================================== -->
+						<!-- End display ordered products for review -->
+						<!-- ============================================================== -->
+						<!-- ============================================================== -->
+						<!-- Display total order amount -->
+						<!-- ============================================================== -->
 						<div style="text-align: center;" class="row d-flex justify-content-end align-items-center mb-3">
 							<h4 class="ml-3">Order Total (Included 6% SST): </h4>
 							<h4 class="ml-auto" style="color:green;">RM<%
 							 	BigDecimal total = orderList.getTotalPrice();
-							total = total.multiply(new BigDecimal(1.06));
+								total = total.multiply(new BigDecimal(1.06));
 							 	out.print(String.format("%.2f", total.doubleValue()));
 							 %>
 							 </h4>
 						</div>
+						<!-- ============================================================== -->
+						<!-- End display total order amount -->
+						<!-- ============================================================== -->
 					</div>
 				</div>
 			</div>

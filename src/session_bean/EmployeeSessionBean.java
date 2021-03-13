@@ -7,7 +7,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import domain.Employee;
@@ -30,9 +29,9 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
     @Override
     public Employee findEmployee(String employee_id) throws EJBException {
-		Query q = em.createNamedQuery("Employee.findbyId");
-		q.setParameter("employee_id", Long.valueOf(employee_id));
-		return (Employee) q.getSingleResult();
+		TypedQuery<Employee> q = em.createNamedQuery("Employee.findbyId", Employee.class);
+		q.setParameter("employee_id", Integer.valueOf(employee_id));
+		return q.getSingleResult();
     }
     
     @Override
@@ -46,8 +45,21 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 	public Employee findEmployeeByEmail(String email) throws EJBException {
 		TypedQuery<Employee> query = em.createNamedQuery("Employee.findbyEmail", Employee.class);
 		query.setParameter("email", email);
-		Employee matchedEmployee = (Employee) query.getSingleResult();
-    	return matchedEmployee;
+		/* Handle special case where jfirrelli@classicmodelcars.com is repeated 
+		 * twice in the database.
+		 */
+		List<Employee> matchedEmployees = (List<Employee>) query.getResultList();
+		Employee trueEmployee = matchedEmployees.get(0);
+		if (matchedEmployees.size() == 1) return trueEmployee;
+		else {
+			for (Employee employee : matchedEmployees) {
+				if (employee.getJobtitle().equals("Sales Rep")) {
+					trueEmployee = employee;
+					break;
+				}
+			}
+		}
+    	return trueEmployee;
 	}
 
 }

@@ -13,21 +13,25 @@ import domain.ShoppingCart;
 
 /**
  * Servlet implementation class Receipt
+ * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
  */
 @WebServlet({ "frontend/Receipt", "/Receipt", "/receipt" })
 public class ReceiptServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+	
     public ReceiptServlet() {
         super();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+    /**
+     * Check if user has already done payment before proceed to display receipt. 
+     * If the user hasn't done any payment, the servlet will forward to receipt_error.jsp
+     * before redirecting to checkout page.
+     * Else, the servlet will forward to receipt.jsp to proceed to display receipt.
+     */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ShoppingCart purchasedOrderProduct = (ShoppingCart) request.getAttribute("purchased_order_product");
 		
@@ -42,11 +46,7 @@ public class ReceiptServlet extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }

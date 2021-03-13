@@ -14,7 +14,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import domain.Customer;
 import session_bean.CustomerSessionBeanLocal;
+import utility.PaginationRequestProcessor;
+import utility.UrlGenerator;
 
+/**
+ * Servlet implementation class CustomerPaginationServlet
+ * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
+ */
 @WebServlet(urlPatterns = {"backend/CustomerPagination", "backend/customerpagination"})
 public class CustomerPaginationServlet extends HttpServlet {
 
@@ -26,40 +35,26 @@ public class CustomerPaginationServlet extends HttpServlet {
     public CustomerPaginationServlet() {
 	super();
     }
-
+	
+	/**
+	 * Perform pagination on customer dashboard.
+	 * 
+	 * Reference: UCCD3243 Practical Slide 
+	 */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		response.setContentType("text/html;charset=UTF-8");
-	
-		int nOfPages = 0;
-		int currentPage = 1;
-		int recordsPerPage = 30;
-		String keyword = "";
-		String sortItem = "";
-		String sortType = "";
-				
-		if (request.getParameter("currentPage") != null) {
-			currentPage = Integer.valueOf(request.getParameter("currentPage"));
-		}
 		
-		if (request.getParameter("recordsPerPage") != null) {
-			recordsPerPage = Integer.valueOf(request.getParameter("recordsPerPage"));
-		}
-		
-		if (request.getParameter("keyword") != null) {
-			keyword = request.getParameter("keyword");
-		}
-		
-		if (request.getParameter("sortItem") != null) {
-			sortItem = request.getParameter("sortItem");
-			if (request.getParameter("sortType") != null) {
-				if (request.getParameter("sortType").equals("DESC"))
-					sortType = "DESC";	
-				else
-					sortType = "ASC";
-			}
-		}
+		// Use custom class to process the request's parameter to reduce redundancy
+		PaginationRequestProcessor requestProcessor = new PaginationRequestProcessor();
+		requestProcessor.process(request);
+		int nOfPages = requestProcessor.getnOfPages();
+		int currentPage = requestProcessor.getCurrentPage();
+		int recordsPerPage = requestProcessor.getRecordsPerPage();
+		String keyword = requestProcessor.getKeyword();
+		String sortItem = requestProcessor.getSortItem();
+		String sortType = requestProcessor.getSortType();
 	
 		try {
 	
@@ -82,17 +77,21 @@ public class CustomerPaginationServlet extends HttpServlet {
 			throw ex;
 		}
 		
-		request.setAttribute("nOfPages", nOfPages);
-		request.setAttribute("currentPage", currentPage);
-		request.setAttribute("recordsPerPage", recordsPerPage);
-		request.setAttribute("keyword", keyword);
-		request.setAttribute("sortItem", sortItem);
-		request.setAttribute("sortType", sortType);
+		/* Set the URL to the latest value of request's parameters 
+		 * so that the user's preference can be saved between requests.
+		 */
+		String absoluteLink = request.getContextPath();		
+		UrlGenerator urlGenerator = new UrlGenerator(absoluteLink, nOfPages, currentPage, 
+													 recordsPerPage, keyword, sortItem, sortType);
+		request.setAttribute("urlGenerator", urlGenerator);
 	
 		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_customer.jsp");
 		dispatcher.forward(request, response);
     }
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	doGet(request, response);

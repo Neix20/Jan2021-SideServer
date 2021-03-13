@@ -6,6 +6,9 @@ import javax.persistence.*;
 /**
  * The primary key class for the payments database table.
  * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
  */
 @Embeddable
 public class PaymentPK implements Serializable {
@@ -63,9 +66,4 @@ public class PaymentPK implements Serializable {
 		
 		return hash;
 	}
-	
-	@Override
-	public String toString(){
-		  return customernumber+""+checknumber;  
-	}  
 }

@@ -1,18 +1,26 @@
+<%--
+Author	  : Yap Jheng Khin
+Page      : Payment dashboard
+Reminder  : Please enable Internet connection to load third party libraries: Thank you
+--%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<% 
-	String pageDisplay= "";
-	int currentPage=(int) request.getAttribute("currentPage");
-	int recordsPerPage=(int) request.getAttribute("recordsPerPage");
-	int nOfPages=(int) request.getAttribute("nOfPages");
-	String keyword=(String) request.getAttribute("keyword");
+<%@page import="utility.UrlGenerator" %>
+<%
+	UrlGenerator urlGenerator = (UrlGenerator) request.getAttribute("urlGenerator");
+	int nOfPages = urlGenerator.getnOfPages();
+	int currentPage = urlGenerator.getCurrentPage();
+	int recordsPerPage = urlGenerator.getRecordsPerPage();
+	String keyword = urlGenerator.getKeyword();
+	String sortItem = urlGenerator.getSortItem();
+	String sortType = urlGenerator.getSortType();
+%>
 %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Manage Payment</title>
-<!-- <link href="assets/css/def_table.css" rel="stylesheet"> -->
+	<meta charset="ISO-8859-1">
+	<title>Manage Payment</title>
 </head>
 <body>
     <!-- ============================================================== -->
@@ -47,6 +55,7 @@
                 <div class="row align-items-center">
                     <div class="col-sm-8">
                     	<%
+                    	String pageDisplay = "";
 						if (nOfPages !=0) { pageDisplay=currentPage + " of " + nOfPages; }
 						%>
                         <h2 class="page-title text-uppercase font-medium">

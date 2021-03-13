@@ -1,4 +1,4 @@
-package session_bean;
+package utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,53 +12,93 @@ import javax.persistence.criteria.Root;
 import domain.Customer;
 import domain.Customer_;
 
-public class CustomerQueryConstructor {
+/**
+ * Class to construct customer criteria queries. This method allows 
+ * more flexibility and customization as compared to NamedQuery or 
+ * NamedNativeQuery. For this purpose, I create a custom CONCAT function
+ * to allow concatenation between string and non-string attributes, which
+ * is not supported by the default CONCAT function.
+ * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
+ */
+public class CustomerCriteriaQuery {
 	    
     private CriteriaBuilder cb;
-    // private CriteriaBuilder cb = em.getCriteriaBuilder();
     
-    public CustomerQueryConstructor() {
+    public CustomerCriteriaQuery() {
     }
     
-    public CustomerQueryConstructor(CriteriaBuilder cb) {
+    public CustomerCriteriaQuery(CriteriaBuilder cb) {
     	this.cb = cb;
     }
-    
-    public CriteriaQuery<Customer> queryCustomer(String keyword, String sortItem, String sortType) {
+        
+    public CriteriaQuery<Long> getNumberofCustomer(String keyword) {
     	
-    	// To create a typesafe query, specify the type of the query when you create the CriteriaQuery object.
-    	CriteriaQuery<Customer> cq = cb.createQuery(Customer.class);
-    	// Call the from method of the query object to set the FROM clause of the query and to specify the root of the query:
-    	Root<Customer> customer = cq.from(Customer.class);
-    	// Call the select method of the query object, passing in the query root, to set the SELECT clause of the query:
-    	cq.select(customer);
+    	// Specify the type of the query to create a type-safe query
+    	CriteriaQuery<Long> query = cb.createQuery(Long.class);
+    	// Call the from method of the query object to set the FROM clause of the query and to specify the root of the query
+    	Root<Customer> customer = query.from(Customer.class);
+    	/* Call the select method of the query object, passing in the query root, to set the SELECT clause of the query
+    	 * Perform `SELECT COUNT(c.customernumber) FROM Customer c`
+    	 */
+    	query.select(cb.count(customer.get(Customer_.customernumber)));
     	
-    	// CONCAT(... ALL ATTRIBUTES) = '%keyword%'
+    	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
     	if (!keyword.equals("")) {
 	    	List<Expression<String>> expressions = setAll(customer);
-	    	Expression<String> stringConcat = concat("", expressions);
-	    	cq.where(cb.like(stringConcat, "%"+keyword+"%"));
+	    	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
+	    	query.where(cb.like(stringConcat, "%"+keyword+"%"));
+    	}
+
+    	return query;
+    }
+    
+    public CriteriaQuery<Customer> findCustomer(String keyword, String sortItem, String sortType) {
+    	
+    	// Specify the type of the query to create a type-safe query
+    	CriteriaQuery<Customer> query = cb.createQuery(Customer.class);
+    	// Call the from method of the query object to set the FROM clause of the query and to specify the root of the query
+    	Root<Customer> customer = query.from(Customer.class);
+    	/* Call the select method of the query object, passing in the query root, to set the SELECT clause of the query
+    	 * Perform `SELECT c FROM Customer c`
+    	 */
+    	query.select(customer);
+    	
+    	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
+    	if (!keyword.equals("")) {
+	    	List<Expression<String>> expressions = setAll(customer);
+	    	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
+	    	query.where(cb.like(stringConcat, "%"+keyword+"%"));
     	}
     	
-    	// ORDER BY specific_column
+    	// Perform `ORDER BY specific_column`
     	sortItem = validateColumnName(sortItem);
     	Order queryOrder = null;
     	if (!sortType.equals("")) {
+    		// Handle special case
     		if (sortItem.equals("salesrepresentativeno"))
     			queryOrder = cb.asc(customer.get("employee").get("employeenumber"));
+    		// Normal case
     		else
     			queryOrder = cb.asc(customer.get(sortItem));
     	}
     	if (sortType.equals("ASC")) {
-    		cq.orderBy(queryOrder);
-    	} else if (sortType.equals("DESC")) {
+    		query.orderBy(queryOrder);
+    	}
+    	// Reverse the order if it is in DESC order
+    	else if (sortType.equals("DESC")) {
     		queryOrder.reverse();
-    		cq.orderBy(queryOrder);
+    		query.orderBy(queryOrder);
     	}
     			
-    	return cq;
+    	return query;
     }
     
+    /**
+     * Ensure that only valid column is returned.
+     */
     private String validateColumnName(String sortItem) {
       	
     	switch (sortItem) {
@@ -98,6 +138,10 @@ public class CustomerQueryConstructor {
     	return sortItem;
     }
     
+    /**
+     * Get all the attributes of the customer in String. Convert all 
+     * non-string attribute into string attribute to perform concatenation.
+     */
     private List<Expression<String>> setAll(Root<Customer> customer) {
     	List<Expression<String>> expressions = new ArrayList<Expression<String>>();
     	Expression<String> customerNo = customer.get(Customer_.customernumber).as(String.class);
@@ -131,24 +175,5 @@ public class CustomerQueryConstructor {
     	expressions.add(salesrepresentativeno);
     	
     	return expressions;
-    }
-    
-    private Expression<String> concat(String delimiter, List<Expression<String>> expressions) {
-        Expression<String> result = null;
-        for (int i = 0; i < expressions.size(); i++) {
-            final boolean first = i == 0, last = i == (expressions.size() - 1);
-            final Expression<String> expression = expressions.get(i);
-            if (first && last) {
-                result = expression;
-            } else if (first) {
-                result = cb.concat(expression, delimiter);
-            } else {
-                result = cb.concat(result, expression);
-                if (!last) {
-                    result = cb.concat(result, delimiter);
-                }
-            }
-        }
-        return result;
     }
 }

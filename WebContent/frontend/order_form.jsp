@@ -1,3 +1,8 @@
+<%--
+Author	  : Yap Jheng Khin
+Page info : 'Order form' section of the checkout page
+Reminder  : Please enable Internet connection to load third party libraries: Thank you
+--%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List"%>
@@ -7,31 +12,23 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Bill Information</title>
-<script>
-// $(document).ready(function() {
-// 		$('#payment_form').submit(function() {
-// 				let chosenEmail = $("#sales_person_email").val();
-// 				let obj = $("#sales_person_emails").find("option[value='" + modelname + "']");
-// 				return obj != null && obj.length > 0;
-// 		});
-// });
-</script>
+	<meta charset="ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Bill Information</title>
 </head>
 <body>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h4 class="panel-title">
 			<a class="collapsed" data-toggle="collapse" data-parent="#accordion"
-				href="#collapseTwo"><i class="fa" aria-hidden="true"></i>Order Information</a>
+				href="#collapseTwo"><i class="fa icon-change" aria-hidden="true"></i>Order Information</a>
 		</h4>
 	</div>
+	<!-- ============================================================== -->
+	<!-- Order form (a.k.a. customer information) -->
+	<!-- ============================================================== -->
 	<div id="collapseTwo" class="panel-collapse collapse">
 		<div class="panel-body">
-			<b>Help us keep your account safe and secure, please verify your billing
-				information.</b>
-			<br /><br />
 			<div class="form-group">
 				<label for="customername">Customer name:</label>
 				<input class="form-control" type="text" id="customername" name="customername" required>
@@ -82,14 +79,14 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 			</div>
 			<div class="form-group">
 				<label for="sales_person_email">Sales person email address:</label>
-				<input class="form-control" list="sales_person_emails" type="text" id="sales_person_email" name="sales_person_email">
-				<datalist id="sales_person_emails">
+				<select id="sales_person_email" class="form-control" class="sales_person_email" required>
+					<option value="" selected>Select your sales representative</option>
 					<%
 					for (String employeeEmail : employeeEmails) {
-						out.print("<option value='"+employeeEmail+"'>");
+						out.print("<option value='"+employeeEmail+"'>"+employeeEmail+"</option>");
 					}
 					%>
-				</datalist>
+				</select>
 			</div>
 			<div class="form-group">
 				<label for="required_date">Required date:</label>
@@ -100,6 +97,9 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 			</div>
 		</div>
 	</div>
+	<!-- ============================================================== -->
+	<!-- End order form -->
+	<!-- ============================================================== -->
 </div>
 </body>
 </html>

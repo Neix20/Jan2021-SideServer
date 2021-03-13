@@ -1,16 +1,15 @@
+<%--
+Author	  : Yap Jheng Khin
+Page      : Customer data table
+References: (Bootstrap template) https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=elegant-table-design
+Reminder  : Please enable Internet connection to load third party libraries: Thank you
+--%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <%@page import="java.util.List" %>
 <%@page import="domain.Customer" %>
 <%@page import="domain.Employee" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
-<% 
-	String pageDisplay = "";
-	int currentPage =(int) request.getAttribute("currentPage");
-	int recordsPerPage =(int) request.getAttribute("recordsPerPage");
-	int nOfPages =(int) request.getAttribute("nOfPages");
-	String keyword =(String) request.getAttribute("keyword");
-	String sortItem = (String) request.getAttribute("sortItem");
-	String sortType = (String) request.getAttribute("sortType");
-%>
+<%@page import="utility.UrlGenerator" %>
+<%UrlGenerator urlGenerator = (UrlGenerator) request.getAttribute("urlGenerator");%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,6 +17,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>Bootstrap Elegant Table Design</title>
+	<!-- ============================================================== -->
+	<!-- Import dependencies & libraries -->
+	<!-- ============================================================== -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/fontawesome.min.css" 
@@ -37,28 +39,43 @@
 			crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/frontend/assets/css/font-awesome.css">
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/css/customer-page.css">
+	<!-- ============================================================== -->
+	<!-- End dependencies & libraries -->
+	<!-- ============================================================== -->
+	<!-- ============================================================== -->
+	<!-- Custom JQuery script -->
+	<!-- ============================================================== -->
 	<script>
 		$(document).ready(function () {
-			
+
+			// Check all the checkboxes once the document is loaded
 			$('input[type="checkbox"]').attr('checked', 'checked');
 			var checkboxes = $('input[name=filtercolumn]');
-
+	
+			// Use JQuery to hide and show specific columns based on checkboxes
 			function filterColumn(checkbox) {
 				let id = checkbox.attr("id");
 				let columns = $('.'+id);
 				
 				if (checkbox.prop('checked')) {
 					$.each(columns, function(index, column) {
+						// Show column
 						column.style.display= "";
 					});
 				} else {
+					// Uncheck "Select all" checkbox if users uncheck one of the checkboxes
 					$("#selectAll").prop("checked", false);
 					$.each(columns, function(index, column) {
+						// Hide column
 						column.style.display= "none";
 					});	
 				}
 			}
-			
+	
+			/*
+			Once the user click "Select all" checkbox, activate all 
+			checkboxes programmatically.
+			*/
 			$("#selectAll").on("change", function(){
 				let checkbox;			
 				if($("#selectAll").prop("checked")){
@@ -75,13 +92,14 @@
 					});
 				} 
 			});
-						 
+	
+			// Activate the filterColumn function on change.	 
 			checkboxes.on("change", function(){
 				let checkbox = $(this);
 				filterColumn(checkbox);
 			});
 			
-			// Animate  box length
+			// Animate select box length
 			var searchInput = $(".search-box input");
 			var inputGroup = $(".search-box .input-group");
 			var boxWidth = inputGroup.width();
@@ -94,77 +112,97 @@
 					width: boxWidth
 				});
 			});
-
+	
+			// Update the input values of "Select entries" based on url parameter
+			document.querySelector("#selected_entries").value = '<%= urlGenerator.getRecordsPerPage() %>';
+			
+			// Redirect to get new resources when the user selects different number of entries
 			$("#selected_entries").on('change', function() {
 				  let numOfEntries = this.value;
-				  location.href = "CustomerPagination?currentPage=1&recordsPerPage="+numOfEntries+"&keyword="+"<%= keyword %>";
+				  location.href = <%= urlGenerator %>;
 			});
-
-			document.querySelector("#selected_entries").value = '<%= recordsPerPage %>';
-
+	
+			// Redirect to get new resources when the user activates the search function
 			$('#search').on('click', function() {
 				$('#search-form').submit();
 			});
-
-			// Activate tooltip
-			// $('[data-toggle="tooltip"]').tooltip();
-			
-// 			$('.scroll-bar').DataTable({
-// 				"scrollX": true,
-// 				"scrollY": 200,
-// 			});
-
-// 			$('.dataTables_length').addClass('bs-');
 		});
 	</script>
+	<!-- ============================================================== -->
+	<!-- End custom JQuery script -->
+	<!-- ============================================================== -->
 </head>
 
 <body>
 	<div class="container-fluid">
 		<div class="row d-flex justify-content-start align-items-center">
+			<!-- ============================================================== -->
+			<!-- Add customer -->
+			<!-- ============================================================== -->
 			<div class="col-4">
 				<button class="btn btn-success d-flex justify-content-center align-items-center" data-toggle="modal" data-target="#addCustomerModal">
 				<i class="material-icons mr-2">&#xE147;</i> <span>Add Customer</span>
 				</button>
 			</div>
+			<!-- ============================================================== -->
+			<!-- End add customer -->
+			<!-- ============================================================== -->
+			<!-- ============================================================== -->
+			<!-- Page navigation -->
+			<!-- ============================================================== -->
 			<nav class="col-4 d-flex justify-content-center align-items-center" aria-label="Navigation for customers">
 				<ul class="pagination m-4">
 					<%
-					if (currentPage != 1 && nOfPages != 0) {
-					%>
-					<%
-					out.println("<li class=\"page-item\">");
-					out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
-							+ "&currentPage=1" + "&keyword=" + keyword +
-							"\">First</a>");
-					out.println("</li>");
-					%>
-					<li class="page-item">
-						<%
-						out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
-								+ "&currentPage=" + (currentPage - 1) +
-								"&keyword=" + keyword + "\">Previous</a>");
-						%>
-					</li>
-					<%
+					// Use custom class to manage URL more effectively
+					UrlGenerator urlGeneratorTemp;
+
+					// Generate URLs to navigate between pages
+					if (urlGenerator.getCurrentPage() != 1 && urlGenerator.getnOfPages() != 0) {
+						
+						urlGeneratorTemp = new UrlGenerator(urlGenerator);
+						// Set to first page
+						urlGeneratorTemp.setCurrentPage(1);
+						out.println("<li class='page-item'>");
+						out.println("<a class='page-link' href='"+urlGeneratorTemp+"'>First</a>");
+						out.println("</li>");
+
+						urlGeneratorTemp = new UrlGenerator(urlGenerator);
+						// Set to previous page
+						urlGeneratorTemp.setCurrentPage(urlGeneratorTemp.getCurrentPage()-1);
+						out.println("<li class='page-item'>");
+						out.println("<a class='page-link' href='"+urlGeneratorTemp+"'>Previous</a>");
+						out.println("</li>");
+						
 					}
-					%>
-					<%
-					if (currentPage < nOfPages) {
-						out.println("<li class=\"page-item\">");
-						out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
-						+ "&currentPage=" + (currentPage + 1) +
-						"&keyword=" + keyword + "\">Next</a>");
+					
+					// Generate URLs to navigate between pages
+					if (urlGenerator.getCurrentPage() < urlGenerator.getnOfPages()) {
+						
+						urlGeneratorTemp = new UrlGenerator(urlGenerator);
+						// Set to next page
+						urlGeneratorTemp.setCurrentPage(urlGeneratorTemp.getCurrentPage()+1);
+						out.println("<li class='page-item'>");
+						out.println("<a class='page-link' href='"+urlGeneratorTemp+"'>Next</a>");
 						out.println("</li>");
+						
+						urlGeneratorTemp = new UrlGenerator(urlGenerator);
+						// Set to last page
+						urlGeneratorTemp.setCurrentPage(urlGeneratorTemp.getnOfPages());
 						out.println("<li class=\"page-item\">");
-						out.println("<a class=\"page-link\" href=\"" + "CustomerPagination?recordsPerPage=" + recordsPerPage
-						+ "&currentPage=" + nOfPages + "&keyword=" +
-						keyword + "\">Last</a>");
+						out.println("<li class='page-item'>");
+						out.println("<a class='page-link' href='"+urlGeneratorTemp+"'>Last</a>");
 						out.println("</li>");
+						
 					}
 					%>
 				</ul>
 			</nav>
+			<!-- ============================================================== -->
+			<!-- End page navigation -->
+			<!-- ============================================================== -->
+			<!-- ============================================================== -->
+			<!-- Select number of entries -->
+			<!-- ============================================================== -->
 			<div class="col-4 show-entries ml-auto d-flex justify-content-end align-items-center">
 				<span class="mr-1">Show </span>
 					<select id="selected_entries">
@@ -175,22 +213,22 @@
 					</select>
 				<span class="ml-1"> entries per page</span>
 			</div>
+			<!-- ============================================================== -->
+			<!-- End select number of entries -->
+			<!-- ============================================================== -->
 		</div>
 		</div>
 		<div class="row container-fluid">
+			<!-- ============================================================== -->
+			<!-- Customer data table -->
+			<!-- ============================================================== -->
 			<div class="col-9 table-responsive table-wrapper" style="min-width: 500px;">
 				<table class="table table-striped table-hover table-light scroll-bar">
 					<thead>
 						<tr>
-						<%
-							String url = request.getContextPath() + 
-									 "/backend/CustomerPagination"+
-									 "?keyword="+keyword+
-									 "&currentPage="+currentPage+
-									 "&recordsPerPage="+recordsPerPage;
-							%>
 							<th scope="col">Action</th>
 							<%
+							UrlGenerator urlGeneratorNew;
 							final int NUM_OF_COLUMNS = 14;
 							String urls[] = new String[NUM_OF_COLUMNS];
 							String[] sortIcons = new String[NUM_OF_COLUMNS];
@@ -246,26 +284,40 @@
 									"number",
 							};
 							
+							// Generate URLs for each columns
 							for (int idx = 0; idx < sortItemsLookup.length; idx++) {
-								urls[idx] = url + "&sortItem=" + sortItemsLookup[idx];
-								if (sortItem.equals(sortItemsLookup[idx])) {
-									if (sortType.equals("ASC")) {
+								
+								urlGeneratorNew = new UrlGenerator(urlGenerator);
+								// Set to sort item based on the current column
+								urlGeneratorNew.setSortItem(sortItemsLookup[idx]);
+								
+								urls[idx] = urlGeneratorNew.toString();
+								// If the current column matches the URL parameter sortItem
+								if (urlGenerator.getSortItem().equals(sortItemsLookup[idx])) {
+									/* Change the icon to ascending icon if the user previously clicked
+									   asceding, and vice versa
+									*/
+									if (urlGenerator.getSortType().equals("ASC")) {
+										// Change the icon depending on the data type of the column
 										if (columnTypes[idx].equals("number"))
 											sortIcons[idx] = "fa fa-sort-numeric-asc";
 										else
 											sortIcons[idx] = "fa fa-sort-alpha-asc";
 										urls[idx] += "&sortType=DESC";
-									} else if (sortType.equals("DESC")){
+									} else if (urlGenerator.getSortType().equals("DESC")){
 										if (columnTypes[idx].equals("number"))
 											sortIcons[idx] = "fa fa-sort-numeric-desc";
 										else
 											sortIcons[idx] = "fa fa-sort-alpha-desc";
 										urls[idx] += "&sortType=ASC";
 									}
-								} else {
+								} 
+								// Else if not match, use the default sort icon
+								else {
 									sortIcons[idx] = "fa fa-sort";
 									urls[idx] += "&sortType=ASC";
 								}
+								// Print the HTML element respectively
 								out.print("<th scope='col' class='"+sortItemsLookup[idx]+"'>");
 								out.print("<a href='"+urls[idx]+"'>");
 								out.print(columnName[idx]);
@@ -285,6 +337,7 @@
 							Integer customernumber = customer.getCustomernumber();
 							
 							out.println("<tr>");
+							// TODO Switch to Customer with parameter
 							String href = "'Customer?customernumber="+customernumber+"'";
 
 							out.println("<td><a title='View' class='view'"+
@@ -309,7 +362,6 @@
 							out.println("<td class='state'>" + customer.getState() + "</td>");
 							out.println("<td class='postalcode'>" + customer.getPostalcode() + "</td>");
 							out.println("<td class='country'>" + customer.getCountry() + "</td>");
-							//TODO Link this employee to another page
 							Employee salespersonrep = customer.getEmployee();
 							String salespersonrepHTML = "";	
 							if (salespersonrep == null) {
@@ -319,8 +371,6 @@
 							}	
 							out.println("<td class='salesrepresentativeno'>" + salespersonrepHTML + "</td>");
 							out.println("<td class='creditlimit'>" + customer.getCreditlimit().doubleValue() + "</td>");
-                            //TODO Display payment record
-                            // out.println("<td>" + customer.getCustomers() + "</td>");
                             out.println("</tr>");
 						}
 						} else {
@@ -335,6 +385,12 @@
 					</tbody>
 				</table>
 			</div>
+			<!-- ============================================================== -->
+			<!-- End customer data table -->
+			<!-- ============================================================== -->
+			<!-- ============================================================== -->
+			<!-- Add customer form -->
+			<!-- ============================================================== -->
 			<div class="col-3">
 				<div class="row d-flex flex-column">
 					<div class="col d-flex mt-3 px-3 flex-column justify-content-start align-items-center">
@@ -374,8 +430,13 @@
 					</div>
 				</div>
 			</div>
+			<!-- ============================================================== -->
+			<!-- End add customer form -->
+			<!-- ============================================================== -->
 		</div>
-	<!-- Add Modal HTML -->
+	<!-- ============================================================== -->
+	<!-- Add customer pop up -->
+	<!-- ============================================================== -->
 	<div id="addCustomerModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -447,7 +508,12 @@
 			</div>
 		</div>
 	</div>
-	<!-- Delete Modal HTML -->
+	<!-- ============================================================== -->
+	<!-- End customer pop up -->
+	<!-- ============================================================== -->
+	<!-- ============================================================== -->
+	<!-- Delete customer pop up -->
+	<!-- ============================================================== -->
 	<div id="deleteCustomerModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -468,6 +534,9 @@
 			</div>
 		</div>
 	</div>
+	<!-- ============================================================== -->
+	<!-- End delete customer pop up -->
+	<!-- ============================================================== -->
 </body>
 
 </html>

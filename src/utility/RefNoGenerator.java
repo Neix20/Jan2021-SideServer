@@ -2,14 +2,23 @@ package utility;
 
 import java.util.Random;
 
-// References: https://www.baeldung.com/java-random-string
-public class referenceNumberGenerator {
+/**
+* RefNoGenerator randomly generates reference number for 
+* the unique identification of receipts in the database.
+* 
+* Reference: https://www.baeldung.com/java-random-string
+* 
+* @author  Yap Jheng Khin
+* @version 1.0
+* @since   2021-03-12 
+*/
+public class RefNoGenerator {
 	
     private static int leftLimit = 97; // letter 'a'
     private static int rightLimit = 122; // letter 'z'
 	private int StringLength;
 
-	public referenceNumberGenerator(int StringLength) {
+	public RefNoGenerator(int StringLength) {
 		this.StringLength = StringLength;
 	}
 	
