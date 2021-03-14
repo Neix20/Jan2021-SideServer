@@ -11,8 +11,6 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 <%@ page import="java.util.HashMap"%>
 <%
 	ShoppingCart orderList = (ShoppingCart) session.getAttribute("order_product");
-	BigDecimal total = orderList.getTotalPrice();
-	total = total.multiply(new BigDecimal(1.06));
 %>
 <!DOCTYPE html>
 <html>
@@ -34,59 +32,72 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			</div>
 			<div id="collapseOne" class="panel-collapse collapse in">
 				<div class="panel-body">
+					<!-- ============================================================== -->
+					<!-- Display ordered products for review -->
+					<!-- ============================================================== -->
 					<div class="items">
 						<%
-							for (ShoppingCartItem order : orderList.getList()) {
-								String type = order.getProductline().split(" ")[0];
+						// Reference: My fellow teammate Xi En's code
+						HashMap<String, Integer> map = new HashMap<String, Integer>();
+						for (ShoppingCartItem order : orderList.getList()) {
+							String type = order.getProductline().split(" ")[0];
+							if (!map.containsKey(type))
+								map.put(type, 1);
+							int number = map.get(type) + 1;
+							if (number > 6)
+								number = 1;
+							map.put(type, number);
 						%>
 						<div class="row d-flex align-items-center">
-							<div class="col-12 mb-2">
-								<h5><%=order.getProductname()%></h5>
-							</div>
+							<div class="col-12 mb-2"><h5><%=order.getProductname()%></h5></div>
 							<div class="col-md-5 col-lg-3 col-xl-3">
-								<img
-									src="${pageContext.request.contextPath}/frontend/assets/images/<%=type%>.jpg"
-									style="width: 100%;" />
+								<img src="${pageContext.request.contextPath}/frontend/assets/images/<%out.print(type + "_" + number + ".jpg");%>"
+								style="width: 100%;" />
 							</div>
 							<div class="col-md-7 col-lg-9 col-xl-9">
 								<table class="table table-hover table-borderless table-sm ">
 									<tr>
 										<td>Model</td>
-										<td><%=order.getProductline()%></td>
+										<td><%out.print(order.getProductline());%></td>
 									</tr>
 									<tr>
 										<td>Vendor</td>
-										<td><%=order.getProductvendor()%></td>
+										<td><%out.print(order.getProductvendor());%></td>
 									</tr>
 									<tr>
 										<td>Scale</td>
-										<td><%=order.getProductscale()%></td>
+										<td><%out.print(order.getProductscale());%></td>
 									</tr>
 									<tr>
 										<td>Order quantity</td>
-										<td><%=order.getQuantity()%></td>
+										<td><%out.print(order.getQuantity());%></td>
 									</tr>
 									<tr>
 										<td><em>Sub-price</em></td>
-										<td>RM<%=order.getSubPriceString()%></td>
+										<td>RM<%out.print(order.getSubPriceString());%></td>
 									</tr>
 								</table>
-								<!--<div class="def-number-input number-input safari_only mb-0 w-100"> -->
-								<%--<p class="text-right buy_quantity"><%out.print(order.getQuantity());%></p> --%>
-								<%--<%//TODO Want to check quantity in stock when checkout?// out.print(order.getQuantityinstock());%>" --%>
-								<!--</div> -->
 							</div>
 						</div>
-						<%
-							}
-						%>
-						<div style="text-align: center;"
-							class="row d-flex justify-content-end align-items-center mb-3">
-							<h4 class="ml-3">Order Total (Included 6% SST):</h4>
-							<h4 class="ml-auto" style="color: green;">
-								RM<%=String.format("%.2f", total.doubleValue())%>
-							</h4>
+						<% } %>
+						<!-- ============================================================== -->
+						<!-- End display ordered products for review -->
+						<!-- ============================================================== -->
+						<!-- ============================================================== -->
+						<!-- Display total order amount -->
+						<!-- ============================================================== -->
+						<div style="text-align: center;" class="row d-flex justify-content-end align-items-center mb-3">
+							<h4 class="ml-3">Order Total (Included 6% SST): </h4>
+							<h4 class="ml-auto" style="color:green;">RM<%
+							 	BigDecimal total = orderList.getTotalPrice();
+								total = total.multiply(new BigDecimal(1.06));
+							 	out.print(String.format("%.2f", total.doubleValue()));
+							 %>
+							 </h4>
 						</div>
+						<!-- ============================================================== -->
+						<!-- End display total order amount -->
+						<!-- ============================================================== -->
 					</div>
 				</div>
 			</div>
