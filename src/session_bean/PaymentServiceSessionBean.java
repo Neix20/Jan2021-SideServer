@@ -153,8 +153,8 @@ public class PaymentServiceSessionBean implements PaymentServiceSessionBeanLocal
 		
 		// Get customer information from request's parameter
 		String customerName = request.getParameter("customername"); 
-		String contactFirstname = request.getParameter("contact_firstname"); 
-		String contactLastname = request.getParameter("contact_lastname"); 
+		String contactFirstname = request.getParameter("contactfirstname"); 
+		String contactLastname = request.getParameter("contactlastname"); 
 		String phone = request.getParameter("phone"); 
 		String email = request.getParameter("email"); 
 		String addressLine1 = request.getParameter("addressline1"); 

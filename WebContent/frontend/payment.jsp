@@ -69,7 +69,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 											</div>
 											<div class="form-group">
 												<label for="card_holder_name">Card Holder's name:</label>
-												<input type="text" name="card_holder_name" placeholder="Jason Doe" class="form-control" required>
+												<input type="text" id="card_holder_name" name="card_holder_name" placeholder="Jason Doe" class="form-control" required>
 											</div>
 											<div class="form-group">
 												<label for="card_number">Card number</label>
@@ -78,7 +78,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 													Most credit/debit cards have 16 digits, while others like American Express have just 15 digits.
 													Reference: https://www.experian.com/blogs/ask-experian/how-many-numbers-are-on-a-credit-card/#:~:text=Credit%20cards%20that%20are%20part,be%20used%20to%20authenticate%20transactions.
 													 -->
-													<input type="text" name="card_number" placeholder="Your card number" class="form-control" minlength="15" maxlength="16" required>
+													<input type="text" id="card_number" name="card_number" placeholder="Your card number" class="form-control" required>
 												    <div class="input-group-append">
 												    	<span class="input-group-text text-muted">
 															<i class="fa fa-cc-visa mx-1"></i>
@@ -96,8 +96,8 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 															<i class="fa fa-question-circle"></i>
 														</label>
 														<div class="input-group">
-															<input type="number" placeholder="MM" name="card_month" class="form-control" min="1" max="12" required>
-															<input type="number" placeholder="YY" name="card_year" class="form-control" min="2000" max="2500" required>
+															<input type="number" placeholder="MM" id="card_month" name="card_month" class="form-control" min="1" max="12" required>
+															<input type="number" placeholder="YY" id="card_year" name="card_year" class="form-control" min="2000" max="2500" required>
 														</div>
 													</div>
 												</div>
@@ -106,7 +106,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 														<label data-toggle="tooltip" title="Three-digits code on the back of your card">CVV
 															<i class="fa fa-question-circle"></i>
 														</label>
-														<input type="text" name="card_cvv" class="form-control" pattern="[0-9]{3}" required>
+														<input type="text" id="card_cvv" name="card_cvv" class="form-control" pattern="[0-9]{3}" required>
 													</div>
 												</div>
 											</div>
@@ -125,6 +125,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 											<div class="form-group">
 												<label for="bank_name">Bank name</label>
 												<select class="form-control" name="bank_name" id="bank_name" required>
+													<option value="" selected>Select your bank</option>
 													<%
 													// Display list of available banks for user to choose from
 													Bank banks = new Bank();
@@ -140,7 +141,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 												The International Bank Account Number (IBAN) can consist up to 34 alphanumeric characters.
 												Reference: https://en.wikipedia.org/wiki/International_Bank_Account_Number
 												 -->
-												<input class="form-control" type="text" id="bank_account_number" name="bank_account_number" maxlength="34" required>
+												<input class="form-control" type="text" id="bank_account_number" name="bank_account_number" required>
 											</div>
 											<p class="text-muted">
 												Please ensure your bank details are correct.
@@ -155,7 +156,8 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						</div>
 					</div>
 				</fieldset>
-				<button id="pay-btn" type="button" class="btn btn-success btn-lg" style="width:100%;">
+				<!-- Submit the checkout form when user clicks "Pay Now"  -->
+				<button id="pay-btn" type="submit" class="btn btn-success btn-lg" style="width:100%;">
 					Pay Now
 				</button>
 				<br>

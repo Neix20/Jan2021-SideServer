@@ -451,12 +451,12 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						    <input class="form-control" type="text" id="customername" name="customername" required>
 						</div>
 						<div class="form-group">
-						    <label for="contact_firstname">Contact first name:</label>
-						    <input class="form-control" type="text" id="contact_firstname" name="contact_firstname" required>
+						    <label for="contactfirstname">Contact first name:</label>
+						    <input class="form-control" type="text" id="contactfirstname" name="contactfirstname" required>
 						</div>
 						<div class="form-group">
-						    <label for="contact_lastname">Contact last name:</label>
-						    <input class="form-control" type="text" id="contact_lastname" name="contact_lastname" required>
+						    <label for="contactlastname">Contact last name:</label>
+						    <input class="form-control" type="text" id="contactlastname" name="contactlastname" required>
 						</div>
 						<div class="form-group">
 						    <label for="phone">Phone:</label>

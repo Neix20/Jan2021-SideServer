@@ -94,12 +94,12 @@ $(document).ready(function () {
 						    <input class="form-control" type="text" id="customername" name="customername" value="${ customer.customername }" required>
 						</div>
 						<div class="form-group">
-						    <label for="contact_firstname">Contact first name:</label>
-						    <input class="form-control" type="text" id="contact_firstname" name="contact_firstname" value="${ customer.contactfirstname }" required>
+						    <label for="contactfirstname">Contact first name:</label>
+						    <input class="form-control" type="text" id="contactfirstname" name="contactfirstname" value="${ customer.contactfirstname }" required>
 						</div>
 						<div class="form-group">
-						    <label for="contact_lastname">Contact last name:</label>
-						    <input class="form-control" type="text" id="contact_lastname" name="contact_lastname" value="${ customer.contactlastname }" required>
+						    <label for="contactlastname">Contact last name:</label>
+						    <input class="form-control" type="text" id="contactlastname" name="contactlastname" value="${ customer.contactlastname }" required>
 						</div>
 						<div class="form-group">
 						    <label for="phone">Phone:</label>
