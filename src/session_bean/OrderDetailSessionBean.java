@@ -63,8 +63,4 @@ public class OrderDetailSessionBean implements OrderDetailSessionBeanLocal {
 	public void deleteOrderdetail(Orderdetail od) throws EJBException {
 		em.remove(em.contains(od) ? od : em.merge(od));
 	}
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 }
