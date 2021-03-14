@@ -18,14 +18,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<!-- jQuery -->
-<script src="${pageContext.request.contextPath}/frontend/assets/jquery-2.1.0.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="${pageContext.request.contextPath}/frontend/assets/popper.js"></script>
-<script src="${pageContext.request.contextPath}/frontend/assets/bootstrap.min.js"></script>
-</head>
 <body>
 
 	<%@ include file="header.jsp"%>
@@ -136,7 +128,6 @@
 	<!-- ***** Cars Ends ***** -->
 
 	<section class="section section-bg" id="schedule"
-
 		style="background-image: url(${pageContext.request.contextPath}/frontend/assets/images/about-fullscreen-1-1920x700.jpg)">
 		<div class="container">
 			<div class="row">
@@ -270,25 +261,6 @@
 			</div>
 		</div>
 	</footer>
-
-	<!-- jQuery -->
-
-	<script src="${pageContext.request.contextPath}/frontend/assets/jquery-2.1.0.min.js"></script>
-
-	<!-- Bootstrap -->
-	<script src="${pageContext.request.contextPath}/frontend/assets/popper.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/bootstrap.min.js"></script>
-
-	<!-- Plugins -->
-	<script src="${pageContext.request.contextPath}/frontend/assets/scrollreveal.min.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/waypoints.min.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/jquery.counterup.min.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/imgfix.min.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/mixitup.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/accordions.js"></script>
-
-	<!-- Global Init -->
-	<script src="${pageContext.request.contextPath}/frontend/assets/custom.js"></script>
 </body>
 
 </html>
