@@ -15,10 +15,10 @@ public class PaymentPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="customernumber", insertable=false, updatable=false)
+	@Column(name="customernumber", insertable=false, updatable=false, nullable=false)
 	private Integer customernumber;
 
-	@Column(name="checknumber", length=11)
+	@Column(name="checknumber", length=11, nullable=false)
 	private String checknumber;
 
 	public PaymentPK() {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.EJBException;
 import javax.ejb.Local;
+import javax.persistence.Column;
 
 import domain.Customer;
 
@@ -24,4 +25,5 @@ public interface CustomerSessionBeanLocal {
 	public Integer addCustomer(String[] s) throws EJBException;
 	public void updateCustomer(String[] s, String customernumber) throws EJBException;
 	public void deleteCustomer(String customernumber) throws EJBException;
+	public Column getColumnAnnotation(String columnName);
 }

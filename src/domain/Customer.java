@@ -45,49 +45,49 @@ public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="customernumber")
+	@Column(name="customernumber", nullable=false)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer customernumber;
 	
-	@Column(name="customername", length=34)
+	@Column(name="customername", length=34, nullable=false)
 	private String customername;
 	
-	@Column(name="contactlastname", length=15)
+	@Column(name="contactlastname", length=15, nullable=false)
 	private String contactlastname;	
 
-	@Column(name="contactfirstname", length=11)
+	@Column(name="contactfirstname", length=11, nullable=false)
 	private String contactfirstname;
 	
-	@Column(name="phone", length=18)
+	@Column(name="phone", length=18, nullable=false)
 	private String phone;
 
-	@Column(name="addressline1", length=32)
+	@Column(name="addressline1", length=32, nullable=false)
 	private String addressline1;
 
-	@Column(name="addressline2", length=24)
+	@Column(name="addressline2", length=24, nullable=true)
 	private String addressline2;
 
-	@Column(name="city", length=17)
+	@Column(name="city", length=17, nullable=false)
 	private String city;
 	
-	@Column(name="state", length=13)
+	@Column(name="state", length=13, nullable=true)
 	private String state;
 	
-	@Column(name="postalcode", length=9)
+	@Column(name="postalcode", length=9, nullable=true)
 	private String postalcode;
 
-	@Column(name="country", length=12)
+	@Column(name="country", length=12, nullable=false)
 	private String country;
 
-	@Column(name="creditlimit", precision=8, scale=2)
+	@Column(name="creditlimit", precision=8, scale=2, nullable=true)
 	private BigDecimal creditlimit;
 
-	@Column(name="email", length=50)
+	@Column(name="email", length=50, nullable=false)
 	private String email;
 
 	//bi-directional many-to-one association to Employee
 	@ManyToOne
-	@JoinColumn(name="salesrepemployeenumber",insertable=false, updatable=false)
+	@JoinColumn(name="salesrepemployeenumber",insertable=false, updatable=false, nullable=true)
 	private Employee employee;
 	
 	//bi-directional many-to-one association to Payment

@@ -154,13 +154,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		 */
 		int scale = 0;
 		int precision = 0;	
-		Field f = null;
-		try {
-			f = Customer.class.getDeclaredField("creditlimit");
-		} catch (NoSuchFieldException | SecurityException e) {
-			e.printStackTrace();
-		}
-		Column creditlimitColumn = f.getAnnotation(Column.class);
+		Column creditlimitColumn = getColumnAnnotation("creditlimit");
 		if (creditlimitColumn != null){
 			precision = creditlimitColumn.precision();
 			scale = creditlimitColumn.scale();
@@ -188,5 +182,17 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		customer.setEmployee(salesrepemployee);
 		
 		return customer;
-	}    
+	}
+	
+	public Column getColumnAnnotation(String columnName) {
+		Field f = null;
+		try {
+			f = Customer.class.getDeclaredField(columnName);
+		} catch (NoSuchFieldException | SecurityException e) {
+			e.printStackTrace();
+		}
+		Column column = f.getAnnotation(Column.class);
+		
+		return column;
+	}
 }
