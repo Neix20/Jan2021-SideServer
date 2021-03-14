@@ -1,10 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -24,21 +20,6 @@ import session_bean.PaymentServiceSessionBeanLocal;
  * @author  Yap Jheng Khin
  * @version 1.0
  * @since   2021-03-12 
-import domain.Customer;
-import domain.Employee;
-import domain.Order;
-import domain.Orderdetail;
-import domain.ShoppingCart;
-import domain.ShoppingCartItem;
-import session_bean.CustomerSessionBeanLocal;
-import session_bean.EmployeeSessionBeanLocal;
-import session_bean.OrderDetailSessionBeanLocal;
-import session_bean.OrderSessionBeanLocal;
-import session_bean.PaymentSessionBeanLocal;
-import utility.referenceNumberGenerator;
-
-/**
- * Servlet implementation class CheckoutServlet
  */
 @WebServlet({"frontend/Checkout", "/Checkout", "/checkout"})
 public class CheckoutServlet extends HttpServlet {
@@ -50,20 +31,6 @@ public class CheckoutServlet extends HttpServlet {
 	@EJB
 	private PaymentServiceSessionBeanLocal paymentServiceBean;
 	
-	private CustomerSessionBeanLocal customerbean;
-	
-	@EJB
-	private PaymentSessionBeanLocal paymentbean;
-	
-	@EJB
-	private OrderSessionBeanLocal orderbean;
-	
-	@EJB
-	private OrderDetailSessionBeanLocal orderdetailbean;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public CheckoutServlet() {
         super();
     }
@@ -73,7 +40,6 @@ public class CheckoutServlet extends HttpServlet {
      * If the shopping cart is empty, the servlet will forward to checkout_error.jsp
      * before redirect to product catalog page.
      * Else, the servlet will forward to checkout.jsp to perform checkout.
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ShoppingCart scList = (ShoppingCart) request.getSession().getAttribute("ShoppingCart");
