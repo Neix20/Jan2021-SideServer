@@ -185,10 +185,18 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			   on user's interaction
 			*/
 			$('#bank_payment_method').on('click', function() {
+				$("#bank_holder_name").removeClass("is-valid is-invalid");
+				$("#bank_name").removeClass("is-valid is-invalid");
+				$("#bank_account_number").removeClass("is-valid is-invalid");
 				$('#payment_method').val('bank');
 			});
 	
 			$('#card_payment_method').on('click', function() {
+				$("#card_holder_name").removeClass("is-valid is-invalid");
+				$("#card_number").removeClass("is-valid is-invalid");
+				$("#card_month").removeClass("is-valid is-invalid");
+				$("#card_year").removeClass("is-valid is-invalid");
+				$("#card_cvv").removeClass("is-valid is-invalid");
 				$('#payment_method').val('card');
 			});
 
@@ -202,97 +210,105 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 
 			$('#required_date').attr('min', today);
 
-			/* Submit the checkout form when user clicks "Pay Now"
-			*/
-			$('#pay-btn').on('click', function() {
-				<% //TODO Validate form input before submitting %>
-				let chosenEmail = $("#sales_person_email").val();
-				let obj = $("#sales_person_email").find("option[value='" + chosenEmail + "']");
-				if (obj != null && obj.length > 0 && chosenEmail !== "") {
-					$('#payment_form').submit();
-				}
-				else {
-					$('#form_error_modal').modal();
-				}
-			});
-
+			const mapIdToColumnName = {
+				    "customername" : "customer's name",
+				    "contactfirstname" : "contact's first name",
+				    "contactlastname" : "contact's last name",
+				    "phone" : "phone",
+				    "email" : "email",
+				    "addressline1" : "address line 1",
+				    "addressline2" : "address line 2",
+				    "city" : "city",
+				    "state" : "state",
+				    "postal code" : "postal code",
+				    "country" : "country",
+				    "sales_person_email": "sales person's email",
+				    "required_date" : "required date",
+				    "card_holder_name" : "card holder's name", 
+				    "card_number" : "card number",
+				    "card_month" : "card month", 
+				    "card_year" : "card year", 
+				    "card_cvv" : "card cvv",
+				    "bank_holder_name" : "bank holder's name", 
+				    "bank_name" : "bank name", 
+				    "bank_account_number" : "bank account number",
+				};
+			
 			// Arrow function produces syntax error, so annoying, switch to traditional method instead
 			const ERROR_MESSAGES = {
-				"REQUIRED" : function (columnName) { return "Please provide a "+columnName+"."} ,
-				"DIGIT_ONLY": function (columnName) { return "Only digits are allowed for "+columnName+"."} ,
-				"TOO_SHORT": function (columnName, minChar) { return "Minimum number of characters allowed for "+columnName+" is "+minChar+"."} ,
-				"TOO_LONG": function (columnName, maxChar) { return "Maximum number of characters allowed for "+columnName+" is "+maxChar+"."} ,
+				"REQUIRED" : function (columnName) { return "Please provide a "+columnName+"."},
+				"DIGIT_ONLY": function (columnName) { return "Only digits are allowed for "+columnName+"."},
+				"TOO_SHORT": function (columnName, minChar) { return "Minimum number of characters allowed for "+columnName+" is "+minChar+"."},
+				"TOO_LONG": function (columnName, maxChar) { return "Maximum number of characters allowed for "+columnName+" is "+maxChar+"."},
+				"EXACT": function (columnName, exactChar) { return "The exact number of characters allowed for "+columnName+" is "+exactChar+"."},
+				"TOO_SMALL": function (columnName, minVal) { return "Minimum value allowed for "+columnName+" is "+minVal+"."},
+				"TOO_BIG": function (columnName, maxVal) { return "Maximum value allowed for "+columnName+" is "+maxVal+"."},
 			}
 
 			$(".needs-validation").on("submit", function(event) {
-			    let $form = $(this);
 
-			    $.post($form.attr("action"), $form.serialize(), function(responseJSON) {
+				event.preventDefault();
+				
+				let $form = $(".needs-validation");
+				let returnResponseJSON;
+				let inputIdentifiers = []
 
-			    	let wrongInputs = Object.keys(responseJSON);
-			    	$(".needs-validation #input").each(function(index, element){
-			    		let $parent = element.parent();
-						/* Find all child elements with tag name "option" and remove them 
-						 * (just to prevent duplicate options when button is pressed again).
-						 */
-						element.removeClass(".is-valid .is-invalid");
-						$parent.remove(".invalid-feedback");
-						if (!element.attr("id") in wrongInputs) {
-							element.addClass(".is-valid");
-						}
-					})
-			    	
-			     	// Iterate over the JSON object.                      
-			        $.each(responseJson, function(inputIdentifier, errorMessage) {
-			        	inputIdentifiers.append(inputIdentifier);
-			        	 // Locate HTML DOM element with ID "someselect".
-						let $select = $("#"+inputIdentifier);
-						let $parent = $select.parent();						
+				$.post($form.attr("action"), $form.serialize(), function(responseJSON) {
 
-						let errorMessageDisplay;
-						// Construct the error message
-						switch (errorMessage) {
-						case "REQUIRED":
-						case "DIGIT_ONLY":
-							errorMessageDisplay = ERROR_MESSAGES[errorMessage](columnName);
-						    break;
-						errorMessage, numCharAllowed = errorMessage.split(";");
-						//case "TOO_SHORT":
-						//case "TOO_LONG":
-						default:
-							errorMessage, numCharAllowed = errorMessage.split(";");
-							errorMessageDisplay = ERROR_MESSAGES[errorMessage](columnName, numCharAllowed);
-						}
-						$parent.append("<div class='invalid-feedback'>"+errorMessageDisplay+"</div>")
-						
+					if (jQuery.isEmptyObject(responseJSON)) {
+					    $form.off("submit");
+					    $form.submit();
+					}
+				    
+				    console.log(responseJSON);
+				    returnResponseJSON = responseJSON;
+				    
+				    let wrongInputs = Object.keys(responseJSON);
+				    let customSelector = ".needs-validation select,input:not([type=radio],[type=button],[type=submit],[type=hidden])";
 
-			        	// Create HTML <option> element, set its value with currently iterated key and its text content with currently iterated item and finally append it to the <select>.             
-			            $("<option>").val(key).text(value).appendTo($select);
-			        });
-			    });
-
-			    // Prevents submitting the form.
-			    event.preventDefault(); 
+				    $(customSelector).each(function(index, element){
+				        let $elem = $(element);
+				        let $parent = $elem.parent();
+				        /* Find all child elements with tag name "option" and remove them 
+				         * (just to prevent duplicate options when button is pressed again).
+				         */
+				        $elem.removeClass("is-valid is-invalid");
+				        $parent.children(".invalid-feedback").remove();
+				        if (!wrongInputs.includes($elem.attr("id"))) {
+				            $elem.addClass("is-valid");
+				        } else {
+				            $elem.addClass("is-invalid")
+				        }
+				    });
+				    
+				    // Iterate over the JSON object.                      
+				    $.each(responseJSON, function(inputIdentifier, errorMessage) {
+				        inputIdentifiers.push(inputIdentifier);
+				         // Locate HTML DOM element with ID "someselect".
+				        let $select = $("#"+inputIdentifier);
+				        let $parent = $select.parent();						
+				        let columnName = mapIdToColumnName[inputIdentifier];
+				        let errorMessageDisplay;
+				        // Construct the error message
+				        switch (errorMessage) {
+				        case "REQUIRED":
+				        case "DIGIT_ONLY":
+				            errorMessageDisplay = ERROR_MESSAGES[errorMessage](columnName);
+				            break;
+				        //case "TOO_SHORT":
+				        //case "TOO_LONG":
+				        //case "EXACT":
+				        //case "TOO_SMALL":
+				        //case "TOO_BIG":
+				        default:
+					        let errorMessage2, numCharAllowed;
+				            [errorMessage2, numCharAllowed] = errorMessage.split(";");
+				            errorMessageDisplay = ERROR_MESSAGES[errorMessage2](columnName, numCharAllowed);
+				        }
+				        $parent.append("<div class='invalid-feedback'>"+errorMessageDisplay+"</div>");
+				    });
+				});
 			});
-
-			/* Disabling form submissions if there are invalid fields and Bootstrap
-			 * will intercept the submit button and relay validation feedback to user.
-			 * Reference: https://getbootstrap.com/docs/4.0/components/forms/?#validation
-			 */
-			window.addEventListener('load', function() {
-			    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-			    let forms = document.getElementsByClassName('needs-validation');
-			    // Loop over them and prevent submission
-			    let validation = Array.prototype.filter.call(forms, function(form) {
-			      form.addEventListener('submit', function(event) {
-			        if (form.checkValidity() === false) {
-			          event.preventDefault();
-			          event.stopPropagation();
-			        }
-			        form.classList.add('was-validated');
-			      }, false);
-			    });
-			  }, false);
 		});
 	</script>
 	<!-- ============================================================== -->

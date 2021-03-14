@@ -66,8 +66,8 @@ public class CustomerServlet extends HttpServlet {
 
     	String customernumber = request.getParameter("customernumber");
         String customername = request.getParameter("customername");
-        String contactfirstname = request.getParameter("contact_firstname");
-        String contactlastname = request.getParameter("contact_lastname");
+        String contactfirstname = request.getParameter("contactfirstname");
+        String contactlastname = request.getParameter("contactlastname");
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String addressline1 = request.getParameter("addressline1");

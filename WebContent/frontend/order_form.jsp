@@ -37,15 +37,15 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 		        </div>
 			</div>
 			<div class="form-group">
-				<label for="contact_firstname">Contact first name:</label>
-				<input class="form-control" type="text" id="contact_firstname" name="contact_firstname" required>
+				<label for="contactfirstname">Contact first name:</label>
+				<input class="form-control" type="text" id="contactfirstname" name="contactfirstname" required>
 				<div class="invalid-feedback">
 		         	Please provide a contact first name.
 		        </div>
 			</div>
 			<div class="form-group">
-				<label for="contact_lastname">Contact last name:</label>
-				<input class="form-control" type="text" id="contact_lastname" name="contact_lastname" required>
+				<label for="contactlastname">Contact last name:</label>
+				<input class="form-control" type="text" id="contactlastname" name="contactlastname" required>
 				<div class="invalid-feedback">
 		         	Please provide a contact last name.
 		        </div>
@@ -103,7 +103,7 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 			</div>
 			<div class="form-group">
 				<label for="sales_person_email">Sales person email address:</label>
-				<select id="sales_person_email" class="form-control" class="sales_person_email" required>
+				<select id="sales_person_email" name="sales_person_email" class="form-control" class="sales_person_email" required>
 					<option value="" selected>Select your sales representative</option>
 					<%
 					for (String employeeEmail : employeeEmails) {
