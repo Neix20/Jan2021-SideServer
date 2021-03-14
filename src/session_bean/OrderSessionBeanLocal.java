@@ -16,4 +16,6 @@ public interface OrderSessionBeanLocal {
 	public void updateOrder(Order o) throws EJBException;
 	public void deleteOrder(Order o) throws EJBException;
 	public Integer locateNextPK() throws EJBException;
+	public List<Object[]> getDashboardOrdersOption() throws EJBException;
+	public List<Order> getOrderMonth(String date_select) throws EJBException;
 }

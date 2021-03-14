@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -172,7 +170,7 @@ public class Orderdetail implements Serializable {
 	}
 	
 	public static String[] getParameter() {
-		String[] s = {"productname", "quantityordered"};
+		String[] s = {"orderNumber", "productcode", "quantityordered", "orderlinenumber", "priceeach"};
 		return s;
 	}
 	

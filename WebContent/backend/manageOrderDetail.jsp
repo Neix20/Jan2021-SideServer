@@ -2,9 +2,11 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List"%>
 <%@ page import="domain.Orderdetail"%>
+<%@ page import="domain.Product"%>
 <%
 	List<Orderdetail> orderdetailList = (List<Orderdetail>) request.getAttribute("orderdetailList");
-	int orderNumber = orderdetailList.get(0).getId().getOrdernumber();
+	List<Product> productList = (List<Product>) request.getAttribute("productList");
+	int orderNumber = (Integer) request.getAttribute("orderNumber");
 	String servlet_name = (String) request.getAttribute("servlet_name");
 	int currentPage = (Integer) request.getAttribute("currentPage");
 	int nOfPage = (Integer) request.getAttribute("nOfPage");
@@ -33,10 +35,13 @@
 <!-- Custom CSS -->
 <link href="backend/assets/css/style.min.css" rel="stylesheet">
 <title>Order Detail Page</title>
+<script src="backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
+<script src="backend/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet"
 	href="backend/assets/bootstrap/dist/css/bootstrap.min.css" />
-<script src="backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
 <link href="backend/assets/css/def_table.css" rel="stylesheet">
+<script src="backend/assets/js/selectize.js"></script>
+<link rel="stylesheet" href="backend/assets/css/selectize/selectize.css" />
 <style>
 table.table tr th:first-child {
 	width: 50px;
@@ -50,6 +55,10 @@ table.table tr th:first-child {
 	$(document).ready(function() {
 		// Activate tooltip
 		$('[data-toggle="tooltip"]').tooltip();
+
+		$('.search_select').selectize({
+			sortField : 'text'
+		});
 	});
 </script>
 </head>
@@ -160,8 +169,8 @@ table.table tr th:first-child {
 												%>
 												<%
 													if (currentPage > 1) {
-														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber + "&currentPage=" + (currentPage - 1) + "\">"
-																+ (currentPage - 1) + "</a></li>";
+														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber
+																+ "&currentPage=" + (currentPage - 1) + "\">" + (currentPage - 1) + "</a></li>";
 														out.println(link);
 													}
 												%>
@@ -170,15 +179,15 @@ table.table tr th:first-child {
 													class="page-link"><%=currentPage%></a></li>
 												<%
 													if (currentPage < nOfPage) {
-														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber + "&currentPage=" + (currentPage + 1) + "\">"
-																+ (currentPage + 1) + "</a></li>";
+														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber
+																+ "&currentPage=" + (currentPage + 1) + "\">" + (currentPage + 1) + "</a></li>";
 														out.println(link);
 													}
 												%>
 												<%
 													if (currentPage < nOfPage - 1) {
-														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber + "&currentPage=" + (currentPage + 2)
-																+ "\">Next</a></li>";
+														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber
+																+ "&currentPage=" + (currentPage + 2) + "\">Next</a></li>";
 														out.println(link);
 													}
 												%>
@@ -202,20 +211,36 @@ table.table tr th:first-child {
 	<div id="addOrderDetailModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form id="add_form">
+				<form id="add_form" action="<%=servlet_name%>" method="POST">
 					<div class="modal-header">
 						<h4 class="modal-title">Add Order Detail</h4>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body product-body">
+						<input name="orderNumber" value="<%=orderNumber%>" hidden
+							type="text" />
 						<div class="form-group">
-							<label>PRODUCT NAME</label> <input name="product_name"
-								class="form-control input-md" required type="text">
+							<label>PRODUCT NAME</label> <select class="search_select"
+								name="productcode" form="add_form">
+								<option value="">Choose a product</option>
+								<%
+									for (Product p : productList) {
+								%>
+								<option value="<%=p.getProductcode()%>"><%=p.getProductname()%></option>
+								<%
+									}
+								%>
+							</select>
 						</div>
 						<div class="form-group">
-							<label>PRODUCT QUANTITY</label> <input name="product_name"
+							<label>PRODUCT QUANTITY</label> <input name="quantityordered"
 								class="form-control input-md" required type="number">
+						</div>
+						<div class="form-group">
+							<label>ORDER LINE NUMBER</label> <input name="orderlinenumber"
+								class="form-control input-md"
+								value="<%=orderdetailList.size() + 1%>" readonly type="number">
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -228,24 +253,45 @@ table.table tr th:first-child {
 		</div>
 	</div>
 
+	<%
+		num = 1;
+		for (Orderdetail od : orderdetailList) {
+	%>
 	<!-- Edit Modal HTML -->
-	<div id="editOrderDetailModal" class="modal fade">
+	<div id="editOrderDetailModal<%=num%>" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form id="update_form">
+				<form id="update_form<%=num%>" action="<%=servlet_name%>"
+					method="POST">
 					<div class="modal-header">
 						<h4 class="modal-title">Edit Order Detail</h4>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body product-body">
+						<input name="orderNumber" value="<%=orderNumber%>" hidden
+							type="text" />
 						<div class="form-group">
-							<label>PRODUCT NAME</label> <input name="product_name"
-								class="form-control input-md" required type="text">
+							<label>PRODUCT NAME</label> <input name="productcode"
+								value="<%=od.getProduct().getProductcode()%>" hidden type="text">
+							<input name="productname"
+								value="<%=od.getProduct().getProductname()%>"
+								class="form-control input-md" readonly type="text">
 						</div>
 						<div class="form-group">
-							<label>PRODUCT QUANTITY</label> <input name="product_name"
-								class="form-control input-md" required type="text">
+							<label>PRODUCT QUANTITY</label> <input name="quantityordered"
+								class="form-control input-md"
+								value="<%=od.getQuantityordered()%>" required type="text">
+						</div>
+						<div class="form-group">
+							<label>ORDER LINE NUMBER</label> <input name="orderlinenumber"
+								class="form-control input-md"
+								value="<%=od.getOrderlinenumber()%>" readonly type="number">
+						</div>
+						<div class="form-group">
+							<label>PRICE EACH</label> <input name="priceeach"
+								class="form-control input-md"
+								value="<%=od.getProduct().getMsrp()%>" readonly type="number">
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -257,12 +303,20 @@ table.table tr th:first-child {
 			</div>
 		</div>
 	</div>
+	<%
+		num++;
+		}
+	%>
 
+	<%
+		num = 1;
+		for (Orderdetail od : orderdetailList) {
+	%>
 	<!-- Delete Modal HTML -->
-	<div id="deleteOrderDetailModal" class="modal fade">
+	<div id="deleteOrderDetailModal<%=num%>" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				<form action="<%=servlet_name%>" method="POST">
 					<div class="modal-header">
 						<h4 class="modal-title">Delete Order Detail</h4>
 						<button type="button" class="close" data-dismiss="modal"
@@ -274,23 +328,25 @@ table.table tr th:first-child {
 							<small>This action cannot be undone.</small>
 						</p>
 					</div>
-					<input name="productcode" hidden type="text">
+					<input name="productcode" value="<%=od.getProduct().getProductcode()%>" hidden type="text">
+					<input name="orderNumber" value="<%=orderNumber%>" hidden type="text">
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal"
 							value="Cancel"> <input type="submit"
-							class="btn btn-danger" name="Type" value="DELETE">
+							class="btn btn-danger" name="type" value="DELETE">
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
+	<%
+		num++;
+		}
+	%>
 
-	<script
-		src="backend/assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 	<!-- Bootstrap tether Core JavaScript -->
 	<script
 		src="backend/assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
-	<script src="backend/assets/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="backend/assets/js/app-style-switcher.js"></script>
 	<!--Wave Effects -->
 	<script src="backend/assets/js/waves.js"></script>

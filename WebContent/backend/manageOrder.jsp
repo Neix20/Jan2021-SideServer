@@ -1,9 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List"%>
+<%@ page import="java.util.HashMap"%>
 <%@ page import="domain.Order"%>
+<%@ page import="domain.Customer"%>
 <%
 	List<Order> orderList = (List<Order>) request.getAttribute("orderList");
+	List<Customer> customerList = (List<Customer>) request.getAttribute("customerList");
+	HashMap<Integer, String> customerHashMap = (HashMap<Integer, String>) request
+			.getAttribute("customerHashMap");
+	int nextOrderNumber = (Integer) request.getAttribute("nextOrderNumber");
 	String servlet_name = (String) request.getAttribute("servlet_name");
 	int currentPage = (Integer) request.getAttribute("currentPage");
 	int nOfPage = (Integer) request.getAttribute("nOfPage");
@@ -34,7 +40,10 @@
 <link rel="stylesheet"
 	href="backend/assets/bootstrap/dist/css/bootstrap.min.css" />
 <script src="backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
+<script src="backend/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <link href="backend/assets/css/def_table.css" rel="stylesheet">
+<script src="backend/assets/js/selectize.js"></script>
+<link rel="stylesheet" href="backend/assets/css/selectize/selectize.css" />
 <style>
 table.table tr th:first-child {
 	width: 100px;
@@ -45,21 +54,10 @@ table.table tr th:first-child {
             // Activate tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
-            $("#add_form").submit(e => {
-                $("#customerId").val($("#customerName").val());
+            $('.search_select').selectize({
+                sortField: 'text'
             });
 
-            <%
-            	num = 1;
-				for (Order o : orderList) {
-			%>
-            $("#update_form<%=num%>").submit(e => {
-                $("#customerId<%=num%>").val($("#customerName<%=num%>").val());
-            });
-            <%
-            		num++;
-				}
-			%>
         });
     </script>
 </head>
@@ -83,7 +81,8 @@ table.table tr th:first-child {
 			<div class="page-breadcrumb bg-white">
 				<div class="row align-items-center">
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-						<h4 class="page-title text-uppercase font-medium font-14">MANAGE ORDERS</h4>
+						<h4 class="page-title text-uppercase font-medium font-14">MANAGE
+							ORDERS</h4>
 					</div>
 				</div>
 			</div>
@@ -115,6 +114,7 @@ table.table tr th:first-child {
 													<th>Order Date</th>
 													<th>Required Date</th>
 													<th>Shipped Date</th>
+													<th>Status</th>
 													<th>Customer Name</th>
 													<th>Order Details</th>
 													<th>Actions</th>
@@ -130,8 +130,10 @@ table.table tr th:first-child {
 													<td><%=o.getOrderdate()%></td>
 													<td><%=o.getRequireddate()%></td>
 													<td><%=o.getShippeddate()%></td>
-													<td></td>
-													<td><a href="OrderDetail?orderNumber=<%=o.getOrdernumber()%>">View</a></td>
+													<td><%=o.getStatus()%></td>
+													<td><%=customerHashMap.get(o.getCustomernumber())%></td>
+													<td><a
+														href="OrderDetail?orderNumber=<%=o.getOrdernumber()%>">View</a></td>
 													<td><a href="#editOrderModal<%=num%>" class="edit"
 														data-toggle="modal"><i class="fas fa-pen-square"
 															data-toggle="tooltip" title="Edit"></i></a> <a
@@ -210,6 +212,11 @@ table.table tr th:first-child {
 					</div>
 					<div class="modal-body product-body">
 						<div class="form-group">
+							<label>ORDER NUMBER</label> <input name="ordernumber"
+								class="form-control input-md" readonly
+								value="<%=nextOrderNumber%>" type="text">
+						</div>
+						<div class="form-group">
 							<label>ORDER DATE</label> <input name="orderdate"
 								class="form-control input-md" required type="text">
 						</div>
@@ -222,16 +229,32 @@ table.table tr th:first-child {
 								class="form-control input-md" required type="text">
 						</div>
 						<div class="form-group">
-							<label>COMMENTS</label>
-							<textarea name="comment" class="form-control" required
-								form="add_form"></textarea>
+							<label>STATUS</label> <select name="status" form="add_form"
+								class="form-control">
+								<option value="Shipped">Shipped</option>
+								<option value="In Process">In Process</option>
+								<option value="Disputed">Disputed</option>
+								<option value="Cancelled">Cancelled</option>
+								<option value="Resolved">Resolved</option>
+								<option value="On Hold">On Hold</option>
+							</select>
 						</div>
 						<div class="form-group">
-							<label>CUSTOMER NAME</label> <input id="customerName"
-								name="customerName" class="form-control input-md" required
-								type="text" /> <input id="customerId" name="customerId"
-								class="form-control input-md" hidden type="text"
-								value="Hello World" />
+							<label>COMMENTS</label>
+							<textarea name="comment" class="form-control" form="add_form"></textarea>
+						</div>
+						<div class="form-group">
+							<label>CUSTOMER NAME</label> <select class="search_select"
+								name="customerId" form="add_form">
+								<option value="">Enter a Customer Name...</option>
+								<%
+									for (Customer c : customerList) {
+								%>
+								<option value="<%=c.getCustomernumber()%>"><%=c.getCustomername()%></option>
+								<%
+									}
+								%>
+							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -252,7 +275,8 @@ table.table tr th:first-child {
 	<div id="editOrderModal<%=num%>" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form id="update_form<%=num%>" action="<%=servlet_name%>" method="POST">
+				<form id="update_form<%=num%>" action="<%=servlet_name%>"
+					method="POST">
 					<div class="modal-header">
 						<h4 class="modal-title">Edit Existing Order</h4>
 						<button type="button" class="close" data-dismiss="modal"
@@ -260,30 +284,57 @@ table.table tr th:first-child {
 					</div>
 					<div class="modal-body product-body">
 						<div class="form-group">
+							<label>ORDER NUMBER</label> <input name="ordernumber"
+								class="form-control input-md" readonly
+								value="<%=o.getOrdernumber()%>" type="text">
+						</div>
+						<div class="form-group">
 							<label>ORDER DATE</label> <input name="orderdate"
-								class="form-control input-md" value="<%=o.getOrderdate()%>" required type="text">
+								class="form-control input-md" value="<%=o.getOrderdate()%>"
+								required type="text">
 						</div>
 						<div class="form-group">
 							<label>REQUIRED DATE</label> <input name="requireddate"
-								class="form-control input-md" value="<%=o.getRequireddate()%>" required type="text">
+								class="form-control input-md" value="<%=o.getRequireddate()%>"
+								required type="text">
 						</div>
 						<div class="form-group">
 							<label>SHIPPED DATE</label> <input name="shippeddate"
-								class="form-control input-md" value="<%=o.getShippeddate()%>" requiredtype="text">
+								class="form-control input-md" value="<%=o.getShippeddate()%>"
+								required type="text">
+						</div>
+						<div class="form-group">
+							<label>STATUS</label> <select name="status"
+								form="update_form<%=num%>" class="form-control">
+								<option value="Shipped">Shipped</option>
+								<option value="In Process">In Process</option>
+								<option value="Disputed">Disputed</option>
+								<option value="Cancelled">Cancelled</option>
+								<option value="Resolved">Resolved</option>
+								<option value="On Hold">On Hold</option>
+							</select>
 						</div>
 						<div class="form-group">
 							<label>COMMENTS</label>
 							<textarea id="otd<%=num%>" name="comment" class="form-control"
-								required form="update_form<%=num%>"></textarea>
+								form="update_form<%=num%>"></textarea>
 							<script>
-								document.querySelector("#otd<%=num%>").value = "<%=o.getComments()%>";
+								document.querySelector("#otd<%=num%>").value = "<%=o.getComments()%>
+								";
 							</script>
 						</div>
 						<div class="form-group">
-							<label>CUSTOMER NAME</label> <input id="customerName<%=num%>"
-								name="customerName" class="form-control input-md" required
-								type="text" /> <input id="customerId<%=num%>" name="customerId"
-								class="form-control input-md" hidden type="text" />
+							<label>CUSTOMER NAME</label> <select class="search_select"
+								name="customerId" form="update_form<%=num%>">
+								<option value="<%=o.getCustomernumber()%>"><%=customerHashMap.get(o.getCustomernumber())%></option>
+								<%
+									for (Customer c : customerList) {
+								%>
+								<option value="<%=c.getCustomernumber()%>"><%=c.getCustomername()%></option>
+								<%
+									}
+								%>
+							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -300,8 +351,12 @@ table.table tr th:first-child {
 		}
 	%>
 
+	<%
+		num = 1;
+		for (Order o : orderList) {
+	%>
 	<!-- Delete Modal HTML -->
-	<div id="deleteOrderModal" class="modal fade">
+	<div id="deleteOrderModal<%=num%>" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form action="<%=servlet_name%>" method="POST">
@@ -316,23 +371,23 @@ table.table tr th:first-child {
 							<small>This action cannot be undone.</small>
 						</p>
 					</div>
-					<input name="ordernumber" hidden type="text">
+					<input name="ordernumber" value="<%=o.getOrdernumber()%>" hidden type="text">
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal"
 							value="Cancel"> <input type="submit"
-							class="btn btn-danger" name="Type" value="DELETE">
+							class="btn btn-danger" name="type" value="DELETE">
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
+	<%
+		}
+	%>
 
-	<script
-		src="backend/assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 	<!-- Bootstrap tether Core JavaScript -->
 	<script
 		src="backend/assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
-	<script src="backend/assets/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="backend/assets/js/app-style-switcher.js"></script>
 	<!--Wave Effects -->
 	<script src="backend/assets/js/waves.js"></script>

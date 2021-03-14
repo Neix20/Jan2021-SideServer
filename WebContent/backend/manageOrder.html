@@ -23,9 +23,12 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
     <title>Manage Order</title>
+    <script src="assets/js/jquery-3.5.1.min.js"></script>
+    <script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css" />
-    <script src="assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
     <link href="assets/css/def_table.css" rel="stylesheet">
+    <script src="assets/js/selectize.js"></script>
+    <link rel="stylesheet" href="assets/css/selectize/selectize.css" />
     <style>
         table.table tr th:first-child {
             width: 100px;
@@ -36,12 +39,8 @@
             // Activate tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
-            $("#add_form").submit(e => {
-                $("#customerId").val($("#customerName").val());
-            });
-
-            $("#update_form").submit(e => {
-                $("#customerId").val($("#customerName").val());
+            $('select').selectize({
+                sortField: 'text'
             });
         });
     </script>
@@ -135,9 +134,9 @@
                         </div>
                         <div class="form-group">
                             <label>CUSTOMER NAME</label>
-                            <input id="customerName" name="customerName" class="form-control input-md" required
-                                type="text" />
-                            <input id="customerId" name="customerId" class="form-control input-md" hidden type="text" value="Hello World" />
+                            <select name="customerId" form="add_form">
+                                <option value="">Enter a Customer Name...</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -169,7 +168,7 @@
                         </div>
                         <div class="form-group">
                             <label>SHIPPED DATE</label>
-                            <input name="shippeddate" class="form-control input-md" requiredtype="text">
+                            <input name="shippeddate" class="form-control input-md" required type="text">
                         </div>
                         <div class="form-group">
                             <label>COMMENTS</label>
@@ -177,9 +176,9 @@
                         </div>
                         <div class="form-group">
                             <label>CUSTOMER NAME</label>
-                            <input id="customerName" name="customerName" class="form-control input-md" required
-                                type="text" />
-                            <input id="customerId" name="customerId" class="form-control input-md" hidden type="text" />
+                            <select name="customerId" form="update_form">
+                                <option value="">Enter a Customer Name...</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -214,11 +213,8 @@
         </div>
     </div>
     <!-- All Jquery -->
-    <!-- ============================================================== -->
-    <script src="assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
-    <script src="assets/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="assets/js/app-style-switcher.js"></script>
     <!--Wave Effects -->
     <script src="assets/js/waves.js"></script>

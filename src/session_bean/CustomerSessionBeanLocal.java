@@ -26,4 +26,5 @@ public interface CustomerSessionBeanLocal {
 	public void updateCustomer(String[] s, String customernumber) throws EJBException;
 	public void deleteCustomer(String customernumber) throws EJBException;
 	public Column getColumnAnnotation(String columnName);
+	public List<Customer> getAllCustomer() throws EJBException;
 }

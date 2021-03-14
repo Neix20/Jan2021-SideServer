@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -12,9 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import domain.Orderdetail;
+import domain.OrderdetailPK;
 import domain.Product;
 import session_bean.OrderDetailSessionBeanLocal;
 import session_bean.ProductSessionBeanLocal;
+import utility.html_generator;
 
 /**
  * Servlet implementation class OrderDetailServlet
@@ -57,15 +60,18 @@ public class OrderDetailServlet extends HttpServlet {
 		String temp = request.getParameter("currentPage");
 		int currentPage = (temp != null) ? Integer.valueOf(temp) : 1;
 		int start_num = (currentPage - 1) * recordsPerPage;
-		int end_num = (currentPage * recordsPerPage > orderdetailList.size()) ? orderdetailList.size()
-				: currentPage * recordsPerPage;
+		int end_num = (currentPage * recordsPerPage > orderdetailList.size()) ? orderdetailList.size() : currentPage * recordsPerPage;
 
-		orderdetailList = orderdetailList.subList(start_num, end_num);
+		orderdetailList = (orderdetailList.isEmpty()) ? orderdetailList : orderdetailList.subList(start_num, end_num);
+		
+		List<Product> productList = productBean.getAllProduct();
 
 		request.setAttribute("servlet_name", "manageOrderDetail");
 		request.setAttribute("orderdetailList", orderdetailList);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("nOfPage", nOfPage);
+		request.setAttribute("orderNumber", orderNumber);
+		request.setAttribute("productList", productList);
 
 		RequestDispatcher req = request.getRequestDispatcher("backend/manageOrderDetail.jsp");
 		req.forward(request, response);
@@ -78,7 +84,42 @@ public class OrderDetailServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String type = request.getParameter("type");
+		String[] parameter = Orderdetail.getParameter();
+		String[] arr = new String[parameter.length];
+		
+		for(int i = 0; i < arr.length; i++) arr[i] = request.getParameter(parameter[i]);
+		
+		Orderdetail od;
+		Product p;
+		OrderdetailPK tmp;
+		PrintWriter out = response.getWriter();
+		
+		switch(type) {
+		case "ADD":
+			od = new Orderdetail();
+			p = productBean.getProduct(arr[1]);
+			arr[4] = p.getMsrp().toString();
+			od.setEverything2(arr);
+			orderDetailBean.addOrderdetail(od);
+			out.println(html_generator.operation_complete("added", "manageOrderDetail?orderNumber=" + arr[0]));
+			break;
+		case "UPDATE":
+			tmp = new OrderdetailPK(Integer.valueOf(arr[0]), arr[1]);
+			od = orderDetailBean.getOrderdetail(tmp);
+			p = productBean.getProduct(arr[1]);
+			arr[4] = p.getMsrp().toString();
+			od.setEverything2(arr);
+			orderDetailBean.updateOrderdetail(od);
+			out.println(html_generator.operation_complete("updated", "manageOrderDetail?orderNumber=" + arr[0]));
+			break;
+		case "DELETE":
+			tmp = new OrderdetailPK(Integer.valueOf(arr[0]), arr[1]);
+			od = orderDetailBean.getOrderdetail(tmp);
+			orderDetailBean.deleteOrderdetail(od);
+			out.println(html_generator.operation_complete("deleted", "manageOrderDetail?orderNumber=" + arr[0]));
+			break;
+		}
 	}
 
 }

@@ -1,1 +1,8 @@
-<li class=\"page-item\"><a href=\"Product?category=\">Previous</a></li>
+this.ordernumber = ordernumber;
+		this.orderdate = orderdate;
+		this.requireddate = requireddate;
+		this.shippeddate = shippeddate;
+		this.status = status;
+		this.comments = comments;
+		this.customernumber = customernumber;
+		this.orderdetails = orderdetails;

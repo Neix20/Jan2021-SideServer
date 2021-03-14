@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -11,8 +13,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import domain.Customer;
 import domain.Order;
+import session_bean.CustomerSessionBeanLocal;
 import session_bean.OrderSessionBeanLocal;
+import utility.html_generator;
 
 /**
  * Servlet implementation class OrderServlet
@@ -23,6 +28,9 @@ public class OrderServlet extends HttpServlet {
 
 	@EJB
 	private OrderSessionBeanLocal orderBean;
+	
+	@EJB
+	private CustomerSessionBeanLocal customerBean;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -48,12 +56,22 @@ public class OrderServlet extends HttpServlet {
 		int start_num = (currentPage - 1) * recordsPerPage;
 		int end_num = (currentPage * recordsPerPage > orderList.size()) ? orderList.size() : currentPage * recordsPerPage;
 
-		orderList = orderList.subList(start_num, end_num);
+		orderList = (orderList.isEmpty()) ? orderList : orderList.subList(start_num, end_num);
+		int nextOrderNumber = orderBean.locateNextPK() + 1;
+		
+		List<Customer> customerList = customerBean.getAllCustomer();
+		
+		HashMap<Integer, String> customerHashMap = new HashMap<Integer, String>();
+		for(Customer c : customerList)
+			customerHashMap.put(c.getCustomernumber(), c.getCustomername());
 
 		request.setAttribute("servlet_name", "manageOrders");
 		request.setAttribute("orderList", orderList);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("nOfPage", nOfPage);
+		request.setAttribute("customerList", customerList);
+		request.setAttribute("customerHashMap", customerHashMap);
+		request.setAttribute("nextOrderNumber", nextOrderNumber);
 
 		RequestDispatcher req = request.getRequestDispatcher("backend/manageOrder.jsp");
 		req.forward(request, response);
@@ -66,7 +84,34 @@ public class OrderServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String type = request.getParameter("type");
+		String[] parameter = Order.getParameter();
+		String[] arr = new String[parameter.length];
+		
+		for(int i = 0; i < arr.length; i++) arr[i] = request.getParameter(parameter[i]);
+		
+		Order o;
+		PrintWriter out = response.getWriter();
+		
+		switch(type) {
+		case "ADD":
+			o = new Order();
+			o.setEverything(arr);
+			orderBean.addOrder(o);
+			out.println(html_generator.operation_complete("added", "manageOrders"));
+			break;
+		case "UPDATE":
+			o = orderBean.getOrder(arr[0]);
+			o.setEverything(arr);
+			orderBean.updateOrder(o);
+			out.println(html_generator.operation_complete("updated", "manageOrders"));
+			break;
+		case "DELETE":
+			o = orderBean.getOrder(arr[0]);
+			orderBean.deleteOrder(o);
+			out.println(html_generator.operation_complete("deleted", "manageOrders"));
+			break;
+		}
 	}
 
 }

@@ -21,9 +21,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name="orders", schema="classicmodels")
 @NamedQueries({ 
+	//please change me
 	@NamedQuery(
 		name = "Order.findAll", 
-		query = "SELECT o FROM Order o"
+		query = "SELECT o FROM Order o ORDER BY o.ordernumber DESC"
 	),
 	@NamedQuery(
 		name = "Order.findByOrderNumber",
@@ -34,8 +35,8 @@ import javax.persistence.Table;
 		query = "SELECT o FROM Order o WHERE o.customernumber = ?1"
 	),
 	@NamedQuery(
-			name="Order.locateNextPK", 
-			query="SELECT MAX(o.ordernumber) FROM Order o"
+		name="Order.locateNextPK", 
+		query="SELECT MAX(o.ordernumber) FROM Order o"
 	)
 })
 public class Order implements Serializable {
@@ -71,6 +72,17 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
+	public Order(Order o) {
+		this.ordernumber = o.ordernumber;
+		this.orderdate = o.orderdate;
+		this.requireddate = o.requireddate;
+		this.shippeddate = o.shippeddate;
+		this.status = o.status;
+		this.comments = o.comments;
+		this.customernumber = o.customernumber;
+		this.orderdetails = o.orderdetails;
+	}
+	
 	public Integer getOrdernumber() {
 		return this.ordernumber;
 	}
@@ -150,17 +162,17 @@ public class Order implements Serializable {
 	}
 	
 	public static String[] getParameter() {
-		String[] s = {"orderDate", "requiredDate", "shippedDate", "comment", "customerId"};
+		String[] s = {"ordernumber", "orderdate", "requireddate", "shippeddate", "comment", "customerId", "status"};
 		return s;
 	}
-	
+
 	public void setEverything(String[] arr) {
-		this.setOrderdate(arr[0]);
-		this.setRequireddate(arr[1]);
-		this.setShippeddate(arr[2]);
-		this.setComments(arr[3]);
-		this.setCustomernumber(Integer.valueOf(arr[4]));
-		this.setStatus("Shipped");
+		this.setOrderdate(arr[1]);
+		this.setRequireddate(arr[2]);
+		this.setShippeddate(arr[3]);
+		this.setComments(arr[4]);
+		this.setCustomernumber(Integer.valueOf(arr[5]));
+		this.setStatus(arr[6]);
 	}
 
 	public void setEverything2(String[] arr) {

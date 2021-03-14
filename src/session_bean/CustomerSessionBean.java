@@ -195,4 +195,11 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		
 		return column;
 	}
+
+	@Override
+	public List<Customer> getAllCustomer() throws EJBException {
+		// TODO Auto-generated method stub
+		return em.createQuery("SELECT c FROM Customer c", Customer.class)
+				.getResultList();
+	}
 }
