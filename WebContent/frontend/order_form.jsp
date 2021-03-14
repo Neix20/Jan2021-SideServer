@@ -32,18 +32,30 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 			<div class="form-group">
 				<label for="customername">Customer name:</label>
 				<input class="form-control" type="text" id="customername" name="customername" required>
+				<div class="invalid-feedback">
+		         	Please provide a customer name.
+		        </div>
 			</div>
 			<div class="form-group">
 				<label for="contact_firstname">Contact first name:</label>
 				<input class="form-control" type="text" id="contact_firstname" name="contact_firstname" required>
+				<div class="invalid-feedback">
+		         	Please provide a contact first name.
+		        </div>
 			</div>
 			<div class="form-group">
 				<label for="contact_lastname">Contact last name:</label>
 				<input class="form-control" type="text" id="contact_lastname" name="contact_lastname" required>
+				<div class="invalid-feedback">
+		         	Please provide a contact last name.
+		        </div>
 			</div>
 			<div class="form-group">
 				<label for="phone">Phone:</label>
 				<input class="form-control" type="text" id="phone" name="phone" required>
+				<div class="invalid-feedback">
+		         	Please provide a phone number.
+		        </div>
 			</div>
 			<div class="form-group">
 				<label for="email">Email:</label>
@@ -52,10 +64,16 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 				Make sure that your email matches with the company's email. We will update the 
 				customer information in the database accordingly.
 				</small>
+				<div class="invalid-feedback">
+		         	Please provide a email address.
+		        </div>
 			</div>
 			<div class="form-group">
 				<label for="addressline1">Address line 1:</label>
 				<input class="form-control" type="text" id="addressline1" name="addressline1" required>
+				<div class="invalid-feedback">
+		         	Please provide an address.
+		        </div>
 			</div>
 			<div class="form-group">
 				<label for="addressline2">Address line 2:</label>
@@ -64,6 +82,9 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 			<div class="form-group">
 				<label for="city">City:</label>
 				<input class="form-control" type="text" id="city" name="city" required>
+				<div class="invalid-feedback">
+		         	Please provide an address.
+		        </div>
 			</div>
 			<div class="form-group">
 				<label for="state">State:</label>
@@ -76,6 +97,9 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 			<div class="form-group">
 				<label for="country">Country:</label>
 				<input class="form-control" type="text" id="country" name="country" required>
+				<div class="invalid-feedback">
+		         	Please provide a country.
+		        </div>
 			</div>
 			<div class="form-group">
 				<label for="sales_person_email">Sales person email address:</label>
@@ -87,6 +111,9 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 					}
 					%>
 				</select>
+				<div class="invalid-feedback">
+		         	Please choose a sales person email address.
+		        </div>
 			</div>
 			<div class="form-group">
 				<label for="required_date">Required date:</label>
@@ -94,6 +121,9 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 				<small id="required_dateHelp" class="form-text text-muted">
 				Make sure that your required date should be reasonable and agreed by your appointed sales person.
 				</small>
+				<div class="invalid-feedback">
+		         	Please choose a required date.
+		        </div>
 			</div>
 		</div>
 	</div>

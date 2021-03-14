@@ -93,7 +93,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						<a href="${pageContext.request.contextPath}/ShoppingCart" class="btn btn-info" style="width: 100%;">Edit Cart Items</a>
 						<hr>
 						<div class="shopping_cart">
-							<form class="form-horizontal" role="form" action="Checkout" method="post" id="payment_form">
+							<form class="form-horizontal needs-validation" role="form" action="Checkout" method="post" id="payment_form" novalidate>
 								<!-- ============================================================== -->
 								<!-- Review order -->
 								<!-- ============================================================== -->
@@ -181,20 +181,6 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				$('#collapseTwo').collapse('toggle');
 			});
 
-			/* Submit the checkout form when user clicks "Pay Now"
-			*/
-			$('#pay-btn').on('click', function() {
-				<% //TODO Validate form input before submitting %>
-				let chosenEmail = $("#sales_person_email").val();
-				let obj = $("#sales_person_email").find("option[value='" + chosenEmail + "']");
-				if (obj != null && obj.length > 0 && chosenEmail !== "") {
-					$('#payment_form').submit();
-				}
-				else {
-					$('#form_error_modal').modal();
-				}
-			});
-
 			/* Switch the payment method between 'bank' and 'card' depending 
 			   on user's interaction
 			*/
@@ -213,8 +199,100 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			let month = String(today.getMonth() + 1).padStart(2, '0');
 			let year = today.getFullYear();
 			today = year + '-' + month + '-' + day;
-	
+
 			$('#required_date').attr('min', today);
+
+			/* Submit the checkout form when user clicks "Pay Now"
+			*/
+			$('#pay-btn').on('click', function() {
+				<% //TODO Validate form input before submitting %>
+				let chosenEmail = $("#sales_person_email").val();
+				let obj = $("#sales_person_email").find("option[value='" + chosenEmail + "']");
+				if (obj != null && obj.length > 0 && chosenEmail !== "") {
+					$('#payment_form').submit();
+				}
+				else {
+					$('#form_error_modal').modal();
+				}
+			});
+
+			// Arrow function produces syntax error, so annoying, switch to traditional method instead
+			const ERROR_MESSAGES = {
+				"REQUIRED" : function (columnName) { return "Please provide a "+columnName+"."} ,
+				"DIGIT_ONLY": function (columnName) { return "Only digits are allowed for "+columnName+"."} ,
+				"TOO_SHORT": function (columnName, minChar) { return "Minimum number of characters allowed for "+columnName+" is "+minChar+"."} ,
+				"TOO_LONG": function (columnName, maxChar) { return "Maximum number of characters allowed for "+columnName+" is "+maxChar+"."} ,
+			}
+
+			$(".needs-validation").on("submit", function(event) {
+			    let $form = $(this);
+
+			    $.post($form.attr("action"), $form.serialize(), function(responseJSON) {
+
+			    	let wrongInputs = Object.keys(responseJSON);
+			    	$(".needs-validation #input").each(function(index, element){
+			    		let $parent = element.parent();
+						/* Find all child elements with tag name "option" and remove them 
+						 * (just to prevent duplicate options when button is pressed again).
+						 */
+						element.removeClass(".is-valid .is-invalid");
+						$parent.remove(".invalid-feedback");
+						if (!element.attr("id") in wrongInputs) {
+							element.addClass(".is-valid");
+						}
+					})
+			    	
+			     	// Iterate over the JSON object.                      
+			        $.each(responseJson, function(inputIdentifier, errorMessage) {
+			        	inputIdentifiers.append(inputIdentifier);
+			        	 // Locate HTML DOM element with ID "someselect".
+						let $select = $("#"+inputIdentifier);
+						let $parent = $select.parent();						
+
+						let errorMessageDisplay;
+						// Construct the error message
+						switch (errorMessage) {
+						case "REQUIRED":
+						case "DIGIT_ONLY":
+							errorMessageDisplay = ERROR_MESSAGES[errorMessage](columnName);
+						    break;
+						errorMessage, numCharAllowed = errorMessage.split(";");
+						//case "TOO_SHORT":
+						//case "TOO_LONG":
+						default:
+							errorMessage, numCharAllowed = errorMessage.split(";");
+							errorMessageDisplay = ERROR_MESSAGES[errorMessage](columnName, numCharAllowed);
+						}
+						$parent.append("<div class='invalid-feedback'>"+errorMessageDisplay+"</div>")
+						
+
+			        	// Create HTML <option> element, set its value with currently iterated key and its text content with currently iterated item and finally append it to the <select>.             
+			            $("<option>").val(key).text(value).appendTo($select);
+			        });
+			    });
+
+			    // Prevents submitting the form.
+			    event.preventDefault(); 
+			});
+
+			/* Disabling form submissions if there are invalid fields and Bootstrap
+			 * will intercept the submit button and relay validation feedback to user.
+			 * Reference: https://getbootstrap.com/docs/4.0/components/forms/?#validation
+			 */
+			window.addEventListener('load', function() {
+			    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+			    let forms = document.getElementsByClassName('needs-validation');
+			    // Loop over them and prevent submission
+			    let validation = Array.prototype.filter.call(forms, function(form) {
+			      form.addEventListener('submit', function(event) {
+			        if (form.checkValidity() === false) {
+			          event.preventDefault();
+			          event.stopPropagation();
+			        }
+			        form.classList.add('was-validated');
+			      }, false);
+			    });
+			  }, false);
 		});
 	</script>
 	<!-- ============================================================== -->
