@@ -50,7 +50,8 @@
 	<%@ include file="header.jsp"%>
 
 	<!-- ***** Call to Action Start ***** -->
-	<section class="section section-bg" id="call-to-action" style="background-image: url(${pageContext.request.contextPath}/frontend/assets/images/banner-image-1-1920x500.jpg)">
+	<section class="section section-bg" id="call-to-action"
+		style="background-image: url(${pageContext.request.contextPath}/frontend/assets/images/banner-image-1-1920x500.jpg)">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 offset-lg-1">
