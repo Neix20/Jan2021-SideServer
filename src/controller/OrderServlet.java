@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import domain.Customer;
 import domain.Order;
-import session_bean.CustomerSessionBeanLocal;
+import session_bean.CustomerLocal;
 import session_bean.OrderSessionBeanLocal;
 import utility.html_generator;
 
@@ -30,7 +30,7 @@ public class OrderServlet extends HttpServlet {
 	private OrderSessionBeanLocal orderBean;
 	
 	@EJB
-	private CustomerSessionBeanLocal customerBean;
+	private CustomerLocal customerBean;
 
 	/**
 	 * @see HttpServlet#HttpServlet()

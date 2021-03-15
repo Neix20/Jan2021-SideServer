@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 
 @Stateless
 @LocalBean
-public class CustomerFormValidationSessionBean implements CustomerFormValidationSessionBeanLocal {
+public class FormValidationBean implements FormValidationLocal {
 	
 	@EJB
-	private CustomerSessionBeanLocal customerBean;
+	private CustomerLocal customerBean;
 	
 	final private static int CARD_NO_MIN_LEN = 15;
 	final private static int CARD_NO_MAX_LEN = 16;

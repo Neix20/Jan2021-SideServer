@@ -17,7 +17,7 @@ import domain.Customer;
  * @since   2021-03-12 
  */
 @Local
-public interface CustomerSessionBeanLocal {
+public interface CustomerLocal {
 	public Customer findCustomerById(String customernumber) throws EJBException;
 	public Customer findCustomerByEmail(String email) throws EJBException;
 	public List<Customer> readCustomer(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException;

@@ -16,7 +16,7 @@ import domain.Payment;
  * @since   2021-03-12 
  */
 @Local
-public interface PaymentSessionBeanLocal {
+public interface PaymentLocal {
 	public Payment findPayment(String customernumber, String checknumber) throws EJBException;
 	public List<Payment> readPayment(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException;
 	public int getNumberOfRows(String keyword) throws EJBException;

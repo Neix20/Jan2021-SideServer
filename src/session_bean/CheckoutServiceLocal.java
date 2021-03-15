@@ -12,6 +12,6 @@ import javax.servlet.http.HttpServletRequest;
  * @since   2021-03-12 
  */
 @Local
-public interface PaymentServiceSessionBeanLocal {
+public interface CheckoutServiceLocal {
 	public void run(HttpServletRequest request);
 }

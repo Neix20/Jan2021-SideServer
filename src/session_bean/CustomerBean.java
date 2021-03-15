@@ -30,7 +30,7 @@ import utility.CustomerCriteriaQuery;
  */
 @Stateless
 @LocalBean
-public class CustomerSessionBean implements CustomerSessionBeanLocal {
+public class CustomerBean implements CustomerLocal {
 	
     @PersistenceContext(unitName = "Jan2021-SideServer")
     private EntityManager em;
@@ -38,7 +38,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 	@EJB
 	private EmployeeSessionBeanLocal empBean;
 	
-    public CustomerSessionBean() {
+    public CustomerBean() {
     }
 
     /**

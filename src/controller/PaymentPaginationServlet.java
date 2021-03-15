@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import domain.Payment;
-import session_bean.PaymentSessionBeanLocal;
+import session_bean.PaymentLocal;
 import utility.PaginationRequestProcessor;
 import utility.UrlGenerator;
 
@@ -29,7 +29,7 @@ public class PaymentPaginationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
     @EJB
-    private PaymentSessionBeanLocal paymentBean;
+    private PaymentLocal paymentBean;
 	
     /**
      * @see HttpServlet#HttpServlet()

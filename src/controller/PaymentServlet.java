@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 
 import domain.Payment;
 import domain.PaymentJson;
-import session_bean.PaymentSessionBeanLocal;
+import session_bean.PaymentLocal;
 import utility.PaginationRequestProcessor;
 import utility.UrlGenerator;
 import utility.Redirect;
@@ -32,7 +32,7 @@ public class PaymentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
     @EJB
-    private PaymentSessionBeanLocal paymentBean;
+    private PaymentLocal paymentBean;
 	
     public PaymentServlet() {
         super();

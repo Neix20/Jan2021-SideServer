@@ -36,18 +36,18 @@ import utility.RefNoGenerator;
  */
 @Stateless
 @LocalBean
-public class PaymentSessionBean implements PaymentSessionBeanLocal {
+public class PaymentBean implements PaymentLocal {
 
     @PersistenceContext(unitName = "Jan2021-SideServer")
     EntityManager em;
     
     @EJB
-    private CustomerSessionBeanLocal customerBean;
+    private CustomerLocal customerBean;
     
 	final private static DateFormat dateFormatHTML = new SimpleDateFormat("yyyy-MM-dd");
 	final private static DateFormat dateFormatSQL = new SimpleDateFormat("M/d/yyyy");
 	
-    public PaymentSessionBean() {
+    public PaymentBean() {
     }
     
     /**

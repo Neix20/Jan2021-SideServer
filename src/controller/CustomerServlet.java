@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 
 import domain.Customer;
 import domain.CustomerJson;
-import session_bean.CustomerSessionBeanLocal;
+import session_bean.CustomerLocal;
 import utility.PaginationRequestProcessor;
 import utility.UrlGenerator;
 import utility.Redirect;
@@ -33,7 +33,7 @@ public class CustomerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private CustomerSessionBeanLocal customerBean;
+    private CustomerLocal customerBean;
 
     public CustomerServlet() {
     	super();

@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import domain.ShoppingCart;
-import session_bean.CustomerFormValidationSessionBeanLocal;
-import session_bean.CustomerSessionBeanLocal;
+import session_bean.FormValidationLocal;
+import session_bean.CustomerLocal;
 import session_bean.EmployeeSessionBeanLocal;
-import session_bean.PaymentServiceSessionBeanLocal;
+import session_bean.CheckoutServiceLocal;
 /**
  * Servlet implementation class CheckoutServlet
  * 
@@ -34,13 +34,13 @@ public class CheckoutServlet extends HttpServlet {
 	private EmployeeSessionBeanLocal empbean;
 	
 	@EJB
-	private PaymentServiceSessionBeanLocal paymentServiceBean;
+	private CheckoutServiceLocal paymentServiceBean;
 	
 	@EJB
-	private CustomerSessionBeanLocal customerBean;
+	private CustomerLocal customerBean;
 	
 	@EJB
-	private CustomerFormValidationSessionBeanLocal formValidator;
+	private FormValidationLocal formValidator;
 	
     public CheckoutServlet() {
         super();

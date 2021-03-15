@@ -6,7 +6,7 @@ import javax.ejb.Local;
 import javax.servlet.http.HttpServletRequest;
 
 @Local
-public interface CustomerFormValidationSessionBeanLocal {
+public interface FormValidationLocal {
 	public Map<String, String> validateCustomerForm(HttpServletRequest request);
 //	private boolean isRequired(String customerParameterName, HttpServletRequest request);
 //	private boolean isExact(String parameterName, int parameterValue, int len, Map<String, String> formValidationResult);
