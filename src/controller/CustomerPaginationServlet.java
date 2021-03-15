@@ -59,9 +59,7 @@ public class CustomerPaginationServlet extends HttpServlet {
 		try {
 	
 		    int rows = customerBean.getNumberOfRows(keyword);
-		    System.out.println("Number of rows returned 1: "+ rows);
 		    nOfPages = rows / recordsPerPage;
-		    System.out.println("At servlet" + nOfPages);
 	
 		    if (rows % recordsPerPage != 0) {
 		    	nOfPages++;
@@ -73,7 +71,6 @@ public class CustomerPaginationServlet extends HttpServlet {
 	
 		    List<Customer> lists = customerBean.readCustomer(currentPage, recordsPerPage, keyword, sortItem, sortType);
 		    request.setAttribute("customers", lists);
-		    System.out.println("Number of rows returned 2: "+ lists.size());
 		} catch (EJBException ex) {
 			throw ex;
 		}

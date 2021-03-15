@@ -47,21 +47,53 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	<script>
 		$(document).ready(function () {
 
-			// Check all the checkboxes once the document is loaded
-			$('input[type="checkbox"]').attr('checked', 'checked');
+$columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
+			
+			if (typeof(Storage) !== "undefined") {
+				if (localStorage.paymentFilterCache) {
+					let cacheArr = JSON.parse(localStorage.paymentFilterCache);
+					if (cacheArr.length === $columnCheckBoxes.length)
+						$("#selectAll").attr('checked', 'checked');
+					cacheArr.forEach(function (elem, index){
+						$('input[type="checkbox"]').filter('#'+elem).attr('checked', 'checked');
+					});
+				} else {
+					$("#selectAll").attr('checked', 'checked');
+					let cacheArr = [];
+					$('input[type="checkbox"]').not("#selectAll").each(function() {
+						cacheArr.push($(this).val());
+						$(this).attr('checked', 'checked');
+					});
+					localStorage.setItem("paymentFilterCache", JSON.stringify(cacheArr));
+				}
+			} else {
+			  // Check all the checkboxes once the document is loaded if no Web Storage support..
+				$('input[type="checkbox"]').attr('checked', 'checked');
+			}
+			
 			var checkboxes = $('input[name=filtercolumn]');
-
+	
 			// Use JQuery to hide and show specific columns based on checkboxes
 			function filterColumn(checkbox) {
 				let id = checkbox.attr("id");
 				let columns = $('.'+id);
-				
+
+				let cacheArr = JSON.parse(localStorage.getItem("paymentFilterCache"));
+
 				if (checkbox.prop('checked')) {
+
+					if (!cacheArr.includes(id))
+						cacheArr.push(id);
+					
 					$.each(columns, function(index, column) {
 						// Show column
 						column.style.display= "";
 					});
 				} else {
+
+					if (cacheArr.includes(id))
+						cacheArr = cacheArr.filter(function(value, index, arr) {return value != id});
+					
 					// Uncheck "Select all" checkbox if users uncheck one of the checkboxes
 					$("#selectAll").prop("checked", false);
 					$.each(columns, function(index, column) {
@@ -69,6 +101,8 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						column.style.display= "none";
 					});	
 				}
+
+				localStorage.setItem("paymentFilterCache", JSON.stringify(cacheArr));
 			}
 
 			/*

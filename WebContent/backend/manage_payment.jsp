@@ -66,7 +66,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						<form id="search-form" action="${ pageContext.request.contextPath }/Payment" method="GET">
 							<div class="input-group mr-3">
 								<span class="input-group-addon"><a id="search" href="#" type="submit"><i class="material-icons">&#xE8B6;</i></a></span>
-								<input type="text" name="keyword" class="form-control" placeholder="Search&hellip;">
+								<input type="text" name="keyword" class="form-control" placeholder="Search [Type empty to return all]">
 								<input type="hidden" name="nOfPages" value="<%= urlGenerator.getnOfPages() %>">
 								<input type="hidden" name="currentPage" value="<%= urlGenerator.getCurrentPage() %>">
 								<input type="hidden" name="recordsPerPage" value="<%= urlGenerator.getRecordsPerPage() %>">

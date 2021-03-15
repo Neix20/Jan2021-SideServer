@@ -62,12 +62,18 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 							Customer <b>Details</b> 
 							<span class="page-text font-weight-light small"><%= pageDisplay %></span>
 						</h2>
-                    </div>
+                    </div>  
 					<div class="col-sm-4 d-flex justify-content-end search-box">
 						<form id="search-form" action="${ pageContext.request.contextPath }/Customer" method="GET">
 							<div class="input-group mr-3">
-								<span class="input-group-addon"><a id="search" href="#" type="submit"><i class="material-icons">&#xE8B6;</i></a></span>
-								<input type="text" name="keyword" class="form-control" placeholder="Search&hellip;">
+								<span class="input-group-addon">
+									<a id="search" href="" type="submit">
+									<i class="material-icons">&#xE8B6;</i></a>
+								</span>
+								<%
+								boolean keywordExists = !urlGenerator.getKeyword().equals("");
+								%>
+								<input type="text" name="keyword" value="<%= urlGenerator.getKeyword() %>" class="form-control" placeholder="Search [Type empty to return all]">
 								<input type="hidden" name="nOfPages" value="<%= urlGenerator.getnOfPages() %>">
 								<input type="hidden" name="currentPage" value="<%= urlGenerator.getCurrentPage() %>">
 								<input type="hidden" name="recordsPerPage" value="<%= urlGenerator.getRecordsPerPage() %>">

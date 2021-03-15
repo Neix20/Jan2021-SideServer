@@ -48,21 +48,53 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	<script>
 		$(document).ready(function () {
 
-			// Check all the checkboxes once the document is loaded
-			$('input[type="checkbox"]').attr('checked', 'checked');
+			$columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
+			
+			if (typeof(Storage) !== "undefined") {
+				if (localStorage.customerFilterCache) {
+					let cacheArr = JSON.parse(localStorage.customerFilterCache);
+					if (cacheArr.length === $columnCheckBoxes.length)
+						$("#selectAll").attr('checked', 'checked');
+					cacheArr.forEach(function (elem, index){
+						$('input[type="checkbox"]').filter('#'+elem).attr('checked', 'checked');
+					});
+				} else {
+					$("#selectAll").attr('checked', 'checked');
+					let cacheArr = [];
+					$('input[type="checkbox"]').not("#selectAll").each(function() {
+						cacheArr.push($(this).val());
+						$(this).attr('checked', 'checked');
+					});
+					localStorage.setItem("customerFilterCache", JSON.stringify(cacheArr));
+				}
+			} else {
+			  // Check all the checkboxes once the document is loaded if no Web Storage support..
+				$('input[type="checkbox"]').attr('checked', 'checked');
+			}
+			
 			var checkboxes = $('input[name=filtercolumn]');
 	
 			// Use JQuery to hide and show specific columns based on checkboxes
 			function filterColumn(checkbox) {
 				let id = checkbox.attr("id");
 				let columns = $('.'+id);
-				
+
+				let cacheArr = JSON.parse(localStorage.getItem("customerFilterCache"));
+
 				if (checkbox.prop('checked')) {
+
+					if (!cacheArr.includes(id))
+						cacheArr.push(id);
+					
 					$.each(columns, function(index, column) {
 						// Show column
 						column.style.display= "";
 					});
 				} else {
+
+					if (cacheArr.includes(id))
+						cacheArr = cacheArr.filter(function(value, index, arr) {return value != id});
+					
 					// Uncheck "Select all" checkbox if users uncheck one of the checkboxes
 					$("#selectAll").prop("checked", false);
 					$.each(columns, function(index, column) {
@@ -70,6 +102,8 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						column.style.display= "none";
 					});	
 				}
+
+				localStorage.setItem("customerFilterCache", JSON.stringify(cacheArr));
 			}
 	
 			/*
@@ -126,6 +160,13 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			$('#search').on('click', function() {
 				$('#search-form').submit();
 			});
+
+			// Redirect to get new resources when the user activates the search function
+			if ($('#clear-search').length > 0) {
+				$('#clear-search').on('click', function() {
+					$('#clear-search-form').submit();
+				});
+			}
 
 			// when the submit button in the modal is clicked, submit the form
 			$('#confirm-delete-btn').click(function(){

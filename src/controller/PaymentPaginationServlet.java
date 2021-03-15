@@ -60,7 +60,6 @@ public class PaymentPaginationServlet extends HttpServlet {
 		try {
 		    int rows = paymentBean.getNumberOfRows(keyword);
 		    nOfPages = rows / recordsPerPage;
-		    System.out.println("At servlet" + nOfPages);
 
 		    if (rows % recordsPerPage != 0) {
 		    	nOfPages++;
