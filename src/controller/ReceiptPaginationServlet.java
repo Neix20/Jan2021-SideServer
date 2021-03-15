@@ -19,10 +19,10 @@ import domain.ShoppingCart;
  * @since   2021-03-12 
  */
 @WebServlet({ "/Receipt", "/receipt" })
-public class ReceiptServlet extends HttpServlet {
+public class ReceiptPaginationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-    public ReceiptServlet() {
+    public ReceiptPaginationServlet() {
         super();
     }
 

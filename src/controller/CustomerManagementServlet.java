@@ -28,14 +28,14 @@ import utility.Redirect;
 * @since   2021-03-12 
  */
 @WebServlet({"/manageCustomer", "/managecustomer"})
-public class CustomerServlet extends HttpServlet {
+public class CustomerManagementServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
     private CustomerLocal customerBean;
 
-    public CustomerServlet() {
+    public CustomerManagementServlet() {
     	super();
     }
 

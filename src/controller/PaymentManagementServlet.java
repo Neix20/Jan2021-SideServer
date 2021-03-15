@@ -28,13 +28,13 @@ import utility.Redirect;
  * @since   2021-03-12 
  */
 @WebServlet({"/managePayment", "/managepayment"})
-public class PaymentServlet extends HttpServlet {
+public class PaymentManagementServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
     @EJB
     private PaymentLocal paymentBean;
 	
-    public PaymentServlet() {
+    public PaymentManagementServlet() {
         super();
     }
 
