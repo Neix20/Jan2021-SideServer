@@ -97,7 +97,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 								<!-- ============================================================== -->
 								<!-- Review order -->
 								<!-- ============================================================== -->
-								<jsp:include page="review_order.jsp" /> 
+								<jsp:include page="reviewOrder.jsp" /> 
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
@@ -118,7 +118,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 								<!-- ============================================================== -->
 								<!-- Order form (a.k.a. customer information) -->
 								<!-- ============================================================== -->
-								<jsp:include page="order_form.jsp" />  
+								<jsp:include page="fillBillingForm.jsp" />  
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
@@ -140,7 +140,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 								<!-- ============================================================== -->
 								<!-- Payment form -->
 								<!-- ============================================================== -->
-								<jsp:include page="payment.jsp" />
+								<jsp:include page="performPayment.jsp" />
 								<!-- ============================================================== -->
 								<!-- End payment form -->
 								<!-- ============================================================== -->

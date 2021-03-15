@@ -28,20 +28,20 @@ public class ReceiptPaginationServlet extends HttpServlet {
 
     /**
      * Check if user has already done payment before proceed to display receipt. 
-     * If the user hasn't done any payment, the servlet will forward to receipt_error.jsp
+     * If the user hasn't done any payment, the servlet will forward to printReceiptError.jsp
      * before redirecting to checkout page.
-     * Else, the servlet will forward to receipt.jsp to proceed to display receipt.
+     * Else, the servlet will forward to printReceipt.jsp to proceed to display receipt.
      */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ShoppingCart purchasedOrderProduct = (ShoppingCart) request.getAttribute("purchased_order_product");
 		
 		if (purchasedOrderProduct == null) {
 			response.setHeader("Refresh", "8; URL="+request.getContextPath()+"/Checkout");
-			RequestDispatcher req = request.getRequestDispatcher("frontend/receipt_error.jsp");
+			RequestDispatcher req = request.getRequestDispatcher("frontend/printReceiptError.jsp");
 			req.forward(request, response);
 		}
 		else {
-			RequestDispatcher req = request.getRequestDispatcher("frontend/receipt.jsp");
+			RequestDispatcher req = request.getRequestDispatcher("frontend/printReceipt.jsp");
 			req.forward(request, response);
 		}
 	}

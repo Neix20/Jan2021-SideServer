@@ -48,9 +48,9 @@ public class CheckoutServlet extends HttpServlet {
 
 	/**
      * Check if user has items in the shopping cart before proceed to checkout. 
-     * If the shopping cart is empty, the servlet will forward to checkout_error.jsp
+     * If the shopping cart is empty, the servlet will forward to printCheckoutError.jsp
      * before redirect to product catalog page.
-     * Else, the servlet will forward to checkout.jsp to perform checkout.
+     * Else, the servlet will forward to performCheckout.jsp to perform checkout.
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ShoppingCart scList = (ShoppingCart) request.getSession().getAttribute("ShoppingCart");
@@ -58,12 +58,12 @@ public class CheckoutServlet extends HttpServlet {
 		
 		if (scList == null || scList.count() < 1) {
 			response.setHeader("Refresh", "8; URL="+request.getContextPath()+"/productCatalog");
-			RequestDispatcher req = request.getRequestDispatcher("frontend/checkout_error.jsp");
+			RequestDispatcher req = request.getRequestDispatcher("frontend/printCheckoutError.jsp");
 			req.forward(request, response);
 		}
 		else {
 			List<String> allEmployeeEmails = empbean.getAllEmails();
-			RequestDispatcher req = request.getRequestDispatcher("frontend/checkout.jsp");
+			RequestDispatcher req = request.getRequestDispatcher("frontend/performCheckout.jsp");
 			request.setAttribute("employee_emails", allEmployeeEmails);
 			req.forward(request, response);
 		}
