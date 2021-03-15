@@ -67,7 +67,7 @@ public class CustomerBean implements CustomerLocal {
 
     /**
      * Get customers' record sorted by @param sortItem in @param order.
-     * Pagination for manage_customer.jsp.
+     * Pagination for manageCustomer.jsp.
      */
     @Override
     public List<Customer> readCustomer(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException {
@@ -87,7 +87,7 @@ public class CustomerBean implements CustomerLocal {
 
    /**
     * Return the total number of rows of the query.
-    * Pagination for manage_customer.jsp.
+    * Pagination for manageCustomer.jsp.
     */
     @Override
     public int getNumberOfRows(String keyword) throws EJBException {

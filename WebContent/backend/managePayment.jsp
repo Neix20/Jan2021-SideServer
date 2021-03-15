@@ -91,7 +91,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="white-box p-0">
-                            <jsp:include page="manage_payment2.jsp"/>
+                            <jsp:include page="managePayment2.jsp"/>
                         </div>
                     </div>
                 </div>

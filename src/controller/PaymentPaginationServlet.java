@@ -86,7 +86,7 @@ public class PaymentPaginationServlet extends HttpServlet {
 													 recordsPerPage, keyword, sortItem, sortType);
 		request.setAttribute("urlGenerator", urlGenerator);
 	
-		RequestDispatcher dispatcher = request.getRequestDispatcher("backend/manage_payment.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("backend/managePayment.jsp");
 		dispatcher.forward(request, response);
 	}
 

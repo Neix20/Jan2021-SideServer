@@ -63,7 +63,7 @@ public class PaymentBean implements PaymentLocal {
 
     /**
      * Get payments' record sorted by @param sortItem in @param order.
-     * Pagination for manage_payment.jsp.
+     * Pagination for managePayment.jsp.
      */
 	@Override
 	public List<Payment> readPayment(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException {
@@ -82,7 +82,7 @@ public class PaymentBean implements PaymentLocal {
 
    /**
     * Return the total number of rows of the query.
-    * Pagination for manage_payment.jsp.
+    * Pagination for managePayment.jsp.
     */
 	@Override
 	public int getNumberOfRows(String keyword) throws EJBException {	

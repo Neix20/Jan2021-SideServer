@@ -84,7 +84,7 @@ public class CustomerPaginationServlet extends HttpServlet {
 													 recordsPerPage, keyword, sortItem, sortType);
 		request.setAttribute("urlGenerator", urlGenerator);
 	
-		RequestDispatcher dispatcher = request.getRequestDispatcher("backend/manage_customer.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("backend/manageCustomer.jsp");
 		dispatcher.forward(request, response);
     }
 
