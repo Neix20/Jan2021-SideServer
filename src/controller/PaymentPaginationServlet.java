@@ -24,7 +24,7 @@ import utility.UrlGenerator;
  * @version 1.0
  * @since   2021-03-12 
  */
-@WebServlet({"backend/PaymentPagination", "backend/paymentpagination"})
+@WebServlet({"/Payment", "/payment"})
 public class PaymentPaginationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
@@ -81,12 +81,13 @@ public class PaymentPaginationServlet extends HttpServlet {
 		/* Set the URL to the latest value of request's parameters 
 		 * so that the user's preference can be saved between requests.
 		 */
-		String absoluteLink = request.getContextPath();		
+		String absoluteLink = request.getContextPath();
+		absoluteLink += "/Payment";
 		UrlGenerator urlGenerator = new UrlGenerator(absoluteLink, nOfPages, currentPage, 
 													 recordsPerPage, keyword, sortItem, sortType);
 		request.setAttribute("urlGenerator", urlGenerator);
 	
-		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_payment.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("backend/manage_payment.jsp");
 		dispatcher.forward(request, response);
 	}
 

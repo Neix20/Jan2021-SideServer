@@ -273,7 +273,7 @@ input[type=number] {
 								</li>
 							</ul>
 
-							<a href="Checkout" type="submit"
+							<a href="${pageContext.request.contextPath}/Checkout" type="submit"
 								class="btn btn-primary btn-block">go to checkout</a>
 						</div>
 					</div>

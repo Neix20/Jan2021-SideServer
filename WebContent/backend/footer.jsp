@@ -19,15 +19,15 @@
 	</body>
 	<!-- All Jquery -->
 	<!-- ============================================================== -->
-	<script src="assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
 	<!-- Bootstrap tether Core JavaScript -->
-	<script src="assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
-	<script src="assets/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="assets/js/app-style-switcher.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/app-style-switcher.js"></script>
 	<!--Wave Effects -->
-	<script src="assets/js/waves.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/waves.js"></script>
 	<!--Menu sidebar -->
-	<script src="assets/js/sidebarmenu.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/sidebarmenu.js"></script>
 	<!--Custom JavaScript -->
-	<script src="assets/js/custom.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/custom.js"></script>
 </html>

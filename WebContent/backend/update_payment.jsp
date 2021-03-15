@@ -162,7 +162,7 @@ $(document).ready(function () {
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<a href="${ pageContext.request.contextPath }/PaymentPagination" id="confirm-quit-btn" class="btn btn-danger">Quit</a>
+						<a href="${ pageContext.request.contextPath }/managePayment" id="confirm-btn" class="btn btn-danger">Confrim</a>
 					</div>
 				</form>
 			</div>

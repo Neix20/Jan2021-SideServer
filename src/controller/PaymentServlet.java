@@ -5,14 +5,16 @@ import java.io.PrintWriter;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import domain.Payment;
+import domain.PaymentJson;
 import session_bean.PaymentSessionBeanLocal;
 import utility.PaginationRequestProcessor;
 import utility.UrlGenerator;
@@ -25,7 +27,7 @@ import utility.Redirect;
  * @version 1.0
  * @since   2021-03-12 
  */
-@WebServlet({"backend/Payment", "backend/payment"})
+@WebServlet({"/managePayment", "/managepayment"})
 public class PaymentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
@@ -43,17 +45,19 @@ public class PaymentServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String customernumber = request.getParameter("customernumber");
 		String checknumber = request.getParameter("checknumber");
+	    Payment payment = paymentBean.findPayment(customernumber, checknumber);
+	    request.setAttribute("payment", payment);
+	    
+	    boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
-		try {
-			//TODO Handle special case if customernumber and checknumber not found?
-		    Payment payment = paymentBean.findPayment(customernumber, checknumber);
-		    request.setAttribute("payment", payment);
-	
-		    //TODO Remove forward, since we are going to use AJAX, forward is not needed
-		    RequestDispatcher req = request.getRequestDispatcher("update_payment.jsp");
-		    req.forward(request, response);
-		} catch (EJBException ex) {
-			throw ex;
+		if (ajax) {
+			PaymentJson paymentJson = new PaymentJson(payment);
+			String json = new Gson().toJson(paymentJson);
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        response.getWriter().write(json);
+		} else {
+			//TODO 404 Not found
 		}
 	}
 
@@ -102,7 +106,8 @@ public class PaymentServlet extends HttpServlet {
 		String sortItem = requestProcessor.getSortItem();
 		String sortType = requestProcessor.getSortType();
 		
-		String absoluteLink = request.getContextPath();		
+		String absoluteLink = request.getContextPath();
+		absoluteLink += "/Payment";
 		UrlGenerator urlGenerator = new UrlGenerator(absoluteLink, nOfPages, currentPage, 
 													 recordsPerPage, keyword, sortItem, sortType);
 		request.setAttribute("urlGenerator", urlGenerator);

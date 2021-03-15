@@ -164,7 +164,9 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		BigDecimal creditlimit = new BigDecimal(attributes[12], creditlimitMc);
 		creditlimit.setScale(scale, RoundingMode.HALF_UP);
 		
-		Employee salesrepemployee = empBean.findEmployee(salesrepemployeenumber);
+		Employee salesrepemployee = null;
+		if (!salesrepemployeenumber.equals(""))
+			salesrepemployee = empBean.findEmployee(salesrepemployeenumber);
 		
 		// Set the attributes
 		customer.setCustomername(customername);

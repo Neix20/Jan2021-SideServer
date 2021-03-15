@@ -64,12 +64,15 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						</h2>
                     </div>
 					<div class="col-sm-4 d-flex justify-content-end search-box">
-						<form id="search-form" action="CustomerPagination" method="GET">
+						<form id="search-form" action="${ pageContext.request.contextPath }/Customer" method="GET">
 							<div class="input-group mr-3">
 								<span class="input-group-addon"><a id="search" href="#" type="submit"><i class="material-icons">&#xE8B6;</i></a></span>
 								<input type="text" name="keyword" class="form-control" placeholder="Search&hellip;">
-								<input type="hidden" name="currentPage" value="<%= currentPage %>">
-								<input type="hidden" name="recordsPerPage" value="<%= recordsPerPage %>">
+								<input type="hidden" name="nOfPages" value="<%= urlGenerator.getnOfPages() %>">
+								<input type="hidden" name="currentPage" value="<%= urlGenerator.getCurrentPage() %>">
+								<input type="hidden" name="recordsPerPage" value="<%= urlGenerator.getRecordsPerPage() %>">
+								<input type="hidden" name="sortItem" value="<%= urlGenerator.getSortItem() %>">
+								<input type="hidden" name="sortType" value="<%= urlGenerator.getSortType() %>">
 							</div>
 						</form>
 					</div>

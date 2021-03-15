@@ -51,8 +51,8 @@ public class PaymentCriteriaQuery {
     	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
     	if (!keyword.equals("")) {
 	    	List<Expression<String>> expressions = setAll(payment);
-	    	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
-	    	query.where(cb.like(stringConcat, "%"+keyword+"%"));
+	    	Expression<Boolean> stringConcat = CustomJPQLFunction.constructSearch(keyword.trim(), cb, expressions);
+	    	query.where(stringConcat);
     	}
 
     	return query;
@@ -61,19 +61,19 @@ public class PaymentCriteriaQuery {
     public CriteriaQuery<Payment> findPayment(String keyword, String sortItem, String sortType) {
     	
     	// Specify the type of the query to create a type-safe query
-    	CriteriaQuery<Payment> cq = cb.createQuery(Payment.class);
+    	CriteriaQuery<Payment> query = cb.createQuery(Payment.class);
     	// Call the from method of the query object to set the FROM clause of the query and to specify the root of the query
-    	Root<Payment> payment = cq.from(Payment.class);
+    	Root<Payment> payment = query.from(Payment.class);
     	/* Call the select method of the query object, passing in the query root, to set the SELECT clause of the query
     	 * Perform `SELECT p FROM Payment p`
     	 */
-    	cq.select(payment);
+    	query.select(payment);
     	
     	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
     	if (!keyword.equals("")) {
         	List<Expression<String>> expressions = setAll(payment);
-        	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
-        	cq.where(cb.like(stringConcat, "%"+keyword+"%"));
+	    	Expression<Boolean> stringConcat = CustomJPQLFunction.constructSearch(keyword.trim(), cb, expressions);
+	    	query.where(stringConcat);
     	}
 
     	// Perform `ORDER BY specific_column`
@@ -91,15 +91,15 @@ public class PaymentCriteriaQuery {
         		queryOrder = cb.asc(payment.get(sortItem));
     	}
     	if (sortType.equals("ASC")) {
-    		cq.orderBy(queryOrder);
+    		query.orderBy(queryOrder);
     	}
     	// Reverse the order if it is in DESC order
     	else if (sortType.equals("DESC")) {
     		queryOrder.reverse();
-    		cq.orderBy(queryOrder);
+    		query.orderBy(queryOrder);
     	}
     	    			
-    	return cq;
+    	return query;
     }
     
     /**

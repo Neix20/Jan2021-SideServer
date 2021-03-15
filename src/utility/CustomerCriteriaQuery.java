@@ -48,8 +48,8 @@ public class CustomerCriteriaQuery {
     	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
     	if (!keyword.equals("")) {
 	    	List<Expression<String>> expressions = setAll(customer);
-	    	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
-	    	query.where(cb.like(stringConcat, "%"+keyword+"%"));
+	    	Expression<Boolean> stringConcat = CustomJPQLFunction.constructSearch(keyword.trim(), cb, expressions);
+	    	query.where(stringConcat);
     	}
 
     	return query;
@@ -69,8 +69,8 @@ public class CustomerCriteriaQuery {
     	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
     	if (!keyword.equals("")) {
 	    	List<Expression<String>> expressions = setAll(customer);
-	    	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
-	    	query.where(cb.like(stringConcat, "%"+keyword+"%"));
+	    	Expression<Boolean> stringConcat = CustomJPQLFunction.constructSearch(keyword.trim(), cb, expressions);
+	    	query.where(stringConcat);
     	}
     	
     	// Perform `ORDER BY specific_column`
@@ -157,7 +157,7 @@ public class CustomerCriteriaQuery {
     	Expression<String> country = customer.get(Customer_.country);
     	Expression<String> creditlimit = customer.get(Customer_.creditlimit).as(String.class);
     	Expression<String> email = customer.get(Customer_.email);
-    	Expression<String> salesrepresentativeno = customer.get(Customer_.employee).get("employeenumber");
+    	Expression<String> salesrepresentativeno = customer.get(Customer_.employee).get("employeenumber").as(String.class);
     	
     	expressions.add(customerNo);
     	expressions.add(customername);

@@ -18,7 +18,7 @@ import domain.ShoppingCart;
  * @version 1.0
  * @since   2021-03-12 
  */
-@WebServlet({ "frontend/Receipt", "/Receipt", "/receipt" })
+@WebServlet({ "/Receipt", "/receipt" })
 public class ReceiptServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -37,11 +37,11 @@ public class ReceiptServlet extends HttpServlet {
 		
 		if (purchasedOrderProduct == null) {
 			response.setHeader("Refresh", "8; URL="+request.getContextPath()+"/Checkout");
-			RequestDispatcher req = request.getRequestDispatcher("receipt_error.jsp");
+			RequestDispatcher req = request.getRequestDispatcher("frontend/receipt_error.jsp");
 			req.forward(request, response);
 		}
 		else {
-			RequestDispatcher req = request.getRequestDispatcher("receipt.jsp");
+			RequestDispatcher req = request.getRequestDispatcher("frontend/receipt.jsp");
 			req.forward(request, response);
 		}
 	}

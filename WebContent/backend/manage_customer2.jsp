@@ -119,12 +119,76 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			// Redirect to get new resources when the user selects different number of entries
 			$("#selected_entries").on('change', function() {
 				  let numOfEntries = this.value;
-				  location.href = <%= urlGenerator %>;
+				  location.href = '<%= urlGenerator.toCustomURL(false) %>&recordsPerPage='+numOfEntries;
 			});
 	
 			// Redirect to get new resources when the user activates the search function
 			$('#search').on('click', function() {
 				$('#search-form').submit();
+			});
+
+			// when the submit button in the modal is clicked, submit the form
+			$('#confirm-delete-btn').click(function(){
+
+			    /* when the submit button in the modal is clicked, submit the form */
+			    $('#customer-form').append($('<input>', {
+			            type: 'hidden',
+			            name: 'user_action',
+			            value: 'DELETE'
+			    }));
+				
+				$('#customer-form').submit();	  
+			});
+
+			let addBtn = null;
+			let updateBtn = null;
+			let deleteBtn = null;
+			let customerNoInput = null;
+
+			$('td>a').on('click', function(e) {
+			    // Prevent anchor tag from reloading the page
+			    e.preventDefault();
+
+			    $clickedElem = $(this);
+			    // Execute Ajax GET request on URL
+			    $.get($clickedElem.attr('id'), function(responseJson) {
+			        $.each(responseJson, function (columnName, columnValue) {
+			            $('#editCustomerModal input[name='+columnName+']').val(columnValue);
+			        });
+			        
+			        addBtn = $("#add-btn").detach();
+			        
+			        $('#editCustomerModal').modal('show');
+			    });
+			});
+
+			$('#activate-add-btn').on('click', function(e) {
+
+			    $('#editCustomerModal input:not([type=hidden]').val("");
+			    customerNoInput = $('#editCustomerModal #customernumber').parent().detach();
+			    updateBtn = $("#update-btn").detach();
+			    deleteBtn = $("#delete-btn").detach();
+
+			    $('#editCustomerModal').modal('show');
+			});
+
+			$('#editCustomerModal').on('hidden.bs.modal', function (e) {
+			    if (addBtn !== null) {
+			        $('#editCustomerModal .modal-footer').append(addBtn);
+			        addBtn = null;
+			    }
+			    if (updateBtn !== null) {
+			        $('#editCustomerModal .modal-footer').append(updateBtn);
+			        updateBtn = null;
+			    }
+			    if (deleteBtn !== null) {
+			        $('#editCustomerModal .modal-footer').append(deleteBtn);
+			        deleteBtn = null;
+			    }
+			    if (customerNoInput !== null) {
+			        $('#editCustomerModal .modal-body').prepend(customerNoInput);
+			        customerNoInput = null;
+			    }
 			});
 		});
 	</script>
@@ -140,8 +204,8 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			<!-- Add customer -->
 			<!-- ============================================================== -->
 			<div class="col-4">
-				<button class="btn btn-success d-flex justify-content-center align-items-center" data-toggle="modal" data-target="#addCustomerModal">
-				<i class="material-icons mr-2">&#xE147;</i> <span>Add Customer</span>
+				<button id="activate-add-btn" class="btn btn-success d-flex justify-content-center align-items-center" >
+					<i class="material-icons mr-2">&#xE147;</i> <span>Add Customer</span>
 				</button>
 			</div>
 			<!-- ============================================================== -->
@@ -230,7 +294,6 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 							<%
 							UrlGenerator urlGeneratorNew;
 							final int NUM_OF_COLUMNS = 14;
-							String urls[] = new String[NUM_OF_COLUMNS];
 							String[] sortIcons = new String[NUM_OF_COLUMNS];
 							
 							String[] sortItemsLookup = {
@@ -291,7 +354,6 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 								// Set to sort item based on the current column
 								urlGeneratorNew.setSortItem(sortItemsLookup[idx]);
 								
-								urls[idx] = urlGeneratorNew.toString();
 								// If the current column matches the URL parameter sortItem
 								if (urlGenerator.getSortItem().equals(sortItemsLookup[idx])) {
 									/* Change the icon to ascending icon if the user previously clicked
@@ -303,23 +365,23 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 											sortIcons[idx] = "fa fa-sort-numeric-asc";
 										else
 											sortIcons[idx] = "fa fa-sort-alpha-asc";
-										urls[idx] += "&sortType=DESC";
+										urlGeneratorNew.setSortType("DESC");
 									} else if (urlGenerator.getSortType().equals("DESC")){
 										if (columnTypes[idx].equals("number"))
 											sortIcons[idx] = "fa fa-sort-numeric-desc";
 										else
 											sortIcons[idx] = "fa fa-sort-alpha-desc";
-										urls[idx] += "&sortType=ASC";
+										urlGeneratorNew.setSortType("ASC");
 									}
 								} 
 								// Else if not match, use the default sort icon
 								else {
 									sortIcons[idx] = "fa fa-sort";
-									urls[idx] += "&sortType=ASC";
+									urlGeneratorNew.setSortType("ASC");
 								}
 								// Print the HTML element respectively
 								out.print("<th scope='col' class='"+sortItemsLookup[idx]+"'>");
-								out.print("<a href='"+urls[idx]+"'>");
+								out.print("<a href='"+urlGeneratorNew.toString()+"'>");
 								out.print(columnName[idx]);
 								out.print("<i class='"+sortIcons[idx]+"' aria-hidden='true'>");
 								out.print("</a>");
@@ -337,19 +399,12 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 							Integer customernumber = customer.getCustomernumber();
 							
 							out.println("<tr>");
-							// TODO Switch to Customer with parameter
-							String href = "'Customer?customernumber="+customernumber+"'";
+							String href = "'manageCustomer?customernumber="+customernumber+"'";
 
-							out.println("<td><a title='View' class='view'"+
-							" href="+href+">"+
-							"<i class='material-icons'>&#xE417;</i></a>");
-							out.println("<a class='edit' title='Edit' data-toggle='tooltip'"+
-							" href="+href+">"+
-							"<i class='material-icons'>&#xE254;</i></a>");
-							out.println("<a class='delete' title='Delete' data-toggle='tooltip'"+
-							" href="+href+">"+
-							"<i class='material-icons'>&#xE872;</i></a></td>");
-							
+							// Provide edit icons to user
+							out.println("<td><a class='edit' title='Edit' data-toggle='tooltip' href id="+href+">"+
+							"<i class='material-icons'>&#xE254;</i></a></span></td>");
+				
 							out.println("<td scope='row' class='customernumber'>" + customernumber + "</td>");
 							out.println("<td class='customername'>" + customer.getCustomername() + "</td>");
 							out.println("<td class='contactfirstname'>" + customer.getContactfirstname() + "</td>");
@@ -437,15 +492,19 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	<!-- ============================================================== -->
 	<!-- Add customer pop up -->
 	<!-- ============================================================== -->
-	<div id="addCustomerModal" class="modal fade">
+	<div id="editCustomerModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="Customer" method="post">
+				<form id="customer-form" action="${ pageContext.request.contextPath }/manageCustomer" method="post">
 					<div class="modal-header">
-						<h4 class="modal-title">Add customer</h4>
+						<h4 class="modal-title">Customer details</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
-					<div class="modal-body">					
+					<div class="modal-body">
+						<div class="form-group">
+						    <label for="customernumber">Customer no:</label>
+						    <input class="form-control" type="text" id="customernumber" name="customernumber" value="" readonly required>
+						</div>				
 						<div class="form-group">
 						    <label for="customername">Customer name:</label>
 						    <input class="form-control" type="text" id="customername" name="customername" required>
@@ -497,19 +556,35 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						<div class="form-group">
 						    <label for="creditlimit">Credit limit:</label>
 						    <input class="form-control" type="number" id="creditlimit" name="creditlimit" step="0.01" min="0" value="0">
-						</div>				
+						</div>
+						<input type="hidden" name="nOfPages" value="<%= urlGenerator.getnOfPages() %>">
+						<input type="hidden" name="currentPage" value="<%= urlGenerator.getCurrentPage() %>">
+						<input type="hidden" name="recordsPerPage" value="<%= urlGenerator.getRecordsPerPage() %>">
+						<input type="hidden" name="keyword" value="<%= urlGenerator.getKeyword() %>">
+						<input type="hidden" name="sortItem" value="<%= urlGenerator.getSortItem() %>">
+						<input type="hidden" name="sortType" value="<%= urlGenerator.getSortType() %>">
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
-						<input type="hidden" id="user_action" name="user_action" value="ADD">
+						<button id="cancel-btn" type="button" class="btn btn-default d-flex justify-content-center align-items-center" data-dismiss="modal">
+							<span>Cancel</span>
+						</button>
+						<button id="add-btn" type="submit" name="user_action" value="ADD" class="btn btn-success d-flex justify-content-center align-items-center">
+							<i class="material-icons mr-2">&#xE147;</i> <span>Add</span>
+						</button>
+						<button id="update-btn" type="submit" name="user_action" value="UPDATE" class="btn btn-success d-flex justify-content-center align-items-center">
+							<i class="material-icons mr-2">&#xE254;</i> <span>Update</span>
+						</button>
+						<button id="delete-btn" type="submit" name="user_action" value="DELETE" class="btn btn-danger d-flex justify-content-center align-items-center">
+							<i class="material-icons mr-2">&#xE872;</i>
+							<span>Delete</span>
+						</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<!-- ============================================================== -->
-	<!-- End customer pop up -->
+	<!-- End add customer pop up -->
 	<!-- ============================================================== -->
 	<!-- ============================================================== -->
 	<!-- Delete customer pop up -->
@@ -528,7 +603,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-danger" value="Delete">
+						<input id="confirm-delete-btn" type="submit" class="btn btn-danger" value="Delete">
 					</div>
 				</form>
 			</div>

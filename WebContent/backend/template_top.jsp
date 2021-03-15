@@ -9,10 +9,10 @@
 			<!-- ============================================================== -->
 			<a class="navbar-brand" href="dashboard.html"> <!-- Logo icon -->
 				<b class="logo-icon"> <!-- Dark Logo icon --> <img
-					src="backend/assets/plugins/images/logo-icon.png" alt="homepage" />
+					src="${ pageContext.request.contextPath }/backend/assets/plugins/images/logo-icon.png" alt="homepage" />
 			</b> <!--End Logo icon --> <!-- Logo text --> <span class="logo-text">
 					<!-- dark Logo text --> <img
-					src="backend/assets/plugins/images/logo-text.png" alt="homepage" />
+					src="${ pageContext.request.contextPath }/backend/assets/plugins/images/logo-text.png" alt="homepage" />
 			</span>
 			</a>
 			<!-- ============================================================== -->
@@ -43,7 +43,7 @@
 				<!-- User profile -->
 				<!-- ============================================================== -->
 				<li><a class="profile-pic" href="#"> <img
-						src="backend/assets/plugins/images/users/default_male.jpg"
+						src="${ pageContext.request.contextPath }/backend/assets/plugins/images/users/default_male.jpg"
 						alt="user-img" width="36" class="img-circle"><span
 						class="text-white font-medium">Admin</span></a></li>
 				<!-- ============================================================== -->

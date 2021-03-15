@@ -33,7 +33,7 @@ public class Redirect {
     	}
 		out.println("<SCRIPT type=\"text/javascript\">");
 		out.println("alert(\"Record has been "+message+" and url will be redirected\")");
-		out.println("window.location.assign(\""+redirectPath+"?currentPage=1&recordsPerPage=30&keyword=\")");
+		out.println("window.location.assign(\""+redirectPath+"\")");
 		out.println("</SCRIPT>");
     }
 }
