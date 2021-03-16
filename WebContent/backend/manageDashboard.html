@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Dashboard Debug</title>
+<script src="assets/js/jquery-3.5.1.min.js"></script>
+<script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/jquery.canvasjs.min.js"></script>
+<link rel="stylesheet"
+	href="assets/bootstrap/dist/css/bootstrap.min.css" />
+<script src="assets/js/selectize.js"></script>
+<link rel="stylesheet" href="assets/css/selectize/selectize.css" />
+<script>
+	$(document).ready(function() {
+		$(".search_select").selectize({
+			sortField : 'text'
+		});
+	});
+</script>
+</head>
+<body>
+	<form id="date_select">
+		<div class="p-3">
+			<div class="row">
+				<div class="col-2">
+					<select class="search_select" form="date_select" name="date_select" onchange="this.form.submit()">
+						<option value="">Search for period...</option>
+					</select>
+				</div>
+				<div class="col-10"></div>
+			</div>
+		</div>
+	</form>
+	
+</body>
+</html>
