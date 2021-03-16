@@ -181,6 +181,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				$('#customer-form').submit();	  
 			});
 
+			// temporary variables to store detached DOM elements
 			let addBtn = null;
 			let updateBtn = null;
 			let deleteBtn = null;
@@ -196,9 +197,11 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			        $.each(responseJson, function (columnName, columnValue) {
 			            $('#editCustomerModal input[name='+columnName+']').val(columnValue);
 			        });
-			        
+
+			        // Detach add button since the user only wants to update or delete customer
 			        addBtn = $("#add-btn").detach();
-			        
+
+			        // Manually trigger the customer form
 			        $('#editCustomerModal').modal('show');
 			    });
 			});
@@ -206,13 +209,21 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			$('#activate-add-btn').on('click', function(e) {
 
 			    $('#editCustomerModal input:not([type=hidden]').val("");
+
+			 	/* Detach customer number input, update button, delete button 
+			 	   since the user only wants to add new customer
+			 	*/
 			    customerNoInput = $('#editCustomerModal #customernumber').parent().detach();
 			    updateBtn = $("#update-btn").detach();
 			    deleteBtn = $("#delete-btn").detach();
 
+				// Manually trigger the customer form
 			    $('#editCustomerModal').modal('show');
 			});
 
+			/* Reattach the detached elements back to the customer form once the
+			   user closes the customer form.
+			*/
 			$('#editCustomerModal').on('hidden.bs.modal', function (e) {
 			    if (addBtn !== null) {
 			        $('#editCustomerModal .modal-footer').append(addBtn);
@@ -485,7 +496,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			<!-- End customer data table -->
 			<!-- ============================================================== -->
 			<!-- ============================================================== -->
-			<!-- Add customer form -->
+			<!-- Filter customer checkboxes -->
 			<!-- ============================================================== -->
 			<div class="col-3">
 				<div class="row d-flex flex-column">
@@ -527,11 +538,11 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				</div>
 			</div>
 			<!-- ============================================================== -->
-			<!-- End add customer form -->
+			<!-- End filter customer checkboxes -->
 			<!-- ============================================================== -->
 		</div>
 	<!-- ============================================================== -->
-	<!-- Add customer pop up -->
+	<!-- Add & edit customer pop up -->
 	<!-- ============================================================== -->
 	<div id="editCustomerModal" class="modal fade">
 		<div class="modal-dialog">
@@ -625,7 +636,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 		</div>
 	</div>
 	<!-- ============================================================== -->
-	<!-- End add customer pop up -->
+	<!-- End add & edit customer pop up -->
 	<!-- ============================================================== -->
 	<!-- ============================================================== -->
 	<!-- Delete customer pop up -->

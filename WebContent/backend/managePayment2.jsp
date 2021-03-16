@@ -173,6 +173,7 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 				$('#payment-form').submit();	  
 			});
 
+			// temporary variables to store detached DOM elements
 			let addBtn = null;
 			let updateBtn = null;
 			let deleteBtn = null;
@@ -187,21 +188,31 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 			        $.each(responseJson, function (columnName, columnValue) {
 			            $('#editPaymentModal input[name='+columnName+']').val(columnValue);
 			        });
-			        
+
+			     // Detach add button since the user only wants to update or delete payment
 			        addBtn = $("#add-btn").detach();
-			        
+
+			     	// Manually trigger the payment form
 			        $('#editPaymentModal').modal('show');
 			    });
 			});
 
 			$('#activate-add-btn').on('click', function(e) {
 			    $('#editPaymentModal input:not([type=hidden]').val("");
+
+			 	/* Detach update button, delete button since 
+			 	   the user only wants to add new payment
+			 	*/
 			    updateBtn = $("#update-btn").detach();
 			    deleteBtn = $("#delete-btn").detach();
 
+			 // Manually trigger the payment form
 			    $('#editPaymentModal').modal('show');
 			});
 
+			/* Reattach the detached elements back to the payment form once the
+			   user closes the payment form.
+			*/
 			$('#editPaymentModal').on('hidden.bs.modal', function (e) {
 			    if (addBtn !== null) {
 			        $('#editPaymentModal .modal-footer').append(addBtn);
@@ -432,7 +443,7 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 			<!-- End payment data table -->
 			<!-- ============================================================== -->
 			<!-- ============================================================== -->
-			<!-- Add payment form -->
+			<!-- Filter payment checkboxes -->
 			<!-- ============================================================== -->
 			<div class="col-3">
 				<div class="row d-flex flex-column">
@@ -456,11 +467,11 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 				</div>
 			</div>
 			<!-- ============================================================== -->
-			<!-- End add payment form -->
+			<!-- End filter payment checkboxes -->
 			<!-- ============================================================== -->
 	</div>
 	<!-- ============================================================== -->
-	<!-- Edit payment pop up -->
+	<!-- Add & edit payment pop up -->
 	<!-- ============================================================== -->
 	<div id="editPaymentModal" class="modal fade">
 		<div class="modal-dialog">
@@ -524,7 +535,7 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 		</div>
 	</div>
 	<!-- ============================================================== -->
-	<!-- End edit payment pop up -->
+	<!-- End add & edit payment pop up -->
 	<!-- ============================================================== -->
 	<!-- ============================================================== -->
 	<!-- Delete payment pop up -->

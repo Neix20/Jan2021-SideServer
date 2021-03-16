@@ -1,4 +1,4 @@
-<%--
+	<%--
 Author	  : Yap Jheng Khin
 Page info : 'Order form' section of the checkout page
 Reminder  : Please enable Internet connection to load third party libraries: Thank you
