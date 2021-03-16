@@ -21,7 +21,7 @@ import utility.UrlGenerator;
 import utility.Redirect;
 
 /**
- * Servlet implementation class CustomerServlet
+ * Servlet implementation class CustomerManagement
  * 
 * @author  Yap Jheng Khin
 * @version 1.0
@@ -50,8 +50,18 @@ public class CustomerManagementServlet extends HttpServlet {
 	    Customer customer = customerBean.findCustomerById(id);
 	    request.setAttribute("customer", customer);
 	
+		/*
+		 * Check if it is a AJAX request	
+		 * Reference: https://stackoverflow.com/a/4113258
+		 */
 		boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 		
+		/*
+		 * <JSON response>. 
+		 * Use customer bean to retrieve record based on unique identifier. The
+		 * record is then converted to JSON compatible object, before passed back
+		 * to the client.
+		 */
 		if (ajax) {
 			CustomerJson customJson = new CustomerJson(customer);
 			String json = new Gson().toJson(customJson);

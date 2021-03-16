@@ -27,9 +27,8 @@ import utility.PaymentCriteriaQuery;
 import utility.RefNoGenerator;
 
 /**
- * Session Bean implementation class PaymentSessionBean
+ * Session Bean implementation class PaymentBean
  * 
- *
  * @author  Yap Jheng Khin
  * @version 1.0
  * @since   2021-03-12 

@@ -11,6 +11,17 @@ import javax.ejb.Stateless;
 import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Form validation for billing form, customer form, and payment form.
+ * The client's request object HttpServletRequest is passed into the
+ * functions and input field values are validated. Specific error 
+ * message will passed back to the client as JSON for those values 
+ * that are not matched with the required format.
+ * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
+ */
 @Stateless
 @LocalBean
 public class FormValidationBean implements FormValidationLocal {
@@ -189,7 +200,7 @@ public class FormValidationBean implements FormValidationLocal {
 	 * entity class.
 	 * 
 	 * @param customerParameterName
-	 * @return true/false
+	 * @return true if the value is not valid and vice versa
 	 */
 	private boolean isRequired(String customerParameterName, HttpServletRequest request) {
 		/*
@@ -209,19 +220,33 @@ public class FormValidationBean implements FormValidationLocal {
 		else
 			return true;
 	}
-	
-	private boolean isExact(String parameterName, int parameterValue, int len, Map<String, String> formValidationResult) {
-		String errorMessage = "";
+			
+	/**
+	 * Check if the value is empty.
+	 * 
+	 * @param parameterName
+	 * @param parameterValue
+	 * @param formValidationResult
+	 * @return true if the value is not valid and vice versa
+	 */
+	private boolean isEmpty(String parameterName, String parameterValue, Map<String, String> formValidationResult) {
 		
-	    if (parameterValue != len) {
-	    	errorMessage = "EXACT;" + len;
-	    	formValidationResult.put(parameterName, errorMessage);
-	    	return false;
+	    if (parameterValue.equals("")) {
+	    	formValidationResult.put(parameterName, "REQUIRED");
+	    	return true;
 	    }
 
-	    return true;
+	    return false;
 	}
 	
+	/**
+	 * Check if the value only contains digit characters.
+	 * 
+	 * @param parameterName
+	 * @param parameterValue
+	 * @param formValidationResult
+	 * @return true if the value is not valid and vice versa
+	 */
 	private boolean isDigit(String parameterName, String parameterValue, Map<String, String> formValidationResult) {
 				
     	for (char character : parameterValue.toCharArray()) {
@@ -234,21 +259,20 @@ public class FormValidationBean implements FormValidationLocal {
     	return false;
 	}
 	
-	private boolean isEmpty(String parameterName, String parameterValue, Map<String, String> formValidationResult) {
-		
-	    if (parameterValue.equals("")) {
-	    	formValidationResult.put(parameterName, "REQUIRED");
-	    	return true;
-	    }
-
-	    return false;
-	}
-	
-	private boolean isTooBig(String parameterName, int parameterValue, int max_len, Map<String, String> formValidationResult) {
+	/**
+	 * Check if the magnitude of the value is less than the required minimum.
+	 * 
+	 * @param parameterName
+	 * @param parameterValue
+	 * @param min_len
+	 * @param formValidationResult
+	 * @return true if the value is not valid and vice versa
+	 */
+	private boolean isTooSmall(String parameterName, int parameterValue, int min_val, Map<String, String> formValidationResult) {
 		String errorMessage = "";
 		
-	    if (parameterValue > max_len) {
-	    	errorMessage = "TOO_BIG;" + max_len;
+	    if (parameterValue < min_val) {
+	    	errorMessage = "TOO_SMALL;" + min_val;
 	    	formValidationResult.put(parameterName, errorMessage);
 	    	return true;
 	    }
@@ -256,11 +280,20 @@ public class FormValidationBean implements FormValidationLocal {
 	    return false;
 	}
 	
-	private boolean isTooSmall(String parameterName, int parameterValue, int min_len, Map<String, String> formValidationResult) {
+	/**
+	 * Check if the magnitude of the value is more than the required maximum.
+	 * 
+	 * @param parameterName
+	 * @param parameterValue
+	 * @param max_len
+	 * @param formValidationResult
+	 * @return true if the value is not valid and vice versa
+	 */
+	private boolean isTooBig(String parameterName, int parameterValue, int max_val, Map<String, String> formValidationResult) {
 		String errorMessage = "";
 		
-	    if (parameterValue < min_len) {
-	    	errorMessage = "TOO_SMALL;" + min_len;
+	    if (parameterValue > max_val) {
+	    	errorMessage = "TOO_BIG;" + max_val;
 	    	formValidationResult.put(parameterName, errorMessage);
 	    	return true;
 	    }
@@ -268,11 +301,20 @@ public class FormValidationBean implements FormValidationLocal {
 	    return false;
 	}
 	
-	private boolean isTooLong(String parameterName, String parameterValue, int max_len, Map<String, String> formValidationResult) {
+	/**
+	 * Check if the length of the value is equivalent to the required length.
+	 * 
+	 * @param parameterName
+	 * @param parameterValue
+	 * @param len
+	 * @param formValidationResult
+	 * @return true if the value is not valid and vice versa
+	 */
+	private boolean isExact(String parameterName, int parameterValue, int len, Map<String, String> formValidationResult) {
 		String errorMessage = "";
 		
-	    if (!parameterValue.equals("") && parameterValue.length() > max_len) {
-	    	errorMessage = "TOO_LONG;" + max_len;
+	    if (parameterValue != len) {
+	    	errorMessage = "EXACT;" + len;
 	    	formValidationResult.put(parameterName, errorMessage);
 	    	return true;
 	    }
@@ -280,11 +322,41 @@ public class FormValidationBean implements FormValidationLocal {
 	    return false;
 	}
 	
+	/**
+	 * Check if the length of the value is less than the required minimum.
+	 * 
+	 * @param parameterName
+	 * @param parameterValue
+	 * @param min_len
+	 * @param formValidationResult
+	 * @return true if the value is not valid and vice versa
+	 */
 	private boolean isTooShort(String parameterName, String parameterValue, int min_len, Map<String, String> formValidationResult) {
 		String errorMessage = "";
 		
 	    if (!parameterValue.equals("") && parameterValue.length() < min_len) {
 	    	errorMessage = "TOO_SHORT;" + min_len;
+	    	formValidationResult.put(parameterName, errorMessage);
+	    	return true;
+	    }
+
+	    return false;
+	}
+	
+	/**
+	 * Check if the length of the value is more than the required maximum.
+	 * 
+	 * @param parameterName
+	 * @param parameterValue
+	 * @param max_len
+	 * @param formValidationResult
+	 * @return true if the value is not valid and vice versa
+	 */
+	private boolean isTooLong(String parameterName, String parameterValue, int max_len, Map<String, String> formValidationResult) {
+		String errorMessage = "";
+		
+	    if (!parameterValue.equals("") && parameterValue.length() > max_len) {
+	    	errorMessage = "TOO_LONG;" + max_len;
 	    	formValidationResult.put(parameterName, errorMessage);
 	    	return true;
 	    }

@@ -2,6 +2,14 @@ package domain;
 
 import java.math.BigDecimal;
 
+/**
+ * The JSON class for the customer, specifically used as
+ * the returned object of AJAX response.
+ * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
+ */
 public class CustomerJson {
 
 	private Integer customernumber;
@@ -35,6 +43,7 @@ public class CustomerJson {
 	public CustomerJson() {
 	}
 	
+	// Use custom constructor to allow convenient copy from a entity class to a JSON class
 	public CustomerJson(Customer c) {
 		setCustomernumber(c.getCustomernumber());
 		setCustomername(c.getCustomername());	

@@ -22,7 +22,7 @@ import domain.Employee;
 import utility.CustomerCriteriaQuery;
 
 /**
- * Session Bean implementation class CustomerSessionBean
+ * Session Bean implementation class CustomerBean
  * 
  * @author  Yap Jheng Khin
  * @version 1.0
@@ -186,6 +186,11 @@ public class CustomerBean implements CustomerLocal {
 		return customer;
 	}
 	
+	/**
+	 * Get the column of the entity class to retrieve 
+	 * scale, precision and length, respectively. Used
+	 * in dynamic form validation.
+	 */
 	public Column getColumnAnnotation(String columnName) {
 		Field f = null;
 		try {
@@ -198,9 +203,11 @@ public class CustomerBean implements CustomerLocal {
 		return column;
 	}
 
+	/**
+	 * Get all customers.
+	 */
 	@Override
 	public List<Customer> getAllCustomer() throws EJBException {
-		// TODO Auto-generated method stub
 		return em.createQuery("SELECT c FROM Customer c", Customer.class)
 				.getResultList();
 	}

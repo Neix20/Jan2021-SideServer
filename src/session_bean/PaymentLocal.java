@@ -8,9 +8,8 @@ import javax.ejb.Local;
 import domain.Payment;
 
 /**
- * Session Bean interface class PaymentSessionBeanLocal
+ * Session Bean interface class PaymentLocal
  * 
- *
  * @author  Yap Jheng Khin
  * @version 1.0
  * @since   2021-03-12 

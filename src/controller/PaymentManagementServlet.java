@@ -21,7 +21,7 @@ import utility.UrlGenerator;
 import utility.Redirect;
 
 /**
- * Servlet implementation class PaymentServlet
+ * Servlet implementation class PaymentManagement
  * 
  * @author  Yap Jheng Khin
  * @version 1.0
@@ -29,6 +29,7 @@ import utility.Redirect;
  */
 @WebServlet({"/managePayment", "/managepayment"})
 public class PaymentManagementServlet extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
     
     @EJB
@@ -48,8 +49,18 @@ public class PaymentManagementServlet extends HttpServlet {
 	    Payment payment = paymentBean.findPayment(customernumber, checknumber);
 	    request.setAttribute("payment", payment);
 	    
+		/*
+		 * Check if it is a AJAX request	
+		 * Reference: https://stackoverflow.com/a/4113258
+		 */
 	    boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
+		/*
+		 * <JSON response>. 
+		 * Use payment bean to retrieve record based on unique identifiers. The
+		 * record is then converted to JSON compatible object, before passed back
+		 * to the client.
+		 */
 		if (ajax) {
 			PaymentJson paymentJson = new PaymentJson(payment);
 			String json = new Gson().toJson(paymentJson);

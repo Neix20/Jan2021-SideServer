@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import domain.ShoppingCart;
 
 /**
- * Servlet implementation class Receipt
+ * Servlet implementation class ReceiptPagination
  * 
  * @author  Yap Jheng Khin
  * @version 1.0

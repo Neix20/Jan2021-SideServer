@@ -232,7 +232,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				    "bank_holder_name" : "bank holder's name", 
 				    "bank_name" : "bank name", 
 				    "bank_account_number" : "bank account number",
-				};
+			};
 			
 			// Arrow function produces syntax error, so annoying, switch to traditional method instead
 			const ERROR_MESSAGES = {

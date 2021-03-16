@@ -5,6 +5,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * The JSON class for the payment, specifically used as
+ * the returned object of AJAX response.
+ * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
+ */
 public class PaymentJson {
 
 	private String customernumber;
@@ -24,6 +32,7 @@ public class PaymentJson {
 	public PaymentJson() {
 	}
 	
+	// Use custom constructor to allow convenient copy from a entity class to a JSON class
 	public PaymentJson(Payment payment) {
 		setCustomernumber(String.valueOf(payment.getId().getCustomernumber()));
 		setChecknumber(payment.getId().getChecknumber());

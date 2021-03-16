@@ -85,9 +85,10 @@ public class CheckoutServlet extends HttpServlet {
 		boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
 		/*
-		 * Handle ajax (JSON or XML) response. Use customer form validation service to produce
-		 * JSON. The JSON is then passed back to the client to display the relevant form error 
-		 * message.
+		 * <JSON response>. 
+		 * Use customer form validation service to produce
+		 * JSON. The JSON is then passed back to the client 
+		 * to display the relevant form error message.
 		 */
 	    if (ajax) {	    	
 	    	Map<String, String> formValidationResult = formValidator.validateCustomerForm(request);

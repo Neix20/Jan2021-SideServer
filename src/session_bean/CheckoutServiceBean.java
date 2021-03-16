@@ -16,7 +16,7 @@ import domain.ShoppingCart;
 import domain.ShoppingCartItem;
 
 /**
- * Fascade implementation class PurchaseServiceProvider
+ * Fascade implementation class CheckoutServiceBean. 
  * PurchaseServiceProvider delegates client requests to appropriate subsystems, some
  * of the subsystems are payment system, order placing system, inventory system, and
  * so on.

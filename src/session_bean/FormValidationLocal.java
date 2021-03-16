@@ -5,6 +5,13 @@ import java.util.Map;
 import javax.ejb.Local;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Session Bean interface class FormValidationLocal
+ * 
+ * @author  Yap Jheng Khin
+ * @version 1.0
+ * @since   2021-03-12 
+ */
 @Local
 public interface FormValidationLocal {
 	public Map<String, String> validateCustomerForm(HttpServletRequest request);

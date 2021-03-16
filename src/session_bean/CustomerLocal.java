@@ -9,9 +9,8 @@ import javax.persistence.Column;
 import domain.Customer;
 
 /**
- * Session Bean interface class CustomerSessionBeanLocal
+ * Session Bean interface class CustomerLocal
  * 
- *
  * @author  Yap Jheng Khin
  * @version 1.0
  * @since   2021-03-12 

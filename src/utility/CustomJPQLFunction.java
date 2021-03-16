@@ -6,9 +6,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 
 /**
- * Class for the custom CONCAT function that allows concatenation 
- * between string and non-string attributes, which is not supported 
- * by the default CONCAT function.
+ * Class for the custom search function that allows searching 
+ * between string and non-string attributes, which is not
+ * possible if NamedQuery or NamedNative Query is used.
  * 
  * @author  Yap Jheng Khin
  * @version 1.0
@@ -22,9 +22,9 @@ public class CustomJPQLFunction {
 	}
 	
     /**
-     * Concatenate multiple @parameter expressions together into one expression, 
-     * separated by the @parameter delimiter.
-     */    
+     * Concatenate multiple LIKE expressions together into one expression, 
+     * separated by the OR operator.
+     */
     public static Expression<Boolean> constructSearch(String keyword, CriteriaBuilder cb, List<Expression<String>> expressions) {
         Expression<Boolean> result = null;
         for (int i = 0; i < expressions.size(); i++) {

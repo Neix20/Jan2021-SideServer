@@ -92,6 +92,7 @@ public class UrlGenerator {
 		this.sortType = sortType;
 	}
 	
+	// Combine all attributes into a working URL (with/without recordsPerPage)
 	public String toCustomURL(boolean recordPerPageFlag) {
 		StringBuilder url = new StringBuilder();
 		
