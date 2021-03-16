@@ -210,42 +210,6 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 
 			$('#required_date').attr('min', today);
 
-			// Lookup table to produce custom form error message
-			const mapIdToColumnName = {
-				    "customername" : "customer's name",
-				    "contactfirstname" : "contact's first name",
-				    "contactlastname" : "contact's last name",
-				    "phone" : "phone",
-				    "email" : "email",
-				    "addressline1" : "address line 1",
-				    "addressline2" : "address line 2",
-				    "city" : "city",
-				    "state" : "state",
-				    "postal code" : "postal code",
-				    "country" : "country",
-				    "sales_person_email": "sales person's email",
-				    "required_date" : "required date",
-				    "card_holder_name" : "card holder's name", 
-				    "card_number" : "card number",
-				    "card_month" : "card month", 
-				    "card_year" : "card year", 
-				    "card_cvv" : "card cvv",
-				    "bank_holder_name" : "bank holder's name", 
-				    "bank_name" : "bank name", 
-				    "bank_account_number" : "bank account number",
-			};
-			
-			// Arrow function produces syntax error
-			const ERROR_MESSAGES = {
-				"REQUIRED" : function (columnName) { return "Please provide a "+columnName+"."},
-				"DIGIT_ONLY": function (columnName) { return "Only digits are allowed for "+columnName+"."},
-				"TOO_SHORT": function (columnName, minChar) { return "Minimum number of characters allowed for "+columnName+" is "+minChar+"."},
-				"TOO_LONG": function (columnName, maxChar) { return "Maximum number of characters allowed for "+columnName+" is "+maxChar+"."},
-				"EXACT": function (columnName, exactChar) { return "The exact number of characters allowed for "+columnName+" is "+exactChar+"."},
-				"TOO_SMALL": function (columnName, minVal) { return "Minimum value allowed for "+columnName+" is "+minVal+"."},
-				"TOO_BIG": function (columnName, maxVal) { return "Maximum value allowed for "+columnName+" is "+maxVal+"."},
-			}
-
 			// AJAX POST request to get form validation results form the server
 			$(".needs-validation").on("submit", function(event) {
 
@@ -294,26 +258,8 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				        // Locate HTML DOM element with ID "inputIdentifier".
 				        let $select = $("#"+inputIdentifier);
 				        let $parent = $select.parent();						
-				        let columnName = mapIdToColumnName[inputIdentifier];
-				        let errorMessageDisplay;
-				        // Construct the error message
-				        switch (errorMessage) {
-				        case "REQUIRED":
-				        case "DIGIT_ONLY":
-				            errorMessageDisplay = ERROR_MESSAGES[errorMessage](columnName);
-				            break;
-				        //case "TOO_SHORT":
-				        //case "TOO_LONG":
-				        //case "EXACT":
-				        //case "TOO_SMALL":
-				        //case "TOO_BIG":
-				        default:
-					        let errorMessage2, numCharAllowed;
-				            [errorMessage2, numCharAllowed] = errorMessage.split(";");
-				            errorMessageDisplay = ERROR_MESSAGES[errorMessage2](columnName, numCharAllowed);
-				        }
 				        // Append the constructed error message in the parent div of the wrong input
-				        $parent.append("<div class='invalid-feedback'>"+errorMessageDisplay+"</div>");
+				        $parent.append("<div class='invalid-feedback'>"+errorMessage+"</div>");
 				    });
 				});
 			});

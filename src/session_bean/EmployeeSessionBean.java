@@ -31,7 +31,9 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
     public Employee findEmployee(String employee_id) throws EJBException {
 		TypedQuery<Employee> q = em.createNamedQuery("Employee.findbyId", Employee.class);
 		q.setParameter("employee_id", Integer.valueOf(employee_id));
-		return q.getSingleResult();
+		List<Employee> employees = q.getResultList();
+		if (employees.size() == 0) return null;
+		return employees.get(0);
     }
     
     @Override

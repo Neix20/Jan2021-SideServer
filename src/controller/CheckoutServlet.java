@@ -91,7 +91,7 @@ public class CheckoutServlet extends HttpServlet {
 		 * to display the relevant form error message.
 		 */
 	    if (ajax) {	    	
-	    	Map<String, String> formValidationResult = formValidator.validateCustomerForm(request);
+	    	Map<String, String> formValidationResult = formValidator.validateCheckoutForm(request);
 	        String json = new Gson().toJson(formValidationResult);
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");

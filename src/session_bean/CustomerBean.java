@@ -16,6 +16,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.servlet.http.HttpServletRequest;
 
 import domain.Customer;
 import domain.Employee;
@@ -100,6 +101,20 @@ public class CustomerBean implements CustomerLocal {
     }
 
     @Override
+    public Integer addCustomer(HttpServletRequest request) throws EJBException {
+		Customer customer = new Customer();
+		customer = setValues(request, customer);	
+		
+		// Return the primary key of the new customer
+		TypedQuery<Integer> query = em.createNamedQuery("Customer.locateNextPK", Integer.class);
+		Integer customernumber = (Integer) query.getSingleResult();
+		
+		em.persist(customer);
+		
+		return customernumber;
+    }
+    
+    @Override
     public Integer addCustomer(String[] s) throws EJBException {
 		Customer customer = new Customer();
 		customer = setValues(s, customer);	
@@ -114,11 +129,26 @@ public class CustomerBean implements CustomerLocal {
     }
     
     @Override
+    public void updateCustomer(HttpServletRequest request) throws EJBException {
+    	String customernumber = request.getParameter("customernumber");
+    	Customer customer = findCustomerById(customernumber);
+		customer = setValues(request, customer);
+		em.merge(customer);
+    }
+    
+    @Override
     public void updateCustomer(String[] s, String customernumber) throws EJBException {
 		Customer customer = findCustomerById(customernumber);
 		customer = setValues(s, customer);
 		em.merge(customer);
     }
+	
+	@Override
+	public void deleteCustomer(HttpServletRequest request) throws EJBException {
+		String customernumber = request.getParameter("customernumber");
+		Customer customer = findCustomerById(customernumber);
+		em.remove(customer);
+	}
 	
 	@Override
 	public void deleteCustomer(String customernumber) throws EJBException {
@@ -127,6 +157,67 @@ public class CustomerBean implements CustomerLocal {
 	}
 		
     /**
+     * Set all the attributes of the customer based on the 
+     * @param attributes passed from the servlet.
+     */
+	private Customer setValues(HttpServletRequest request, Customer customer) {
+		
+		// Get the attributes
+        String customername = request.getParameter("customername");
+        String contactfirstname = request.getParameter("contactfirstname");
+        String contactlastname = request.getParameter("contactlastname");
+        String phone = request.getParameter("phone");
+        String email = request.getParameter("email");
+        String addressline1 = request.getParameter("addressline1");
+        String addressline2 = request.getParameter("addressline2");
+        String city = request.getParameter("city");
+        String state = request.getParameter("state");
+        String postalcode = request.getParameter("postalcode");
+        String country = request.getParameter("country");
+        String salesrepemployeenumber = request.getParameter("salesrepemployeenumber");
+        String creditlimitStr = request.getParameter("creditlimit");
+		/*
+		 * Get the scale and precision from the credit limit's
+		 * @Column annotation. 
+		 * Scale and precision are used to update the value properly.
+		 */
+		int scale = 0;
+		int precision = 0;	
+		Column creditlimitColumn = getColumnAnnotation("creditlimit");
+		if (creditlimitColumn != null){
+			precision = creditlimitColumn.precision();
+			scale = creditlimitColumn.scale();
+		}
+		MathContext creditlimitMc = new MathContext(precision);
+		BigDecimal creditlimit = null;
+		if (!creditlimitStr.equals("")) {
+			creditlimit = new BigDecimal(creditlimitStr, creditlimitMc);
+			creditlimit.setScale(scale, RoundingMode.HALF_UP);
+		}
+		
+		Employee salesrepemployee = null;
+		if (!salesrepemployeenumber.equals(""))
+			salesrepemployee = empBean.findEmployee(salesrepemployeenumber);
+		
+		// Set the attributes
+		customer.setCustomername(customername);
+		customer.setContactfirstname(contactfirstname);
+		customer.setContactlastname(contactlastname);
+		customer.setPhone(phone);
+		customer.setEmail(email);
+		customer.setAddressline1(addressline1);
+		customer.setAddressline2(addressline2);
+		customer.setCity(city);
+		customer.setState(state);
+		customer.setPostalcode(postalcode);
+		customer.setCountry(country);
+		customer.setCreditlimit(creditlimit);
+		customer.setEmployee(salesrepemployee);
+		
+		return customer;
+	}
+	
+	/**
      * Set all the attributes of the customer based on the 
      * @param attributes passed from the servlet.
      */
@@ -159,10 +250,12 @@ public class CustomerBean implements CustomerLocal {
 			precision = creditlimitColumn.precision();
 			scale = creditlimitColumn.scale();
 		}
-		
 		MathContext creditlimitMc = new MathContext(precision);
-		BigDecimal creditlimit = new BigDecimal(attributes[12], creditlimitMc);
-		creditlimit.setScale(scale, RoundingMode.HALF_UP);
+		BigDecimal creditlimit = null;
+		if (!attributes[12].equals("")) {
+			creditlimit = new BigDecimal(attributes[12], creditlimitMc);
+			creditlimit.setScale(scale, RoundingMode.HALF_UP);
+		}
 		
 		Employee salesrepemployee = null;
 		if (!salesrepemployeenumber.equals(""))

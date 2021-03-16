@@ -178,7 +178,7 @@ public class CheckoutServiceBean implements CheckoutServiceLocal {
 				customerLimit = String.format("%.2f", totalOrderAmount.doubleValue());
 			}
 		}
-		
+
 		// Package customer information into a single array
 		String[] customerAttributes = {
 				customerName,

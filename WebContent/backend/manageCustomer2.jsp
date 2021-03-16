@@ -9,6 +9,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 <%@page import="domain.Customer" %>
 <%@page import="domain.Employee" %>
 <%@page import="utility.UrlGenerator" %>
+<%@page import="java.math.BigDecimal" %>
 <%UrlGenerator urlGenerator = (UrlGenerator) request.getAttribute("urlGenerator");%>
 <!DOCTYPE html>
 <html lang="en">
@@ -169,13 +170,13 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			}
 
 			// when the submit button in the modal is clicked, submit the form
-			$('#confirm-delete-btn').click(function(){
+			$('#editCustomerModal .modal-footer button').click(function(){
 
 			    /* when the submit button in the modal is clicked, submit the form */
 			    $('#customer-form').append($('<input>', {
 			            type: 'hidden',
 			            name: 'user_action',
-			            value: 'DELETE'
+			            value: $(this).val()
 			    }));
 				
 				$('#customer-form').submit();	  
@@ -241,6 +242,60 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			        $('#editCustomerModal .modal-body').prepend(customerNoInput);
 			        customerNoInput = null;
 			    }
+			});
+			
+			// AJAX POST request to get form validation results form the server
+			$(".needs-validation").on("submit", function(event) {
+
+				event.preventDefault();
+				
+				let $form = $(".needs-validation");
+				let returnResponseJSON;
+				let inputIdentifiers = []
+
+				$.post($form.attr("action"), $form.serialize(), function(responseJSON) {
+
+					/* If the server returns an empty object, it means that all inputs are
+					   are valid. Straight away submit the checkout form.
+					*/
+					if (jQuery.isEmptyObject(responseJSON)) {
+					    $form.off("submit");
+					    $form.submit();
+					}
+				    
+				    returnResponseJSON = responseJSON;
+
+				    let wrongInputs = Object.keys(responseJSON);
+				    $customSelector = $('#editCustomerModal').find('select,input:not([type=radio],[type=button],[type=submit],[type=hidden])');
+
+					/* Assign "is-valid" class to correct inputs and "is-invalid" class to
+					   wrong inputs, respectively
+					*/
+					$customSelector.each(function(index, element){
+				        let $elem = $(element);
+				        let $parent = $elem.parent();
+				        /* Find all child elements with tag name "option" and remove them 
+				         * (just to prevent duplicate options when button is pressed again).
+				         */
+				        $elem.removeClass("is-valid is-invalid");
+				        $parent.children(".invalid-feedback").remove();
+				        if (!wrongInputs.includes($elem.attr("id"))) {
+				            $elem.addClass("is-valid");
+				        } else {
+				            $elem.addClass("is-invalid")
+				        }
+				    });
+				    
+				    // Iterate over the JSON object.                      
+				    $.each(responseJSON, function(inputIdentifier, errorMessage) {
+				        inputIdentifiers.push(inputIdentifier);
+				        // Locate HTML DOM element with ID "inputIdentifier".
+				        let $select = $("#editCustomerModal #"+inputIdentifier);
+				        let $parent = $select.parent();
+				        // Append the constructed error message in the parent div of the wrong input
+				        $parent.append("<div class='invalid-feedback'>"+errorMessage+"</div>");
+				    });
+				});
 			});
 		});
 	</script>
@@ -477,7 +532,14 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 								salespersonrepHTML = String.valueOf(customer.getEmployee().getEmployeenumber());
 							}	
 							out.println("<td class='salesrepresentativeno'>" + salespersonrepHTML + "</td>");
-							out.println("<td class='creditlimit'>" + customer.getCreditlimit().doubleValue() + "</td>");
+							BigDecimal creditLimit = customer.getCreditlimit();
+							String creditLimitHTML = "";
+							if (creditLimit == null) {
+								creditLimitHTML = "None";
+							} else {
+								creditLimitHTML = customer.getCreditlimit().toString();
+							}
+							out.println("<td class='creditlimit'>" + creditLimitHTML + "</td>");
                             out.println("</tr>");
 						}
 						} else {
@@ -547,7 +609,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	<div id="editCustomerModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form id="customer-form" action="${ pageContext.request.contextPath }/manageCustomer" method="post">
+				<form id="customer-form" action="${ pageContext.request.contextPath }/manageCustomer" class="needs-validation" method="post" novalidate>
 					<div class="modal-header">
 						<h4 class="modal-title">Customer details</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -620,13 +682,13 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						<button id="cancel-btn" type="button" class="btn btn-default d-flex justify-content-center align-items-center" data-dismiss="modal">
 							<span>Cancel</span>
 						</button>
-						<button id="add-btn" type="submit" name="user_action" value="ADD" class="btn btn-success d-flex justify-content-center align-items-center">
+						<button id="add-btn" type="button" name="user_action" value="ADD" class="btn btn-success d-flex justify-content-center align-items-center">
 							<i class="material-icons mr-2">&#xE147;</i> <span>Add</span>
 						</button>
-						<button id="update-btn" type="submit" name="user_action" value="UPDATE" class="btn btn-success d-flex justify-content-center align-items-center">
+						<button id="update-btn" type="button" name="user_action" value="UPDATE" class="btn btn-success d-flex justify-content-center align-items-center">
 							<i class="material-icons mr-2">&#xE254;</i> <span>Update</span>
 						</button>
-						<button id="delete-btn" type="submit" name="user_action" value="DELETE" class="btn btn-danger d-flex justify-content-center align-items-center">
+						<button id="delete-btn" type="button" name="user_action" value="DELETE" class="btn btn-danger d-flex justify-content-center align-items-center">
 							<i class="material-icons mr-2">&#xE872;</i>
 							<span>Delete</span>
 						</button>
