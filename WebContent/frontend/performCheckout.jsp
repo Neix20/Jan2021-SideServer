@@ -97,7 +97,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 								<!-- ============================================================== -->
 								<!-- Review order -->
 								<!-- ============================================================== -->
-								<jsp:include page="review_order.jsp" /> 
+								<jsp:include page="reviewOrder.jsp" /> 
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
@@ -118,7 +118,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 								<!-- ============================================================== -->
 								<!-- Order form (a.k.a. customer information) -->
 								<!-- ============================================================== -->
-								<jsp:include page="order_form.jsp" />  
+								<jsp:include page="fillBillingForm.jsp" />  
 								<div class="panel panel-default">
 									<div class="panel-heading">
 										<h4 class="panel-title">
@@ -140,7 +140,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 								<!-- ============================================================== -->
 								<!-- Payment form -->
 								<!-- ============================================================== -->
-								<jsp:include page="payment.jsp" />
+								<jsp:include page="performPayment.jsp" />
 								<!-- ============================================================== -->
 								<!-- End payment form -->
 								<!-- ============================================================== -->
@@ -210,6 +210,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 
 			$('#required_date').attr('min', today);
 
+			// Lookup table to produce custom form error message
 			const mapIdToColumnName = {
 				    "customername" : "customer's name",
 				    "contactfirstname" : "contact's first name",
@@ -232,9 +233,9 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				    "bank_holder_name" : "bank holder's name", 
 				    "bank_name" : "bank name", 
 				    "bank_account_number" : "bank account number",
-				};
+			};
 			
-			// Arrow function produces syntax error, so annoying, switch to traditional method instead
+			// Arrow function produces syntax error
 			const ERROR_MESSAGES = {
 				"REQUIRED" : function (columnName) { return "Please provide a "+columnName+"."},
 				"DIGIT_ONLY": function (columnName) { return "Only digits are allowed for "+columnName+"."},
@@ -245,6 +246,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				"TOO_BIG": function (columnName, maxVal) { return "Maximum value allowed for "+columnName+" is "+maxVal+"."},
 			}
 
+			// AJAX POST request to get form validation results form the server
 			$(".needs-validation").on("submit", function(event) {
 
 				event.preventDefault();
@@ -255,17 +257,22 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 
 				$.post($form.attr("action"), $form.serialize(), function(responseJSON) {
 
+					/* If the server returns an empty object, it means that all inputs are
+					   are valid. Straight away submit the checkout form.
+					*/
 					if (jQuery.isEmptyObject(responseJSON)) {
 					    $form.off("submit");
 					    $form.submit();
 					}
 				    
-				    console.log(responseJSON);
 				    returnResponseJSON = responseJSON;
-				    
+
 				    let wrongInputs = Object.keys(responseJSON);
 				    let customSelector = ".needs-validation select,input:not([type=radio],[type=button],[type=submit],[type=hidden])";
 
+					/* Assign "is-valid" class to correct inputs and "is-invalid" class to
+					   wrong inputs, respectively
+					*/
 				    $(customSelector).each(function(index, element){
 				        let $elem = $(element);
 				        let $parent = $elem.parent();
@@ -284,7 +291,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				    // Iterate over the JSON object.                      
 				    $.each(responseJSON, function(inputIdentifier, errorMessage) {
 				        inputIdentifiers.push(inputIdentifier);
-				         // Locate HTML DOM element with ID "someselect".
+				        // Locate HTML DOM element with ID "inputIdentifier".
 				        let $select = $("#"+inputIdentifier);
 				        let $parent = $select.parent();						
 				        let columnName = mapIdToColumnName[inputIdentifier];
@@ -305,6 +312,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				            [errorMessage2, numCharAllowed] = errorMessage.split(";");
 				            errorMessageDisplay = ERROR_MESSAGES[errorMessage2](columnName, numCharAllowed);
 				        }
+				        // Append the constructed error message in the parent div of the wrong input
 				        $parent.append("<div class='invalid-feedback'>"+errorMessageDisplay+"</div>");
 				    });
 				});

@@ -7,17 +7,17 @@
 	<title>Backend Header</title>
 	<link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
 	<!-- Favicon icon -->
-	<link rel="icon" type="image/png" sizes="16x16" href="assets/plugins/images/favicon.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="${ pageContext.request.contextPath }/backend/assets/plugins/images/favicon.png">
 	<!-- Custom CSS -->
-	<link href="assets/css/style.min.css" rel="stylesheet">
+	<link href="${ pageContext.request.contextPath }/backend/assets/css/style.min.css" rel="stylesheet">
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
-	<link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css" />
-	<script src="assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
+	<link rel="stylesheet" href="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/css/bootstrap.min.css" />
+	<script src="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
 </head>
 <body>
 	<header class="topbar" data-navbarbg="skin5">
@@ -29,11 +29,11 @@
 	            <a class="navbar-brand" href="dashboard.html">
 	                <!-- Logo icon -->
 	                <b class="logo-icon">
-	                    <!-- Dark Logo icon --> <img src="assets/plugins/images/logo-icon.png" alt="homepage" />
+	                    <!-- Dark Logo icon --> <img src="${ pageContext.request.contextPath }/backend/assets/plugins/images/logo-icon.png" alt="homepage" />
 	                </b>
 	                <!--End Logo icon -->
 	                <!-- Logo text --> <span class="logo-text">
-	                    <!-- dark Logo text --> <img src="assets/plugins/images/logo-text.png" alt="homepage" />
+	                    <!-- dark Logo text --> <img src="${ pageContext.request.contextPath }/backend/assets/plugins/images/logo-text.png" alt="homepage" />
 	                </span>
 	            </a>
 	            <!-- ============================================================== -->
@@ -60,7 +60,7 @@
 	                <!-- ============================================================== -->
 	                <!-- User profile-->
 	                <!-- ============================================================== -->
-	                <li><a class="profile-pic" href="#"> <img src="assets/plugins/images/users/default_male.jpg"
+	                <li><a class="profile-pic" href="#"> <img src="${ pageContext.request.contextPath }/backend/assets/plugins/images/users/default_male.jpg"
 	                            alt="user-img" width="36" class="img-circle"><span
 	                            class="text-white font-medium">Admin</span></a></li>
 	                <!-- ============================================================== -->
@@ -100,10 +100,10 @@
 	                        href="manageProduct.html" aria-expanded="false"><i class="far fa-list-alt"
 	                            aria-hidden="true"></i><span class="hide-menu">Order</span></a></li>
 	                <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
-	                        href="${pageContext.request.contextPath}/backend/CustomerPagination" aria-expanded="false"><i class="fas fa-users"
+	                        href="${pageContext.request.contextPath}/Customer" aria-expanded="false"><i class="fas fa-users"
 	                            aria-hidden="true"></i><span class="hide-menu">Customer</span></a></li>
 	                <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
-	                        href="${pageContext.request.contextPath}/backend/PaymentPagination" aria-expanded="false"><i class="fas fa-credit-card"
+	                        href="${pageContext.request.contextPath}/Payment" aria-expanded="false"><i class="fas fa-credit-card"
 	                            aria-hidden="true"></i><span class="hide-menu">Payment</span></a></li>
 	            </ul>
 	

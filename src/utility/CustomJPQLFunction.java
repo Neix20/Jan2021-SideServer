@@ -6,9 +6,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 
 /**
- * Class for the custom CONCAT function that allows concatenation 
- * between string and non-string attributes, which is not supported 
- * by the default CONCAT function.
+ * Class for the custom search function that allows searching 
+ * between string and non-string attributes, which is not
+ * possible if NamedQuery or NamedNative Query is used.
  * 
  * @author  Yap Jheng Khin
  * @version 1.0
@@ -22,25 +22,15 @@ public class CustomJPQLFunction {
 	}
 	
     /**
-     * Concatenate multiple @parameter expressions together into one expression, 
-     * separated by the @parameter delimiter.
-     * Reference: https://stackoverflow.com/a/33916872
+     * Concatenate multiple LIKE expressions together into one expression, 
+     * separated by the OR operator.
      */
-    public static Expression<String> concat(CriteriaBuilder cb, String delimiter, List<Expression<String>> expressions) {
-        Expression<String> result = null;
+    public static Expression<Boolean> constructSearch(String keyword, CriteriaBuilder cb, List<Expression<String>> expressions) {
+        Expression<Boolean> result = null;
         for (int i = 0; i < expressions.size(); i++) {
-            final boolean first = i == 0, last = i == (expressions.size() - 1);
-            final Expression<String> expression = expressions.get(i);
-            if (first && last) {
-                result = expression;
-            } else if (first) {
-                result = cb.concat(expression, delimiter);
-            } else {
-                result = cb.concat(result, expression);
-                if (!last) {
-                    result = cb.concat(result, delimiter);
-                }
-            }
+        	if (i == 0)
+        		result = cb.like(expressions.get(i), "%"+keyword+"%");
+        	result = cb.or(result, cb.like(expressions.get(i), "%"+keyword+"%"));
         }
         return result;
     }

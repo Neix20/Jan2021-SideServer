@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import domain.Payment;
-import session_bean.PaymentSessionBeanLocal;
+import session_bean.PaymentLocal;
 import utility.PaginationRequestProcessor;
 import utility.UrlGenerator;
 
@@ -24,12 +24,12 @@ import utility.UrlGenerator;
  * @version 1.0
  * @since   2021-03-12 
  */
-@WebServlet({"backend/PaymentPagination", "backend/paymentpagination"})
+@WebServlet({"/Payment", "/payment"})
 public class PaymentPaginationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
     @EJB
-    private PaymentSessionBeanLocal paymentBean;
+    private PaymentLocal paymentBean;
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -60,7 +60,6 @@ public class PaymentPaginationServlet extends HttpServlet {
 		try {
 		    int rows = paymentBean.getNumberOfRows(keyword);
 		    nOfPages = rows / recordsPerPage;
-		    System.out.println("At servlet" + nOfPages);
 
 		    if (rows % recordsPerPage != 0) {
 		    	nOfPages++;
@@ -81,12 +80,13 @@ public class PaymentPaginationServlet extends HttpServlet {
 		/* Set the URL to the latest value of request's parameters 
 		 * so that the user's preference can be saved between requests.
 		 */
-		String absoluteLink = request.getContextPath();		
+		String absoluteLink = request.getContextPath();
+		absoluteLink += "/Payment";
 		UrlGenerator urlGenerator = new UrlGenerator(absoluteLink, nOfPages, currentPage, 
 													 recordsPerPage, keyword, sortItem, sortType);
 		request.setAttribute("urlGenerator", urlGenerator);
 	
-		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_payment.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("backend/managePayment.jsp");
 		dispatcher.forward(request, response);
 	}
 

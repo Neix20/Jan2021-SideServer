@@ -8,15 +8,14 @@ import javax.ejb.Local;
 import domain.Payment;
 
 /**
- * Session Bean interface class PaymentSessionBeanLocal
+ * Session Bean interface class PaymentLocal
  * 
- *
  * @author  Yap Jheng Khin
  * @version 1.0
  * @since   2021-03-12 
  */
 @Local
-public interface PaymentSessionBeanLocal {
+public interface PaymentLocal {
 	public Payment findPayment(String customernumber, String checknumber) throws EJBException;
 	public List<Payment> readPayment(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException;
 	public int getNumberOfRows(String keyword) throws EJBException;

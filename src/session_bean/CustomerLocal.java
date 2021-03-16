@@ -9,15 +9,14 @@ import javax.persistence.Column;
 import domain.Customer;
 
 /**
- * Session Bean interface class CustomerSessionBeanLocal
+ * Session Bean interface class CustomerLocal
  * 
- *
  * @author  Yap Jheng Khin
  * @version 1.0
  * @since   2021-03-12 
  */
 @Local
-public interface CustomerSessionBeanLocal {
+public interface CustomerLocal {
 	public Customer findCustomerById(String customernumber) throws EJBException;
 	public Customer findCustomerByEmail(String email) throws EJBException;
 	public List<Customer> readCustomer(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException;

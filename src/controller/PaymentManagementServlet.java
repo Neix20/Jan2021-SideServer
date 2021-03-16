@@ -5,34 +5,37 @@ import java.io.PrintWriter;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import domain.Payment;
-import session_bean.PaymentSessionBeanLocal;
+import domain.PaymentJson;
+import session_bean.PaymentLocal;
 import utility.PaginationRequestProcessor;
 import utility.UrlGenerator;
 import utility.Redirect;
 
 /**
- * Servlet implementation class PaymentServlet
+ * Servlet implementation class PaymentManagement
  * 
  * @author  Yap Jheng Khin
  * @version 1.0
  * @since   2021-03-12 
  */
-@WebServlet({"backend/Payment", "backend/payment"})
-public class PaymentServlet extends HttpServlet {
+@WebServlet({"/managePayment", "/managepayment"})
+public class PaymentManagementServlet extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
     
     @EJB
-    private PaymentSessionBeanLocal paymentBean;
+    private PaymentLocal paymentBean;
 	
-    public PaymentServlet() {
+    public PaymentManagementServlet() {
         super();
     }
 
@@ -43,17 +46,29 @@ public class PaymentServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String customernumber = request.getParameter("customernumber");
 		String checknumber = request.getParameter("checknumber");
+	    Payment payment = paymentBean.findPayment(customernumber, checknumber);
+	    request.setAttribute("payment", payment);
+	    
+		/*
+		 * Check if it is a AJAX request	
+		 * Reference: https://stackoverflow.com/a/4113258
+		 */
+	    boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
 
-		try {
-			//TODO Handle special case if customernumber and checknumber not found?
-		    Payment payment = paymentBean.findPayment(customernumber, checknumber);
-		    request.setAttribute("payment", payment);
-	
-		    //TODO Remove forward, since we are going to use AJAX, forward is not needed
-		    RequestDispatcher req = request.getRequestDispatcher("update_payment.jsp");
-		    req.forward(request, response);
-		} catch (EJBException ex) {
-			throw ex;
+		/*
+		 * <JSON response>. 
+		 * Use payment bean to retrieve record based on unique identifiers. The
+		 * record is then converted to JSON compatible object, before passed back
+		 * to the client.
+		 */
+		if (ajax) {
+			PaymentJson paymentJson = new PaymentJson(payment);
+			String json = new Gson().toJson(paymentJson);
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        response.getWriter().write(json);
+		} else {
+			//TODO 404 Not found
 		}
 	}
 
@@ -102,7 +117,8 @@ public class PaymentServlet extends HttpServlet {
 		String sortItem = requestProcessor.getSortItem();
 		String sortType = requestProcessor.getSortType();
 		
-		String absoluteLink = request.getContextPath();		
+		String absoluteLink = request.getContextPath();
+		absoluteLink += "/Payment";
 		UrlGenerator urlGenerator = new UrlGenerator(absoluteLink, nOfPages, currentPage, 
 													 recordsPerPage, keyword, sortItem, sortType);
 		request.setAttribute("urlGenerator", urlGenerator);

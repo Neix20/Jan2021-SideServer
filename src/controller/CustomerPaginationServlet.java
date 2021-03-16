@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import domain.Customer;
-import session_bean.CustomerSessionBeanLocal;
+import session_bean.CustomerLocal;
 import utility.PaginationRequestProcessor;
 import utility.UrlGenerator;
 
@@ -24,13 +24,13 @@ import utility.UrlGenerator;
  * @version 1.0
  * @since   2021-03-12 
  */
-@WebServlet(urlPatterns = {"backend/CustomerPagination", "backend/customerpagination"})
+@WebServlet(urlPatterns = {"/Customer", "/customer"})
 public class CustomerPaginationServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
     @EJB
-    private CustomerSessionBeanLocal customerBean;
+    private CustomerLocal customerBean;
 
     public CustomerPaginationServlet() {
 	super();
@@ -60,7 +60,6 @@ public class CustomerPaginationServlet extends HttpServlet {
 	
 		    int rows = customerBean.getNumberOfRows(keyword);
 		    nOfPages = rows / recordsPerPage;
-		    System.out.println("At servlet" + nOfPages);
 	
 		    if (rows % recordsPerPage != 0) {
 		    	nOfPages++;
@@ -72,7 +71,6 @@ public class CustomerPaginationServlet extends HttpServlet {
 	
 		    List<Customer> lists = customerBean.readCustomer(currentPage, recordsPerPage, keyword, sortItem, sortType);
 		    request.setAttribute("customers", lists);
-	
 		} catch (EJBException ex) {
 			throw ex;
 		}
@@ -80,12 +78,13 @@ public class CustomerPaginationServlet extends HttpServlet {
 		/* Set the URL to the latest value of request's parameters 
 		 * so that the user's preference can be saved between requests.
 		 */
-		String absoluteLink = request.getContextPath();		
+		String absoluteLink = request.getContextPath();
+		absoluteLink += "/Customer";
 		UrlGenerator urlGenerator = new UrlGenerator(absoluteLink, nOfPages, currentPage, 
 													 recordsPerPage, keyword, sortItem, sortType);
 		request.setAttribute("urlGenerator", urlGenerator);
 	
-		RequestDispatcher dispatcher = request.getRequestDispatcher("manage_customer.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("backend/manageCustomer.jsp");
 		dispatcher.forward(request, response);
     }
 

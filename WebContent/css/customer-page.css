@@ -219,3 +219,7 @@ table.dataTable thead .sorting_desc_disabled:before {
 a.page-link {
 	color: #566787 !important;
 }
+
+.hide-btn {
+	display: none !important;
+}

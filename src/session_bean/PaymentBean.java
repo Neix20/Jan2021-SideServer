@@ -27,27 +27,26 @@ import utility.PaymentCriteriaQuery;
 import utility.RefNoGenerator;
 
 /**
- * Session Bean implementation class PaymentSessionBean
+ * Session Bean implementation class PaymentBean
  * 
- *
  * @author  Yap Jheng Khin
  * @version 1.0
  * @since   2021-03-12 
  */
 @Stateless
 @LocalBean
-public class PaymentSessionBean implements PaymentSessionBeanLocal {
+public class PaymentBean implements PaymentLocal {
 
     @PersistenceContext(unitName = "Jan2021-SideServer")
     EntityManager em;
     
     @EJB
-    private CustomerSessionBeanLocal customerBean;
+    private CustomerLocal customerBean;
     
 	final private static DateFormat dateFormatHTML = new SimpleDateFormat("yyyy-MM-dd");
 	final private static DateFormat dateFormatSQL = new SimpleDateFormat("M/d/yyyy");
 	
-    public PaymentSessionBean() {
+    public PaymentBean() {
     }
     
     /**
@@ -63,7 +62,7 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 
     /**
      * Get payments' record sorted by @param sortItem in @param order.
-     * Pagination for manage_payment.jsp.
+     * Pagination for managePayment.jsp.
      */
 	@Override
 	public List<Payment> readPayment(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException {
@@ -82,7 +81,7 @@ public class PaymentSessionBean implements PaymentSessionBeanLocal {
 
    /**
     * Return the total number of rows of the query.
-    * Pagination for manage_payment.jsp.
+    * Pagination for managePayment.jsp.
     */
 	@Override
 	public int getNumberOfRows(String keyword) throws EJBException {	

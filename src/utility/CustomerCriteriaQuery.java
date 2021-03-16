@@ -15,9 +15,9 @@ import domain.Customer_;
 /**
  * Class to construct customer criteria queries. This method allows 
  * more flexibility and customization as compared to NamedQuery or 
- * NamedNativeQuery. For this purpose, I create a custom CONCAT function
- * to allow concatenation between string and non-string attributes, which
- * is not supported by the default CONCAT function.
+ * NamedNativeQuery. For this purpose, I create a custom search function
+ * to allow searching between string and non-string attributes, which
+ * is not possible if NamedQuery or NamedNative Query is used.
  * 
  * @author  Yap Jheng Khin
  * @version 1.0
@@ -33,7 +33,13 @@ public class CustomerCriteriaQuery {
     public CustomerCriteriaQuery(CriteriaBuilder cb) {
     	this.cb = cb;
     }
-        
+    
+    /**
+     * Get the criteria query of customer's query
+     * 
+     * @param keyword
+     * @return criteria query that returns number of rows
+     */
     public CriteriaQuery<Long> getNumberofCustomer(String keyword) {
     	
     	// Specify the type of the query to create a type-safe query
@@ -45,16 +51,24 @@ public class CustomerCriteriaQuery {
     	 */
     	query.select(cb.count(customer.get(Customer_.customernumber)));
     	
-    	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
+    	// Perform ATTR1 like '%keyword%' or ATTR2 like '%keyword%' or...
     	if (!keyword.equals("")) {
 	    	List<Expression<String>> expressions = setAll(customer);
-	    	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
-	    	query.where(cb.like(stringConcat, "%"+keyword+"%"));
+	    	Expression<Boolean> stringConcat = CustomJPQLFunction.constructSearch(keyword.trim(), cb, expressions);
+	    	query.where(stringConcat);
     	}
 
     	return query;
     }
     
+    /**
+     * Get the criteria query of customer's query
+     * 
+     * @param keyword
+     * @param sortItem
+     * @param sortType
+     * @return criteria query that returns customer's records
+     */
     public CriteriaQuery<Customer> findCustomer(String keyword, String sortItem, String sortType) {
     	
     	// Specify the type of the query to create a type-safe query
@@ -66,11 +80,11 @@ public class CustomerCriteriaQuery {
     	 */
     	query.select(customer);
     	
-    	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
+    	// Perform ATTR1 like '%keyword%' or ATTR2 like '%keyword%' or...
     	if (!keyword.equals("")) {
 	    	List<Expression<String>> expressions = setAll(customer);
-	    	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
-	    	query.where(cb.like(stringConcat, "%"+keyword+"%"));
+	    	Expression<Boolean> stringConcat = CustomJPQLFunction.constructSearch(keyword.trim(), cb, expressions);
+	    	query.where(stringConcat);
     	}
     	
     	// Perform `ORDER BY specific_column`
@@ -140,7 +154,7 @@ public class CustomerCriteriaQuery {
     
     /**
      * Get all the attributes of the customer in String. Convert all 
-     * non-string attribute into string attribute to perform concatenation.
+     * non-string attribute into string attribute to perform searching.
      */
     private List<Expression<String>> setAll(Root<Customer> customer) {
     	List<Expression<String>> expressions = new ArrayList<Expression<String>>();
@@ -157,7 +171,7 @@ public class CustomerCriteriaQuery {
     	Expression<String> country = customer.get(Customer_.country);
     	Expression<String> creditlimit = customer.get(Customer_.creditlimit).as(String.class);
     	Expression<String> email = customer.get(Customer_.email);
-    	Expression<String> salesrepresentativeno = customer.get(Customer_.employee).get("employeenumber");
+    	Expression<String> salesrepresentativeno = customer.get(Customer_.employee).get("employeenumber").as(String.class);
     	
     	expressions.add(customerNo);
     	expressions.add(customername);

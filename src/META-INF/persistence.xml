@@ -12,5 +12,10 @@
 		<class>domain.UserRole</class>
 		<class>domain.UserRolePK</class>
 		<class>domain.User</class>
+		<properties>
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="eclipselink.logging.level" value="FINE"/>
+			<property name="openjpa.Log" value="DefaultLevel=WARN,Runtime=INFO,Tool=INFO,SQL=TRACE"/>
+		</properties>
 	</persistence-unit>
 </persistence>

@@ -22,7 +22,7 @@ import domain.Employee;
 import utility.CustomerCriteriaQuery;
 
 /**
- * Session Bean implementation class CustomerSessionBean
+ * Session Bean implementation class CustomerBean
  * 
  * @author  Yap Jheng Khin
  * @version 1.0
@@ -30,7 +30,7 @@ import utility.CustomerCriteriaQuery;
  */
 @Stateless
 @LocalBean
-public class CustomerSessionBean implements CustomerSessionBeanLocal {
+public class CustomerBean implements CustomerLocal {
 	
     @PersistenceContext(unitName = "Jan2021-SideServer")
     private EntityManager em;
@@ -38,7 +38,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 	@EJB
 	private EmployeeSessionBeanLocal empBean;
 	
-    public CustomerSessionBean() {
+    public CustomerBean() {
     }
 
     /**
@@ -67,7 +67,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
     /**
      * Get customers' record sorted by @param sortItem in @param order.
-     * Pagination for manage_customer.jsp.
+     * Pagination for manageCustomer.jsp.
      */
     @Override
     public List<Customer> readCustomer(int currentPage, int recordsPerPage, String keyword, String sortItem, String sortType) throws EJBException {
@@ -87,7 +87,7 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 
    /**
     * Return the total number of rows of the query.
-    * Pagination for manage_customer.jsp.
+    * Pagination for manageCustomer.jsp.
     */
     @Override
     public int getNumberOfRows(String keyword) throws EJBException {
@@ -164,7 +164,9 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		BigDecimal creditlimit = new BigDecimal(attributes[12], creditlimitMc);
 		creditlimit.setScale(scale, RoundingMode.HALF_UP);
 		
-		Employee salesrepemployee = empBean.findEmployee(salesrepemployeenumber);
+		Employee salesrepemployee = null;
+		if (!salesrepemployeenumber.equals(""))
+			salesrepemployee = empBean.findEmployee(salesrepemployeenumber);
 		
 		// Set the attributes
 		customer.setCustomername(customername);
@@ -184,6 +186,11 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		return customer;
 	}
 	
+	/**
+	 * Get the column of the entity class to retrieve 
+	 * scale, precision and length, respectively. Used
+	 * in dynamic form validation.
+	 */
 	public Column getColumnAnnotation(String columnName) {
 		Field f = null;
 		try {
@@ -196,9 +203,11 @@ public class CustomerSessionBean implements CustomerSessionBeanLocal {
 		return column;
 	}
 
+	/**
+	 * Get all customers.
+	 */
 	@Override
 	public List<Customer> getAllCustomer() throws EJBException {
-		// TODO Auto-generated method stub
 		return em.createQuery("SELECT c FROM Customer c", Customer.class)
 				.getResultList();
 	}

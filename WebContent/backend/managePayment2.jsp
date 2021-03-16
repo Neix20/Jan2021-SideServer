@@ -1,13 +1,12 @@
 <%--
 Author	  : Yap Jheng Khin
-Page      : Customer data table
+Page      : Payment data table
 References: (Bootstrap template) https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=elegant-table-design
 Reminder  : Please enable Internet connection to load third party libraries: Thank you
 --%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <%@page import="java.util.List" %>
-<%@page import="domain.Customer" %>
-<%@page import="domain.Employee" %>
+<%@page import="domain.Payment" %>
 <%@page import="utility.UrlGenerator" %>
 <%UrlGenerator urlGenerator = (UrlGenerator) request.getAttribute("urlGenerator");%>
 <!DOCTYPE html>
@@ -16,7 +15,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Bootstrap Elegant Table Design</title>
+	<title>Manage Payment</title>
 	<!-- ============================================================== -->
 	<!-- Import dependencies & libraries -->
 	<!-- ============================================================== -->
@@ -48,21 +47,53 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	<script>
 		$(document).ready(function () {
 
-			// Check all the checkboxes once the document is loaded
-			$('input[type="checkbox"]').attr('checked', 'checked');
+$columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
+			
+			if (typeof(Storage) !== "undefined") {
+				if (localStorage.paymentFilterCache) {
+					let cacheArr = JSON.parse(localStorage.paymentFilterCache);
+					if (cacheArr.length === $columnCheckBoxes.length)
+						$("#selectAll").attr('checked', 'checked');
+					cacheArr.forEach(function (elem, index){
+						$('input[type="checkbox"]').filter('#'+elem).attr('checked', 'checked');
+					});
+				} else {
+					$("#selectAll").attr('checked', 'checked');
+					let cacheArr = [];
+					$('input[type="checkbox"]').not("#selectAll").each(function() {
+						cacheArr.push($(this).val());
+						$(this).attr('checked', 'checked');
+					});
+					localStorage.setItem("paymentFilterCache", JSON.stringify(cacheArr));
+				}
+			} else {
+			  // Check all the checkboxes once the document is loaded if no Web Storage support..
+				$('input[type="checkbox"]').attr('checked', 'checked');
+			}
+			
 			var checkboxes = $('input[name=filtercolumn]');
 	
 			// Use JQuery to hide and show specific columns based on checkboxes
 			function filterColumn(checkbox) {
 				let id = checkbox.attr("id");
 				let columns = $('.'+id);
-				
+
+				let cacheArr = JSON.parse(localStorage.getItem("paymentFilterCache"));
+
 				if (checkbox.prop('checked')) {
+
+					if (!cacheArr.includes(id))
+						cacheArr.push(id);
+					
 					$.each(columns, function(index, column) {
 						// Show column
 						column.style.display= "";
 					});
 				} else {
+
+					if (cacheArr.includes(id))
+						cacheArr = cacheArr.filter(function(value, index, arr) {return value != id});
+					
 					// Uncheck "Select all" checkbox if users uncheck one of the checkboxes
 					$("#selectAll").prop("checked", false);
 					$.each(columns, function(index, column) {
@@ -70,8 +101,10 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						column.style.display= "none";
 					});	
 				}
+
+				localStorage.setItem("paymentFilterCache", JSON.stringify(cacheArr));
 			}
-	
+
 			/*
 			Once the user click "Select all" checkbox, activate all 
 			checkboxes programmatically.
@@ -92,7 +125,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 					});
 				} 
 			});
-	
+
 			// Activate the filterColumn function on change.	 
 			checkboxes.on("change", function(){
 				let checkbox = $(this);
@@ -112,19 +145,87 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 					width: boxWidth
 				});
 			});
-	
+
 			// Update the input values of "Select entries" based on url parameter
 			document.querySelector("#selected_entries").value = '<%= urlGenerator.getRecordsPerPage() %>';
 			
 			// Redirect to get new resources when the user selects different number of entries
 			$("#selected_entries").on('change', function() {
 				  let numOfEntries = this.value;
-				  location.href = <%= urlGenerator %>;
+				  location.href = '<%= urlGenerator.toCustomURL(false) %>&recordsPerPage='+numOfEntries;
 			});
-	
+
 			// Redirect to get new resources when the user activates the search function
 			$('#search').on('click', function() {
 				$('#search-form').submit();
+			});
+
+			// when the submit button in the modal is clicked, submit the form
+			$('#confirm-delete-btn').click(function(){
+
+			    /* when the submit button in the modal is clicked, submit the form */
+			    $('#payment-form').append($('<input>', {
+			            type: 'hidden',
+			            name: 'user_action',
+			            value: 'DELETE'
+			    }));
+				
+				$('#payment-form').submit();	  
+			});
+
+			// temporary variables to store detached DOM elements
+			let addBtn = null;
+			let updateBtn = null;
+			let deleteBtn = null;
+
+			$('td>a').on('click', function(e) {
+			    // Prevent anchor tag from reloading the page
+			    e.preventDefault();
+
+			    $clickedElem = $(this);
+			    // Execute Ajax GET request on URL
+			    $.get($clickedElem.attr('id'), function(responseJson) {
+			        $.each(responseJson, function (columnName, columnValue) {
+			            $('#editPaymentModal input[name='+columnName+']').val(columnValue);
+			        });
+
+			     // Detach add button since the user only wants to update or delete payment
+			        addBtn = $("#add-btn").detach();
+
+			     	// Manually trigger the payment form
+			        $('#editPaymentModal').modal('show');
+			    });
+			});
+
+			$('#activate-add-btn').on('click', function(e) {
+			    $('#editPaymentModal input:not([type=hidden]').val("");
+
+			 	/* Detach update button, delete button since 
+			 	   the user only wants to add new payment
+			 	*/
+			    updateBtn = $("#update-btn").detach();
+			    deleteBtn = $("#delete-btn").detach();
+
+			 // Manually trigger the payment form
+			    $('#editPaymentModal').modal('show');
+			});
+
+			/* Reattach the detached elements back to the payment form once the
+			   user closes the payment form.
+			*/
+			$('#editPaymentModal').on('hidden.bs.modal', function (e) {
+			    if (addBtn !== null) {
+			        $('#editPaymentModal .modal-footer').append(addBtn);
+			        addBtn = null;
+			    }
+			    if (updateBtn !== null) {
+			        $('#editPaymentModal .modal-footer').append(updateBtn);
+			        updateBtn = null;
+			    }
+			    if (deleteBtn !== null) {
+			        $('#editPaymentModal .modal-footer').append(deleteBtn);
+			        deleteBtn = null;
+			    }
 			});
 		});
 	</script>
@@ -137,15 +238,15 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	<div class="container-fluid">
 		<div class="row d-flex justify-content-start align-items-center">
 			<!-- ============================================================== -->
-			<!-- Add customer -->
+			<!-- Add payment -->
 			<!-- ============================================================== -->
 			<div class="col-4">
-				<button class="btn btn-success d-flex justify-content-center align-items-center" data-toggle="modal" data-target="#addCustomerModal">
-				<i class="material-icons mr-2">&#xE147;</i> <span>Add Customer</span>
+				<button id="activate-add-btn" class="btn btn-success d-flex justify-content-center align-items-center" data-toggle="modal" data-target="#addPaymentModal">
+				<i class="material-icons mr-2">&#xE147;</i> <span>Add Payment</span>
 				</button>
 			</div>
 			<!-- ============================================================== -->
-			<!-- End add customer -->
+			<!-- End add payment -->
 			<!-- ============================================================== -->
 			<!-- ============================================================== -->
 			<!-- Page navigation -->
@@ -220,68 +321,41 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 		</div>
 		<div class="row container-fluid">
 			<!-- ============================================================== -->
-			<!-- Customer data table -->
+			<!-- Payment data table -->
 			<!-- ============================================================== -->
 			<div class="col-9 table-responsive table-wrapper" style="min-width: 500px;">
-				<table class="table table-striped table-hover table-light scroll-bar">
+				<table class="table table-striped table-hover table-light scroll-bar" id="table-container">
 					<thead>
 						<tr>
 							<th scope="col">Action</th>
 							<%
 							UrlGenerator urlGeneratorNew;
-							final int NUM_OF_COLUMNS = 14;
+							final int NUM_OF_COLUMNS = 5;
 							String urls[] = new String[NUM_OF_COLUMNS];
 							String[] sortIcons = new String[NUM_OF_COLUMNS];
 							
 							String[] sortItemsLookup = {
-									"customernumber",
-									"customername",
-									"contactfirstname",
-									"contactlastname",
-									"phone",
-									"email",
-									"addressline1",
-									"addressline2",
-									"city",
-									"state",
-									"postalcode",
-									"country",
-									"salesrepresentativeno",
-									"creditlimit",
+								"customernumber", 
+								"checknumber", 
+								"amount", 
+								"paymentdate", 
+								"paymentmethod",
 							};
 							
 							String[] columnName = {
-									"Customer no",
-									"Name",
-									"Contact first name",
-									"Contact last name",
-									"Phone",
-									"Email",
-									"Address line 1",
-									"Address line 2",
-									"City",
-									"State",
-									"Postal code",
-									"Country",
-									"Sales representative no",
-									"Credit limit",
+								"Customer no", 
+								"Check no", 
+								"Amount",
+								"Payment date",
+								"Payment method",
 							};
 							
 							String[] columnTypes = {
-									"number",
-									"alphabet",
-									"alphabet",
-									"alphabet",
-									"alphabet",
-									"alphabet",
-									"alphabet",
-									"alphabet",
-									"alphabet",
-									"alphabet",
-									"alphabet",
-									"alphabet",
-									"number",
-									"number",
+								"number",
+								"alphabet",
+								"number",
+								"number",
+								"alphabet"
 							};
 							
 							// Generate URLs for each columns
@@ -291,7 +365,6 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 								// Set to sort item based on the current column
 								urlGeneratorNew.setSortItem(sortItemsLookup[idx]);
 								
-								urls[idx] = urlGeneratorNew.toString();
 								// If the current column matches the URL parameter sortItem
 								if (urlGenerator.getSortItem().equals(sortItemsLookup[idx])) {
 									/* Change the icon to ascending icon if the user previously clicked
@@ -303,23 +376,23 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 											sortIcons[idx] = "fa fa-sort-numeric-asc";
 										else
 											sortIcons[idx] = "fa fa-sort-alpha-asc";
-										urls[idx] += "&sortType=DESC";
+										urlGeneratorNew.setSortType("DESC");
 									} else if (urlGenerator.getSortType().equals("DESC")){
 										if (columnTypes[idx].equals("number"))
 											sortIcons[idx] = "fa fa-sort-numeric-desc";
 										else
 											sortIcons[idx] = "fa fa-sort-alpha-desc";
-										urls[idx] += "&sortType=ASC";
+										urlGeneratorNew.setSortType("ASC");
 									}
 								} 
 								// Else if not match, use the default sort icon
 								else {
 									sortIcons[idx] = "fa fa-sort";
-									urls[idx] += "&sortType=ASC";
+									urlGeneratorNew.setSortType("ASC");
 								}
 								// Print the HTML element respectively
 								out.print("<th scope='col' class='"+sortItemsLookup[idx]+"'>");
-								out.print("<a href='"+urls[idx]+"'>");
+								out.print("<a href='"+urlGeneratorNew.toString()+"'>");
 								out.print(columnName[idx]);
 								out.print("<i class='"+sortIcons[idx]+"' aria-hidden='true'>");
 								out.print("</a>");
@@ -330,50 +403,31 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 					</thead>
 					<tbody>
 						<%
-						List<Customer> customers = (List<Customer>) request.getAttribute("customers");
+						List<Payment> payments = (List<Payment>) request.getAttribute("payments");
 						
-						if (customers.size() != 0) {
-						for (Customer customer : customers) {
-							Integer customernumber = customer.getCustomernumber();
+						if (payments.size() != 0) {
+						for (Payment payment : payments) {
+							Integer customernumber = payment.getId().getCustomernumber();
+							String checknumber = payment.getId().getChecknumber();
 							
 							out.println("<tr>");
-							// TODO Switch to Customer with parameter
-							String href = "'Customer?customernumber="+customernumber+"'";
+							String href = "'managePayment?customernumber="+customernumber+"&checknumber="+checknumber+"'";
 
-							out.println("<td><a title='View' class='view'"+
-							" href="+href+">"+
-							"<i class='material-icons'>&#xE417;</i></a>");
-							out.println("<a class='edit' title='Edit' data-toggle='tooltip'"+
-							" href="+href+">"+
-							"<i class='material-icons'>&#xE254;</i></a>");
-							out.println("<a class='delete' title='Delete' data-toggle='tooltip'"+
-							" href="+href+">"+
-							"<i class='material-icons'>&#xE872;</i></a></td>");
+							// Provide edit icons to user
+							out.println("<td><a class='edit' title='Edit' data-toggle='tooltip' href id="+href+">"+
+							"<i class='material-icons'>&#xE254;</i></a></span></td>");
 							
-							out.println("<td scope='row' class='customernumber'>" + customernumber + "</td>");
-							out.println("<td class='customername'>" + customer.getCustomername() + "</td>");
-							out.println("<td class='contactfirstname'>" + customer.getContactfirstname() + "</td>");
-							out.println("<td class='contactlastname'>" + customer.getContactlastname() + "</td>");
-							out.println("<td class='phone'>" + customer.getPhone() + "</td>");
-							out.println("<td class='email'>" + customer.getEmail() + "</td>");
-							out.println("<td class='addressline1'>" + customer.getAddressline1() + "</td>");
-							out.println("<td class='addressline2'>" + customer.getAddressline2() + "</td>");
-							out.println("<td class='city'>" + customer.getCity() + "</td>");
-							out.println("<td class='state'>" + customer.getState() + "</td>");
-							out.println("<td class='postalcode'>" + customer.getPostalcode() + "</td>");
-							out.println("<td class='country'>" + customer.getCountry() + "</td>");
-							Employee salespersonrep = customer.getEmployee();
-							String salespersonrepHTML = "";	
-							if (salespersonrep == null) {
-								salespersonrepHTML = "N/A";
-							} else {
-								salespersonrepHTML = String.valueOf(customer.getEmployee().getEmployeenumber());
-							}	
-							out.println("<td class='salesrepresentativeno'>" + salespersonrepHTML + "</td>");
-							out.println("<td class='creditlimit'>" + customer.getCreditlimit().doubleValue() + "</td>");
-                            out.println("</tr>");
+							// Get and display the data
+						    out.println("<td scope='row' class='customernumber'>" + customernumber + "</td>");
+						    out.println("<td scope='row' class='checknumber'>" + checknumber + "</td>");
+						    out.println("<td class='amount'>" + payment.getAmount() + "</td>");
+						    out.println("<td class='paymentdate'>" + payment.getPaymentdate() + "</td>");
+						    out.println("<td class='paymentmethod'>" + payment.getPaymentmethod() + "</td>");	
+							out.println("</tr>");
 						}
-						} else {
+						} 
+						// Special case when record not found
+						else {
 							out.println("<tr>");
 							String status = "No records";
 							for (int i = 0; i < 8; i++) {
@@ -386,10 +440,10 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				</table>
 			</div>
 			<!-- ============================================================== -->
-			<!-- End customer data table -->
+			<!-- End payment data table -->
 			<!-- ============================================================== -->
 			<!-- ============================================================== -->
-			<!-- Add customer form -->
+			<!-- Filter payment checkboxes -->
 			<!-- ============================================================== -->
 			<div class="col-3">
 				<div class="row d-flex flex-column">
@@ -400,126 +454,98 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 							<label for="selectAll">Select all</label><br>
 							<input class="form-check-input" type="checkbox" name="filtercolumn" value="customernumber" id="customernumber">
 							<label for="customernumber">Customer number</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="customername" id="customername">
-							<label for="customername">Customer name</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="contactfirstname" id="contactfirstname">
-							<label for="contactfirstname">Contact first name</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="contactlastname" id="contactlastname">
-							<label for="contactlastname">Contact last name</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="phone" id="phone">
-							<label for="phone">Phone</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="email" id="email">
-							<label for="email">Email</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="addressline1" id="addressline1">
-							<label for="addressline1">Address line 1</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="addressline2" id="addressline2">
-							<label for="addressline2">Address line 2</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="city" id="city">
-							<label for="city">City</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="state" id="state">
-							<label for="state">State</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="postalcode" id="postalcode">
-							<label for="postalcode">Postal code</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="country" id="country">
-							<label for="country">Country</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="salesrepresentativeno" id="salesrepresentativeno">
-							<label for="salesrepresentativeno">Sales person</label><br>
-							<input class="form-check-input" type="checkbox" name="filtercolumn" value="creditlimit" id="creditlimit">
-							<label for="creditlimit">Credit limit</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="checknumber" id="checknumber">
+							<label for="checknumber">Check number</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="amount" id="amount">
+							<label for="amount">Amount</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="paymentdate" id="paymentdate">
+							<label for="paymentdate">Payment date</label><br>
+							<input class="form-check-input" type="checkbox" name="filtercolumn" value="paymentmethod" id="paymentmethod">
+							<label for="paymentmethod">Payment method</label><br>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- ============================================================== -->
-			<!-- End add customer form -->
+			<!-- End filter payment checkboxes -->
 			<!-- ============================================================== -->
-		</div>
+	</div>
 	<!-- ============================================================== -->
-	<!-- Add customer pop up -->
+	<!-- Add & edit payment pop up -->
 	<!-- ============================================================== -->
-	<div id="addCustomerModal" class="modal fade">
+	<div id="editPaymentModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="Customer" method="post">
+				<form id="payment-form" action="${ pageContext.request.contextPath }/managePayment" method="post">
 					<div class="modal-header">
-						<h4 class="modal-title">Add customer</h4>
+						<h4 class="modal-title">Payment details</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
 						<div class="form-group">
-						    <label for="customername">Customer name:</label>
-						    <input class="form-control" type="text" id="customername" name="customername" required>
+						    <label for="customernumber">Customer no:</label><br>
+						    <input class="form-control" type="number" id="customernumber" name="customernumber" min="0" required><br>
 						</div>
 						<div class="form-group">
-						    <label for="contactfirstname">Contact first name:</label>
-						    <input class="form-control" type="text" id="contactfirstname" name="contactfirstname" required>
+						    <label for="checknumber">Check no:</label><br>
+						    <input class="form-control" type="text" id="checknumber" name="checknumber" required><br>
 						</div>
 						<div class="form-group">
-						    <label for="contactlastname">Contact last name:</label>
-						    <input class="form-control" type="text" id="contactlastname" name="contactlastname" required>
+						    <label for="amount">Amount:</label><br>
+						    <input class="form-control" type="number" id="amount" name="amount" step="0.01" min="0" required><br>
 						</div>
 						<div class="form-group">
-						    <label for="phone">Phone:</label>
-						    <input class="form-control" type="text" id="phone" name="phone" required>
+						    <label for="paymentdate">Payment date:</label><br>
+						    <input class="form-control" type="date" id="paymentdate" name="paymentdate" required><br>
 						</div>
 						<div class="form-group">
-						    <label for="email">Email:</label>
-						    <input class="form-control" type="email" id="email" name="email" required>
+						    <label for="paymentmethod">Payment method:</label><br>
+						    <select class="form-control" name="paymentmethod" id="paymentmethod" required>
+						        <option value="check">Check</option>
+						        <option value="cash">Cash</option>
+						        <option value="debit card">Debit card</option>
+						        <option value="credit card">Credit card</option>
+						        <option value="online banking">Online banking</option>
+						    </select>
 						</div>
-						<div class="form-group">
-						    <label for="addressline1">Address line 1:</label>
-						    <input class="form-control" type="text" id="addressline1" name="addressline1" required>
-						</div>
-						<div class="form-group">
-						    <label for="addressline2">Address line 2:</label>
-						    <input class="form-control" type="text" id="addressline2" name="addressline2">
-						</div>
-						<div class="form-group">
-						    <label for="city">City:</label>
-						    <input class="form-control" type="text" id="city" name="city" required>
-						</div>
-						<div class="form-group">
-						    <label for="state">State:</label>
-						    <input class="form-control" type="text" id="state" name="state">
-						</div>
-						<div class="form-group">
-						    <label for="postalcode">Postal code:</label>
-						    <input class="form-control" type="text" id="postalcode" name="postalcode">
-						</div>
-						<div class="form-group">
-						    <label for="country">Country:</label>
-						    <input class="form-control" type="text" id="country" name="country" required>
-						</div>
-						<div class="form-group">
-						    <label for="salesrepemployeenumber">Sales person representative:</label>
-						    <input class="form-control" type="text" id="salesrepemployeenumber" name="salesrepemployeenumber">
-						</div>
-						<div class="form-group">
-						    <label for="creditlimit">Credit limit:</label>
-						    <input class="form-control" type="number" id="creditlimit" name="creditlimit" step="0.01" min="0" value="0">
-						</div>				
+						<input type="hidden" name="nOfPages" value="<%= urlGenerator.getnOfPages() %>">
+						<input type="hidden" name="currentPage" value="<%= urlGenerator.getCurrentPage() %>">
+						<input type="hidden" name="recordsPerPage" value="<%= urlGenerator.getRecordsPerPage() %>">
+						<input type="hidden" name="keyword" value="<%= urlGenerator.getKeyword() %>">
+						<input type="hidden" name="sortItem" value="<%= urlGenerator.getSortItem() %>">
+						<input type="hidden" name="sortType" value="<%= urlGenerator.getSortType() %>">	
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
-						<input type="hidden" id="user_action" name="user_action" value="ADD">
+						<button id="cancel-btn" type="button" class="btn btn-default d-flex justify-content-center align-items-center" data-dismiss="modal">
+							<span>Cancel</span>
+						</button>
+						<button id="add-btn" type="submit" name="user_action" value="ADD" class="btn btn-success d-flex justify-content-center align-items-center">
+							<i class="material-icons mr-2">&#xE147;</i> <span>Add</span>
+						</button>
+						<button id="update-btn" type="submit" name="user_action" value="UPDATE" class="btn btn-success d-flex justify-content-center align-items-center">
+							<i class="material-icons mr-2">&#xE254;</i> <span>Update</span>
+						</button>
+						<button id="delete-btn" type="submit" name="user_action" value="DELETE" class="btn btn-danger d-flex justify-content-center align-items-center">
+							<i class="material-icons mr-2">&#xE872;</i>
+							<span>Delete</span>
+						</button>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<!-- ============================================================== -->
-	<!-- End customer pop up -->
+	<!-- End add & edit payment pop up -->
 	<!-- ============================================================== -->
 	<!-- ============================================================== -->
-	<!-- Delete customer pop up -->
+	<!-- Delete payment pop up -->
 	<!-- ============================================================== -->
-	<div id="deleteCustomerModal" class="modal fade">
+	<div id="deletePaymentModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form>
 					<div class="modal-header">						
-						<h4 class="modal-title">Delete customer</h4>
+						<h4 class="modal-title">Delete payment</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
@@ -528,14 +554,14 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-danger" value="Delete">
+						<input id="confirm-delete-btn" type="submit" class="btn btn-danger" value="Delete">
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<!-- ============================================================== -->
-	<!-- End delete customer pop up -->
+	<!-- End delete payment pop up -->
 	<!-- ============================================================== -->
 </body>
 

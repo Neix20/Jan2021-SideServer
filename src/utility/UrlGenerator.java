@@ -25,6 +25,7 @@ public class UrlGenerator {
 						String keyword, 
 						String sortItem, 
 						String sortType) {
+		this.absoluteLink = absoluteLink;
 		this.nOfPages =  nOfPages;
 		this.currentPage =  currentPage;
 		this.recordsPerPage =  recordsPerPage;
@@ -89,6 +90,29 @@ public class UrlGenerator {
 	}
 	public void setSortType(String sortType) {
 		this.sortType = sortType;
+	}
+	
+	// Combine all attributes into a working URL (with/without recordsPerPage)
+	public String toCustomURL(boolean recordPerPageFlag) {
+		StringBuilder url = new StringBuilder();
+		
+		url.append(absoluteLink);
+		url.append("?nOfPages=");
+		url.append(nOfPages);
+		url.append("&currentPage=");
+		url.append(currentPage);
+		if (recordPerPageFlag) {
+			url.append("&recordsPerPage=");
+			url.append(recordsPerPage);
+		}
+		url.append("&keyword=");
+		url.append(keyword);
+		url.append("&sortItem=");
+		url.append(sortItem);
+		url.append("&sortType=");
+		url.append(sortType);
+		
+		return url.toString();
 	}
 	
 	// Combine all attributes into a working URL

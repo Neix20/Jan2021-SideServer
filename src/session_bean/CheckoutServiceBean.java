@@ -16,7 +16,7 @@ import domain.ShoppingCart;
 import domain.ShoppingCartItem;
 
 /**
- * Fascade implementation class PurchaseServiceProvider
+ * Fascade implementation class CheckoutServiceBean. 
  * PurchaseServiceProvider delegates client requests to appropriate subsystems, some
  * of the subsystems are payment system, order placing system, inventory system, and
  * so on.
@@ -27,16 +27,16 @@ import domain.ShoppingCartItem;
  */
 @Stateless
 @LocalBean
-public class PaymentServiceSessionBean implements PaymentServiceSessionBeanLocal {
+public class CheckoutServiceBean implements CheckoutServiceLocal {
 
 	@EJB
 	private EmployeeSessionBeanLocal empbean;
 	
 	@EJB
-	private CustomerSessionBeanLocal customerbean;
+	private CustomerLocal customerbean;
 	
 	@EJB
-	private PaymentSessionBeanLocal paymentbean;
+	private PaymentLocal paymentbean;
 	
 	@EJB
 	private OrderSessionBeanLocal orderbean;
@@ -47,7 +47,7 @@ public class PaymentServiceSessionBean implements PaymentServiceSessionBeanLocal
 	@EJB
 	private ProductSessionBeanLocal productbean;
 	
-    public PaymentServiceSessionBean() {
+    public CheckoutServiceBean() {
     }
 	
     @Override

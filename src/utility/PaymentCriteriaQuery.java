@@ -18,9 +18,9 @@ import domain.Payment_;
 /**
  * Class to construct payment criteria queries. This method allows 
  * more flexibility and customization as compared to NamedQuery or 
- * NamedNativeQuery. For this purpose, I create a custom CONCAT function
- * to allow concatenation between string and non-string attributes, which
- * is not supported by the default CONCAT function.
+ * NamedNativeQuery. For this purpose, I create a custom search function
+ * to allow searching between string and non-string attributes, which
+ * is not possible if NamedQuery or NamedNative Query is used.
  * 
  * @author  Yap Jheng Khin
  * @version 1.0
@@ -37,6 +37,12 @@ public class PaymentCriteriaQuery {
     	this.cb = cb;
     }
     
+    /**
+     * Get the criteria query of payment's query
+     * 
+     * @param keyword
+     * @return criteria query that returns number of rows
+     */
     public CriteriaQuery<Long> getNumberofPayment(String keyword) {
     	
     	// Specify the type of the query to create a type-safe query
@@ -48,32 +54,40 @@ public class PaymentCriteriaQuery {
     	 */
     	query.select(cb.count(payment.get(Payment_.id).get("customernumber")));
     	
-    	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
+    	// Perform ATTR1 like '%keyword%' or ATTR2 like '%keyword%' or...
     	if (!keyword.equals("")) {
 	    	List<Expression<String>> expressions = setAll(payment);
-	    	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
-	    	query.where(cb.like(stringConcat, "%"+keyword+"%"));
+	    	Expression<Boolean> stringConcat = CustomJPQLFunction.constructSearch(keyword.trim(), cb, expressions);
+	    	query.where(stringConcat);
     	}
 
     	return query;
     }
     
+    /**
+     * Get the criteria query of payment's query
+     * 
+     * @param keyword
+     * @param sortItem
+     * @param sortType
+     * @return criteria query that returns payment's records
+     */
     public CriteriaQuery<Payment> findPayment(String keyword, String sortItem, String sortType) {
     	
     	// Specify the type of the query to create a type-safe query
-    	CriteriaQuery<Payment> cq = cb.createQuery(Payment.class);
+    	CriteriaQuery<Payment> query = cb.createQuery(Payment.class);
     	// Call the from method of the query object to set the FROM clause of the query and to specify the root of the query
-    	Root<Payment> payment = cq.from(Payment.class);
+    	Root<Payment> payment = query.from(Payment.class);
     	/* Call the select method of the query object, passing in the query root, to set the SELECT clause of the query
     	 * Perform `SELECT p FROM Payment p`
     	 */
-    	cq.select(payment);
+    	query.select(payment);
     	
-    	// Perform `CONCAT(... ALL ATTRIBUTES) = '%keyword%'`
+    	// Perform ATTR1 like '%keyword%' or ATTR2 like '%keyword%' or...
     	if (!keyword.equals("")) {
         	List<Expression<String>> expressions = setAll(payment);
-        	Expression<String> stringConcat = CustomJPQLFunction.concat(cb, "", expressions);
-        	cq.where(cb.like(stringConcat, "%"+keyword+"%"));
+	    	Expression<Boolean> stringConcat = CustomJPQLFunction.constructSearch(keyword.trim(), cb, expressions);
+	    	query.where(stringConcat);
     	}
 
     	// Perform `ORDER BY specific_column`
@@ -91,15 +105,15 @@ public class PaymentCriteriaQuery {
         		queryOrder = cb.asc(payment.get(sortItem));
     	}
     	if (sortType.equals("ASC")) {
-    		cq.orderBy(queryOrder);
+    		query.orderBy(queryOrder);
     	}
     	// Reverse the order if it is in DESC order
     	else if (sortType.equals("DESC")) {
     		queryOrder.reverse();
-    		cq.orderBy(queryOrder);
+    		query.orderBy(queryOrder);
     	}
     	    			
-    	return cq;
+    	return query;
     }
     
     /**
@@ -128,7 +142,7 @@ public class PaymentCriteriaQuery {
     
     /**
      * Get all the attributes of the payment in String. Convert all 
-     * non-string attribute into string attribute to perform concatenation.
+     * non-string attribute into string attribute to perform searching.
      */
     private List<Expression<String>> setAll(Root<Payment> payment) {
     	List<Expression<String>> expressions = new ArrayList<Expression<String>>();
