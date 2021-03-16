@@ -19,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.servlet.http.HttpServletRequest;
 
 import domain.Customer;
 import domain.Payment;
@@ -94,10 +95,27 @@ public class PaymentBean implements PaymentLocal {
 	}
 	
 	@Override
+	public void addPayment(HttpServletRequest request) throws EJBException {
+		Payment payment = new Payment();
+		payment = setValues(request, payment);	
+		em.persist(payment);
+	}
+
+	
+	@Override
 	public void addPayment(String[] attributes) throws EJBException {
 		Payment payment = new Payment();
 		payment = setValues(attributes, payment);	
 		em.persist(payment);
+	}
+	
+	@Override
+	public void updatePayment(HttpServletRequest request) throws EJBException {
+		String customernumber = request.getParameter("customernumber");
+		String checknumber = request.getParameter("checknumber");
+		Payment payment = findPayment(customernumber, checknumber);
+		payment = setValues(request, payment);	
+		em.merge(payment);
 	}
 
 	@Override
@@ -106,18 +124,88 @@ public class PaymentBean implements PaymentLocal {
 		payment = setValues(attributes, payment);	
 		em.merge(payment);
 	}
+	
+	@Override
+	public void deletePayment(HttpServletRequest request) throws EJBException {
+		String customernumber = request.getParameter("customernumber");
+		String checknumber = request.getParameter("checknumber");
+		Payment payment = findPayment(customernumber, checknumber);
+		em.remove(payment);
+	}
 
 	@Override
 	public void deletePayment(String customernumber, String checknumber) throws EJBException {
 		Payment payment = findPayment(customernumber, checknumber);
 		em.remove(payment);
 	}
+	
+    /**
+     * Set all the attributes of the payment based on the 
+     * @param attributes passed from the servlet.
+     */
+	private Payment setValues(HttpServletRequest request, Payment payment) throws EJBException {
+		
+		// Get the attributes
+		String customernumber = request.getParameter("customernumber");
+		Customer customer = customerBean.findCustomerById(customernumber);
+		
+		String checknumber = request.getParameter("checknumber");
+		PaymentPK paymentId = new PaymentPK(customernumber, checknumber);
+		
+		/*
+		 * Get the scale and precision from the amount'attributes @Column annotation. 
+		 * Scale and precision are used to update the value properly.
+		 */
+		int scale = 0;
+		int precision = 0;
+		Field f = null;
+		try {
+			f = Payment.class.getDeclaredField("amount");
+		} catch (NoSuchFieldException | SecurityException e) {
+			e.printStackTrace();
+		}
+		Column amountColumn = f.getAnnotation(Column.class);
+		if (amountColumn != null){
+			precision = amountColumn.precision();
+			scale = amountColumn.scale();
+		}
+		
+		MathContext amountMc = new MathContext(precision);
+		BigDecimal amount = new BigDecimal(request.getParameter("amount"), amountMc);
+		amount.setScale(scale, RoundingMode.HALF_UP);
+		
+		/*
+		 * Change the format of the payment date to be consistent
+		 * with the format stored in the database.
+		 */
+		Date paymentdate = null;
+		
+		try {
+			paymentdate = dateFormatHTML.parse(request.getParameter("paymentdate"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		String paymentdateStr = "";
+		paymentdateStr = dateFormatSQL.format(paymentdate);
+		
+		String paymentmethod = request.getParameter("paymentmethod");
+		
+		// Set the attributes
+		payment.setId(paymentId);
+		payment.setCustomer(customer);
+		payment.setAmount(amount);
+		payment.setPaymentdate(paymentdateStr);
+		payment.setPaymentmethod(paymentmethod);
+		
+		return payment;
+	}
 
     /**
      * Set all the attributes of the payment based on the 
      * @param attributes passed from the servlet.
      */
-	public Payment setValues(String[] attributes, Payment payment) throws EJBException {
+	private Payment setValues(String[] attributes, Payment payment) throws EJBException {
 		
 		// Get the attributes
 		String customernumber = attributes[0];
@@ -229,5 +317,37 @@ public class PaymentBean implements PaymentLocal {
 		};
 		
 		return paymentServiceOutput;
+	}
+	
+	/**
+	 * Get the column of the entity class to retrieve 
+	 * scale, precision and length, respectively. Used
+	 * in dynamic form validation.
+	 */
+	@Override
+	public Column getColumnAnnotation(String columnName) {
+		Field f = null;
+		try {
+			if (columnName.equals("checknumber")||columnName.equals("customernumber"))
+				f = PaymentPK.class.getDeclaredField(columnName);
+			else
+				f = Payment.class.getDeclaredField(columnName);
+		} catch (NoSuchFieldException | SecurityException e) {
+			e.printStackTrace();
+		}
+		Column column = f.getAnnotation(Column.class);
+		
+		return column;
+	}
+	
+	/**
+	 * Get all check numbers based on the customer to check
+	 * the uniqueness of the check numbers of that customer.
+	 */
+	public List<String> getChecknumbers(String customernumber) throws EJBException {
+		TypedQuery<String> q = em.createNamedQuery("Payment.findCheckNumbers", String.class);
+		q.setParameter(1, Integer.valueOf(customernumber));
+		List<String> checkNumbers = q.getResultList();
+		return checkNumbers;
 	}
 }

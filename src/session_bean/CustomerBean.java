@@ -12,7 +12,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
@@ -49,10 +48,11 @@ public class CustomerBean implements CustomerLocal {
     public Customer findCustomerById(String customernumber) throws EJBException {
 		TypedQuery<Customer> q = em.createNamedQuery("Customer.findbyCustomerNumber", Customer.class);
 		q.setParameter(1, Integer.valueOf(customernumber));
-		return (Customer) q.getSingleResult();
+		List<Customer> customers = q.getResultList();
+		if (customers.size() == 0) return null;
+		return customers.get(0);
     }
     
-    //TODO Check the uniques of the email
     /**
      * Get a customer's record based on email address.
      */
@@ -62,8 +62,7 @@ public class CustomerBean implements CustomerLocal {
 		query.setParameter("email", email);
 		List<Customer> matchCustomer = (List<Customer>) query.getResultList();
 		if (matchCustomer.isEmpty()) return null;
-        else if (matchCustomer.size() == 1) return matchCustomer.get(0);
-        throw new NonUniqueResultException();
+        return matchCustomer.get(0);
 	}
 
     /**
@@ -284,6 +283,7 @@ public class CustomerBean implements CustomerLocal {
 	 * scale, precision and length, respectively. Used
 	 * in dynamic form validation.
 	 */
+	@Override
 	public Column getColumnAnnotation(String columnName) {
 		Field f = null;
 		try {

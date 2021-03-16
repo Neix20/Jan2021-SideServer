@@ -50,8 +50,7 @@ public class CustomerManagementServlet extends HttpServlet {
 	 * from the client's request.
 	 */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String id = request.getParameter("customernumber");
 	    Customer customer = customerBean.findCustomerById(id);
 	    request.setAttribute("customer", customer);
@@ -83,8 +82,7 @@ public class CustomerManagementServlet extends HttpServlet {
 	 * To perform add, update, delete operation on customer's record.
 	 */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     	PrintWriter out = response.getWriter();
     	String action = request.getParameter("user_action");

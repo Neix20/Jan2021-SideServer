@@ -49,32 +49,9 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	<script>
 		$(document).ready(function () {
 
+			$checkboxes = $('input[name=filtercolumn]');
 			$columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 			
-			if (typeof(Storage) !== "undefined") {
-				if (localStorage.customerFilterCache) {
-					let cacheArr = JSON.parse(localStorage.customerFilterCache);
-					if (cacheArr.length === $columnCheckBoxes.length)
-						$("#selectAll").attr('checked', 'checked');
-					cacheArr.forEach(function (elem, index){
-						$('input[type="checkbox"]').filter('#'+elem).attr('checked', 'checked');
-					});
-				} else {
-					$("#selectAll").attr('checked', 'checked');
-					let cacheArr = [];
-					$('input[type="checkbox"]').not("#selectAll").each(function() {
-						cacheArr.push($(this).val());
-						$(this).attr('checked', 'checked');
-					});
-					localStorage.setItem("customerFilterCache", JSON.stringify(cacheArr));
-				}
-			} else {
-			  // Check all the checkboxes once the document is loaded if no Web Storage support..
-				$('input[type="checkbox"]').attr('checked', 'checked');
-			}
-			
-			var checkboxes = $('input[name=filtercolumn]');
-	
 			// Use JQuery to hide and show specific columns based on checkboxes
 			function filterColumn(checkbox) {
 				let id = checkbox.attr("id");
@@ -83,30 +60,99 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				let cacheArr = JSON.parse(localStorage.getItem("customerFilterCache"));
 
 				if (checkbox.prop('checked')) {
-
+					// Update the preference
 					if (!cacheArr.includes(id))
 						cacheArr.push(id);
-					
-					$.each(columns, function(index, column) {
-						// Show column
-						column.style.display= "";
-					});
+					if (cacheArr.length === $checkboxes.length)
+						$("#selectAll").prop("checked", true);
+					displaySpecificColumn(columns);
 				} else {
-
+					// Update the preference
 					if (cacheArr.includes(id))
 						cacheArr = cacheArr.filter(function(value, index, arr) {return value != id});
-					
 					// Uncheck "Select all" checkbox if users uncheck one of the checkboxes
 					$("#selectAll").prop("checked", false);
-					$.each(columns, function(index, column) {
-						// Hide column
-						column.style.display= "none";
-					});	
+					hideSpecificColumn(columns);
 				}
 
 				localStorage.setItem("customerFilterCache", JSON.stringify(cacheArr));
 			}
-	
+
+			function displayAllColumns() {
+				$checkboxes.each(function(){
+					checkbox = $(this)
+					checkbox.prop("checked", true);
+					filterColumn(checkbox);         
+				});
+			}
+
+			// This function hide all columns "with" updating the cache
+			function hideAllColumns() {
+				$checkboxes.each(function(){
+					checkbox = $(this)
+					checkbox.prop("checked", false);
+					filterColumn(checkbox);     
+				});
+			}
+
+			// This function hide all columns "without" updating the cache
+			function hideAllColumns2() {
+				$checkboxes.each(function(){
+					checkbox = $(this);
+					let id = checkbox.attr("id");
+					let columns = $('.'+id);
+					checkbox.prop("checked", false);
+					hideSpecificColumn(columns);
+				});
+			}
+
+			function displaySpecificColumn(columns) {
+				$.each(columns, function(index, column) {
+					// Show column
+					column.style.display= "";
+				});
+			}
+
+			function hideSpecificColumn(columns) {
+				$.each(columns, function(index, column) {
+					// Hide column
+					column.style.display= "none";
+				});	
+			}
+			
+			if (typeof(Storage) !== "undefined") {
+				// If user preference is available in cache
+				if (localStorage.customerFilterCache) {
+					// Reset the checkboxes
+					$('input[type="checkbox"]').prop('checked', false);
+					hideAllColumns2();
+					// Get the user preference from JavaScript Storage API
+					let cacheArr = JSON.parse(localStorage.customerFilterCache);
+					/* If the user preference is to display all columns, then
+					   display all columns.
+					*/
+					if (cacheArr.length === $columnCheckBoxes.length)
+						$("#selectAll").prop('checked', true);
+					cacheArr.forEach(function (elem, index) {
+						let columns = $('.'+elem);
+						$('input[name=filtercolumn]').filter('#'+elem).prop('checked', true);
+						displaySpecificColumn(columns);
+					});
+				} else {
+					// Display all columns by default and create new cache
+					$("#selectAll").prop('checked', true);
+					let cacheArr = [];
+					$('input[type="checkbox"]').not("#selectAll").each(function() {
+						cacheArr.push($(this).val());
+						$(this).prop('checked', true);
+					});
+					localStorage.setItem("customerFilterCache", JSON.stringify(cacheArr));
+				}
+			} else {
+			  // Check all the checkboxes once the document is loaded if no Web Storage support.
+				$('input[type="checkbox"]').prop('checked', true);
+			}
+				
 			/*
 			Once the user click "Select all" checkbox, activate all 
 			checkboxes programmatically.
@@ -114,22 +160,14 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			$("#selectAll").on("change", function(){
 				let checkbox;			
 				if($("#selectAll").prop("checked")){
-					checkboxes.each(function(){
-						checkbox = $(this)
-						checkbox.prop("checked", true);
-						filterColumn(checkbox);         
-					});
+					displayAllColumns();
 				} else {
-					checkboxes.each(function(){
-						checkbox = $(this)
-						checkbox.prop("checked", false);
-						filterColumn(checkbox);              
-					});
+					hideAllColumns();
 				} 
 			});
 	
 			// Activate the filterColumn function on change.	 
-			checkboxes.on("change", function(){
+			$checkboxes.on("change", function(){
 				let checkbox = $(this);
 				filterColumn(checkbox);
 			});
@@ -161,13 +199,6 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			$('#search').on('click', function() {
 				$('#search-form').submit();
 			});
-
-			// Redirect to get new resources when the user activates the search function
-			if ($('#clear-search').length > 0) {
-				$('#clear-search').on('click', function() {
-					$('#clear-search-form').submit();
-				});
-			}
 
 			// when the submit button in the modal is clicked, submit the form
 			$('#editCustomerModal .modal-footer button').click(function(){
@@ -222,10 +253,15 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			    $('#editCustomerModal').modal('show');
 			});
 
-			/* Reattach the detached elements back to the customer form once the
-			   user closes the customer form.
+			$customerFormInputs = $('#editCustomerModal').find('select,input:not([type=radio],[type=button],[type=submit],[type=hidden])');
+
+			/* 
+				Once the user closes the payment form:
+				1. Reattach the detached elements back to the payment form.
+				2. Remove all input validation messages.
 			*/
 			$('#editCustomerModal').on('hidden.bs.modal', function (e) {
+				// 1.
 			    if (addBtn !== null) {
 			        $('#editCustomerModal .modal-footer').append(addBtn);
 			        addBtn = null;
@@ -242,6 +278,10 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			        $('#editCustomerModal .modal-body').prepend(customerNoInput);
 			        customerNoInput = null;
 			    }
+				// 2.
+				$customerFormInputs.each(function(index, element){
+			        $(element).removeClass("is-valid is-invalid");
+			    });
 			});
 			
 			// AJAX POST request to get form validation results form the server
@@ -266,12 +306,11 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				    returnResponseJSON = responseJSON;
 
 				    let wrongInputs = Object.keys(responseJSON);
-				    $customSelector = $('#editCustomerModal').find('select,input:not([type=radio],[type=button],[type=submit],[type=hidden])');
 
 					/* Assign "is-valid" class to correct inputs and "is-invalid" class to
 					   wrong inputs, respectively
 					*/
-					$customSelector.each(function(index, element){
+					$customerFormInputs.each(function(index, element){
 				        let $elem = $(element);
 				        let $parent = $elem.parent();
 				        /* Find all child elements with tag name "option" and remove them 

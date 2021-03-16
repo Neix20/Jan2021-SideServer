@@ -2,6 +2,7 @@ package session_bean;
 
 import java.util.Map;
 
+import javax.ejb.EJBException;
 import javax.ejb.Local;
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,8 +15,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Local
 public interface FormValidationLocal {
-	public Map<String, String> validateCheckoutForm(HttpServletRequest request);
-	public Map<String, String> validateCustomerForm(HttpServletRequest request);
+	public Map<String, String> validateCheckoutForm(HttpServletRequest request) throws EJBException;
+	public Map<String, String> validateCustomerForm(HttpServletRequest request) throws EJBException;
+	public Map<String, String> validatePaymentForm(HttpServletRequest request) throws EJBException;
 //	private boolean isRequired(String customerParameterName, HttpServletRequest request);
 //	private boolean isExact(String parameterName, int parameterValue, int len, Map<String, String> formValidationResult);
 //	private boolean isDigit(String parameterName, String parameterValue, Map<String, String> formValidationResult);

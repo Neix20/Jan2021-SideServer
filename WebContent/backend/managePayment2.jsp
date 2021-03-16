@@ -47,32 +47,9 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 	<script>
 		$(document).ready(function () {
 
-$columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
-			
-			if (typeof(Storage) !== "undefined") {
-				if (localStorage.paymentFilterCache) {
-					let cacheArr = JSON.parse(localStorage.paymentFilterCache);
-					if (cacheArr.length === $columnCheckBoxes.length)
-						$("#selectAll").attr('checked', 'checked');
-					cacheArr.forEach(function (elem, index){
-						$('input[type="checkbox"]').filter('#'+elem).attr('checked', 'checked');
-					});
-				} else {
-					$("#selectAll").attr('checked', 'checked');
-					let cacheArr = [];
-					$('input[type="checkbox"]').not("#selectAll").each(function() {
-						cacheArr.push($(this).val());
-						$(this).attr('checked', 'checked');
-					});
-					localStorage.setItem("paymentFilterCache", JSON.stringify(cacheArr));
-				}
-			} else {
-			  // Check all the checkboxes once the document is loaded if no Web Storage support..
-				$('input[type="checkbox"]').attr('checked', 'checked');
-			}
-			
-			var checkboxes = $('input[name=filtercolumn]');
-	
+			$checkboxes = $('input[name=filtercolumn]');
+			$columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
+
 			// Use JQuery to hide and show specific columns based on checkboxes
 			function filterColumn(checkbox) {
 				let id = checkbox.attr("id");
@@ -81,30 +58,102 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 				let cacheArr = JSON.parse(localStorage.getItem("paymentFilterCache"));
 
 				if (checkbox.prop('checked')) {
-
+					// Update the preference
 					if (!cacheArr.includes(id))
 						cacheArr.push(id);
-					
-					$.each(columns, function(index, column) {
-						// Show column
-						column.style.display= "";
-					});
+					if (cacheArr.length === $checkboxes.length)
+						$("#selectAll").prop("checked", true);
+					displaySpecificColumn(columns);
 				} else {
-
+					// Update the preference
 					if (cacheArr.includes(id))
 						cacheArr = cacheArr.filter(function(value, index, arr) {return value != id});
-					
 					// Uncheck "Select all" checkbox if users uncheck one of the checkboxes
 					$("#selectAll").prop("checked", false);
-					$.each(columns, function(index, column) {
-						// Hide column
-						column.style.display= "none";
-					});	
+					hideSpecificColumn(columns);
 				}
-
+				// Save the preference
 				localStorage.setItem("paymentFilterCache", JSON.stringify(cacheArr));
 			}
+			
+			function displayAllColumns() {
+				$checkboxes.each(function(){
+					checkbox = $(this)
+					checkbox.prop("checked", true);
+					filterColumn(checkbox);         
+				});
+			}
 
+			// This function hide all columns "with" updating the cache
+			function hideAllColumns() {
+				$checkboxes.each(function(){
+					checkbox = $(this)
+					checkbox.prop("checked", false);
+					filterColumn(checkbox);     
+				});
+			}
+
+			// This function hide all columns "without" updating the cache
+			function hideAllColumns2() {
+				$checkboxes.each(function(){
+					checkbox = $(this);
+					let id = checkbox.attr("id");
+					let columns = $('.'+id);
+					checkbox.prop("checked", false);
+					hideSpecificColumn(columns);
+				});
+			}
+
+			function displaySpecificColumn(columns) {
+				$.each(columns, function(index, column) {
+					// Show column
+					column.style.display= "";
+				});
+			}
+
+			function hideSpecificColumn(columns) {
+				$.each(columns, function(index, column) {
+					// Hide column
+					column.style.display= "none";
+				});	
+			}
+			
+			if (typeof(Storage) !== "undefined") {
+				// If user preference is available in cache
+				if (localStorage.paymentFilterCache) {
+					// Reset the checkboxes
+					$('input[type="checkbox"]').prop('checked', false);
+					hideAllColumns2();
+					// Get the user preference from JavaScript Storage API
+					let cacheArr = JSON.parse(localStorage.paymentFilterCache);
+					/* If the user preference is to display all columns, then
+					   display all columns.
+					*/
+					if (cacheArr.length === $columnCheckBoxes.length)
+						$("#selectAll").prop('checked', true);
+					cacheArr.forEach(function (elem, index) {
+						let columns = $('.'+elem);
+						$('input[name=filtercolumn]').filter('#'+elem).prop('checked', true);
+						displaySpecificColumn(columns);
+					});
+				}
+				// If user preference is not available in cache
+				else {
+					// Display all columns by default and create new cache
+					$("#selectAll").prop('checked', true);
+					let cacheArr = [];
+					$('input[type="checkbox"]').not("#selectAll").each(function() {
+						cacheArr.push($(this).val());
+						$(this).prop('checked', true);
+					});
+					localStorage.setItem("paymentFilterCache", JSON.stringify(cacheArr));
+				}
+			} 
+			else {
+				// Check all the checkboxes once the document is loaded if no Web Storage support.
+				$('input[type="checkbox"]').prop('checked', true);
+			}
+			
 			/*
 			Once the user click "Select all" checkbox, activate all 
 			checkboxes programmatically.
@@ -112,22 +161,14 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 			$("#selectAll").on("change", function(){
 				let checkbox;			
 				if($("#selectAll").prop("checked")){
-					checkboxes.each(function(){
-						checkbox = $(this)
-						checkbox.prop("checked", true);
-						filterColumn(checkbox);         
-					});
+					displayAllColumns();
 				} else {
-					checkboxes.each(function(){
-						checkbox = $(this)
-						checkbox.prop("checked", false);
-						filterColumn(checkbox);              
-					});
+					hideAllColumns();
 				} 
 			});
 
 			// Activate the filterColumn function on change.	 
-			checkboxes.on("change", function(){
+			$checkboxes.on("change", function(){
 				let checkbox = $(this);
 				filterColumn(checkbox);
 			});
@@ -161,13 +202,13 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 			});
 
 			// when the submit button in the modal is clicked, submit the form
-			$('#confirm-delete-btn').click(function(){
+			$('#editPaymentModal .modal-footer button').click(function(){
 
 			    /* when the submit button in the modal is clicked, submit the form */
 			    $('#payment-form').append($('<input>', {
 			            type: 'hidden',
 			            name: 'user_action',
-			            value: 'DELETE'
+			            value: $(this).val()
 			    }));
 				
 				$('#payment-form').submit();	  
@@ -186,7 +227,7 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 			    // Execute Ajax GET request on URL
 			    $.get($clickedElem.attr('id'), function(responseJson) {
 			        $.each(responseJson, function (columnName, columnValue) {
-			            $('#editPaymentModal input[name='+columnName+']').val(columnValue);
+			            $('#editPaymentModal #'+columnName).val(columnValue);
 			        });
 
 			     // Detach add button since the user only wants to update or delete payment
@@ -210,10 +251,15 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 			    $('#editPaymentModal').modal('show');
 			});
 
-			/* Reattach the detached elements back to the payment form once the
-			   user closes the payment form.
+			$paymentFormInputs = $('#editPaymentModal').find('select,input:not([type=radio],[type=button],[type=submit],[type=hidden])');
+
+			/* 
+				Once the user closes the payment form:
+				1. Reattach the detached elements back to the payment form.
+				2. Remove all input validation messages.
 			*/
 			$('#editPaymentModal').on('hidden.bs.modal', function (e) {
+				// 1.
 			    if (addBtn !== null) {
 			        $('#editPaymentModal .modal-footer').append(addBtn);
 			        addBtn = null;
@@ -226,6 +272,59 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 			        $('#editPaymentModal .modal-footer').append(deleteBtn);
 			        deleteBtn = null;
 			    }
+				// 2.
+				$paymentFormInputs.each(function(index, element){
+			        $(element).removeClass("is-valid is-invalid");
+			    });
+			});
+
+			// AJAX POST request to get form validation results form the server
+			$(".needs-validation").on("submit", function(event) {
+
+				event.preventDefault();
+				
+				let $form = $(".needs-validation");
+				let inputIdentifiers = []
+
+				$.post($form.attr("action"), $form.serialize(), function(responseJSON) {
+
+					/* If the server returns an empty object, it means that all inputs are
+					   are valid. Straight away submit the checkout form.
+					*/
+					if (jQuery.isEmptyObject(responseJSON)) {
+					    $form.off("submit");
+					    $form.submit();
+					}
+				   
+					let wrongInputs = Object.keys(responseJSON);
+
+					/* Assign "is-valid" class to correct inputs and "is-invalid" class to
+					   wrong inputs, respectively
+					*/
+					$paymentFormInputs.each(function(index, element){
+				        let $elem = $(element);
+				        let $parent = $elem.parent();
+						// Remove all previous input validation messages
+				        $elem.removeClass("is-valid is-invalid");
+				        $parent.children(".invalid-feedback").remove();
+				        // Assign new input validation messages based on incoming JSON
+				        if (!wrongInputs.includes($elem.attr("id"))) {
+				            $elem.addClass("is-valid");
+				        } else {
+				            $elem.addClass("is-invalid")
+				        }
+				    });
+				    
+				    // Iterate over the JSON object.                      
+				    $.each(responseJSON, function(inputIdentifier, errorMessage) {
+				        inputIdentifiers.push(inputIdentifier);
+				        // Locate HTML DOM element with ID "inputIdentifier".
+				        let $select = $("#editPaymentModal #"+inputIdentifier);
+				        let $parent = $select.parent();
+				        // Append the constructed error message in the parent div of the wrong input
+				        $parent.append("<div class='invalid-feedback'>"+errorMessage+"</div>");
+				    });
+				});
 			});
 		});
 	</script>
@@ -476,7 +575,7 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 	<div id="editPaymentModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form id="payment-form" action="${ pageContext.request.contextPath }/managePayment" method="post">
+				<form id="payment-form" class="needs-validation" action="${ pageContext.request.contextPath }/managePayment" method="post" novalidate>
 					<div class="modal-header">
 						<h4 class="modal-title">Payment details</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -501,6 +600,7 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 						<div class="form-group">
 						    <label for="paymentmethod">Payment method:</label><br>
 						    <select class="form-control" name="paymentmethod" id="paymentmethod" required>
+						    	<option value="" selected>Select your payment method</option>
 						        <option value="check">Check</option>
 						        <option value="cash">Cash</option>
 						        <option value="debit card">Debit card</option>
@@ -519,13 +619,13 @@ $columnCheckBoxes = $('input[type="checkbox"]').not("#selectAll");
 						<button id="cancel-btn" type="button" class="btn btn-default d-flex justify-content-center align-items-center" data-dismiss="modal">
 							<span>Cancel</span>
 						</button>
-						<button id="add-btn" type="submit" name="user_action" value="ADD" class="btn btn-success d-flex justify-content-center align-items-center">
+						<button id="add-btn" type="button" name="user_action" value="ADD" class="btn btn-success d-flex justify-content-center align-items-center">
 							<i class="material-icons mr-2">&#xE147;</i> <span>Add</span>
 						</button>
-						<button id="update-btn" type="submit" name="user_action" value="UPDATE" class="btn btn-success d-flex justify-content-center align-items-center">
+						<button id="update-btn" type="button" name="user_action" value="UPDATE" class="btn btn-success d-flex justify-content-center align-items-center">
 							<i class="material-icons mr-2">&#xE254;</i> <span>Update</span>
 						</button>
-						<button id="delete-btn" type="submit" name="user_action" value="DELETE" class="btn btn-danger d-flex justify-content-center align-items-center">
+						<button id="delete-btn" type="button" name="user_action" value="DELETE" class="btn btn-danger d-flex justify-content-center align-items-center">
 							<i class="material-icons mr-2">&#xE872;</i>
 							<span>Delete</span>
 						</button>

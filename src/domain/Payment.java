@@ -26,7 +26,12 @@ import javax.persistence.Table;
 	@NamedQuery(
 			name = "Payment.findbyPaymentId", 
 			query = "SELECT p FROM Payment p "+
-			"WHERE p.id.customernumber = ?1 AND p.id.checknumber = ?2"
+					"WHERE p.id.customernumber = ?1 AND p.id.checknumber = ?2"
+	),
+	@NamedQuery(
+			name = "Payment.findCheckNumbers", 
+			query = "SELECT p.id.checknumber FROM Payment p "+
+					"WHERE p.id.customernumber = ?1"
 	),
 })
 public class Payment implements Serializable {

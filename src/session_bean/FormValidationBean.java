@@ -39,8 +39,13 @@ public class FormValidationBean implements FormValidationLocal {
 	@EJB
 	private EmployeeSessionBeanLocal empBean;
 	
+	@EJB
+	private PaymentLocal paymentBean;
+	
 	final private static double CREDIT_LIMIT_MIN = 0.0;
 	final private static double CREDIT_LIMIT_MAX = 999999.99;
+	final private static double AMOUNT_MIN = 0.0;
+	final private static double AMOUNT_MAX = 999999.99;
 	final private static int CARD_NO_MIN_LEN = 15;
 	final private static int CARD_NO_MAX_LEN = 16;
 	final private static int MONTH_MIN = 1;
@@ -63,13 +68,121 @@ public class FormValidationBean implements FormValidationLocal {
 	    "bank_name", 
 	    "bank_account_number"
 	);
+	
+	/**
+	 * Validate each input fields in the payment form at the server side
+	 * to move the business logics from presentation layer to middle layer.
+	 *  
+	 * @param request
+	 * @return formValidationResult (to send back in JSON later)
+	 */
+	@Override
+	public Map<String, String> validatePaymentForm(HttpServletRequest request) {
+				
+		Map<String, String> formValidationResult = new LinkedHashMap<>();
+		
+		List<String> paymentParameterNames = Arrays.asList(
+		    "customernumber", 
+		    "checknumber", 
+		    "amount", 
+		    "paymentdate", 
+		    "paymentmethod"
+		);
+				
+		String errorMessage;
+		/*
+		 * Validation for payment form's input fields
+		 */
+		for (String parameterName : paymentParameterNames) {
+			String parameterValue = request.getParameter(parameterName);
+			/* Check if mandatory input field is empty. Since all input fields are required,
+			 * we can skip the hassle to write code that checks optionality.
+			 */
+		    if (parameterValue.equals("")) {
+		    	errorMessage = printError("REQUIRED", parameterName, "");
+		    	formValidationResult.put(parameterName, errorMessage);
+		    }
+		    // Check if text-based values exceed the maximum characters that can be stored
+		    if (parameterName.equals("checknumber") && !parameterValue.equals("")) {
+			    Column column = paymentBean.getColumnAnnotation(parameterName);
+			    int inputLength = request.getParameter(parameterName).length();
+			    String customernumber = request.getParameter("customernumber");
+			    String action = request.getParameter("user_action");
+			    if (column.length() < inputLength) {
+			    	errorMessage = printError("TOO_LONG", parameterName, String.valueOf(column.length()));
+			    	formValidationResult.put(parameterName, errorMessage);
+			    }
+			    /* Check if the check number in the input field clashes with any of
+			       the check numbers in the database. As long as the check number
+			       is unique for that customer, it is fine XD
+			    */
+			    else if (!customernumber.equals("") && action.equals("ADD")) {
+			    	List<String> existedChecknumbers = paymentBean.getChecknumbers(customernumber);
+			    	for (String existedCheckmumber : existedChecknumbers) {
+			    		if (existedCheckmumber.equals(parameterValue)) {
+			    			errorMessage = printError("NOT_UNIQUE", parameterName, "");
+							formValidationResult.put(parameterName, errorMessage);
+			    		}
+			    	}
+			    }
+		    }
+		}
+		
+		// Check if the customer number exists in the database
+		String customernumber = request.getParameter("customernumber");
+	    if (!customernumber.equals("")) {
+	    	boolean errorExist = isDigit("customernumber", customernumber, formValidationResult);
+	    	if (!errorExist) {
+				Customer customer = customerBean.findCustomerById(customernumber);
+				if (customer == null) {
+					errorMessage = printError("NOT_EXIST", "customernumber", "");
+					formValidationResult.put("customernumber", errorMessage);
+				}
+	    	}
+	    }
+		
+	    String amount = request.getParameter("amount");
+		/* Check if amount matches the pattern similar to "12345.99" 
+		 * where ".99" is optional.
+		 */
+		if (!amount.equals("")) {
+			Pattern amountPattern = Pattern.compile("^\\d+\\.?\\d{0,2}$");
+			Matcher matcher = amountPattern.matcher(amount);
+			boolean matchFound = matcher.find();
+		    if(!matchFound) {
+				errorMessage = printError("INVALID_FORMAT", "amount", "12345.99");
+				formValidationResult.put("amount", errorMessage);
+		    }
+		    else {
+		    	boolean errorExist = false;
+		    	double amountFloat = new BigDecimal(amount).doubleValue();
+		    	// Check if amount is within the valid range
+		    	if (!errorExist) {
+		    		if (amountFloat < AMOUNT_MIN) {
+		    	    	errorMessage = printError("TOO_SMALL", "amount", String.valueOf(AMOUNT_MIN));
+		    	    	formValidationResult.put("amount", errorMessage);
+		    	    	errorExist = true;
+		    		}
+		    	} 
+		    	if (!errorExist) {
+		    		// Hardcode 999999.99 to make my life easier XD
+		    		if (amountFloat > AMOUNT_MAX) {
+		    	    	errorMessage = printError("TOO_BIG", "amount", String.valueOf(AMOUNT_MAX));
+		    	    	formValidationResult.put("amount", errorMessage);
+		    		}
+		    	}
+		    }
+		}
+		
+		return formValidationResult;
+	}
 		
 	/**
 	 * Validate each input fields in the customer form at the server side
 	 * to move the business logics from presentation layer to middle layer.
 	 *  
 	 * @param request
-	 * @return validateCustomerForm (to send back in JSON later)
+	 * @return formValidationResult (to send back in JSON later)
 	 */
 	@Override
 	public Map<String, String> validateCustomerForm(HttpServletRequest request) {
@@ -94,7 +207,7 @@ public class FormValidationBean implements FormValidationLocal {
 				
 		String errorMessage;
 		/*
-		 * Validation for order form's input fields
+		 * Validation for customer form's input fields
 		 */
 		for (String customerParameterName : customerParameterNames) {
 			String parameterValue = request.getParameter(customerParameterName);
@@ -142,7 +255,6 @@ public class FormValidationBean implements FormValidationLocal {
 		String salesrepemployeenumber = request.getParameter("salesrepemployeenumber");
 	    if (!salesrepemployeenumber.equals("")) {
 	    	boolean errorExist = isDigit("salesrepemployeenumber", salesrepemployeenumber, formValidationResult);
-	    	// Check if the length of the card number is 15 or 16
 	    	if (!errorExist) {
 				Employee employee = empBean.findEmployee(salesrepemployeenumber);
 				if (employee == null) {
@@ -169,7 +281,6 @@ public class FormValidationBean implements FormValidationLocal {
 		    	double creditlimitFloat = new BigDecimal(creditlimit).doubleValue();
 		    	// Check if credit limit is within the valid range
 		    	if (!errorExist) {
-		    		
 		    		if (creditlimitFloat < CREDIT_LIMIT_MIN) {
 		    	    	errorMessage = printError("TOO_SMALL", "creditlimit", String.valueOf(CREDIT_LIMIT_MIN));
 		    	    	formValidationResult.put("creditlimit", errorMessage);
@@ -190,11 +301,11 @@ public class FormValidationBean implements FormValidationLocal {
 	}
 
 	/**
-	 * Validate each input fields in the customer form at the server side
+	 * Validate each input fields in the checkout form at the server side
 	 * to move the business logics from presentation layer to middle layer.
 	 *  
 	 * @param request
-	 * @return validateCustomerForm (to send back in JSON later)
+	 * @return formValidationResult (to send back in JSON later)
 	 */
 	@Override
 	public Map<String, String> validateCheckoutForm(HttpServletRequest request) {
@@ -249,7 +360,7 @@ public class FormValidationBean implements FormValidationLocal {
 		String paymentMethod = request.getParameter("payment_method");
 	
 		/*
-		 * Validation for payment form's input fields for "card payment"
+		 * Validation for checkout form's input fields for "card payment"
 		 */
 		if (paymentMethod.equals("card")) {
 			// Check if mandatory input field is empty
@@ -315,7 +426,7 @@ public class FormValidationBean implements FormValidationLocal {
 		}
 		
 		/*
-		 * Validation for payment form's input fields for "bank transfer"
+		 * Validation for checkout form's input fields for "bank transfer"
 		 */
 		else {
 			// Check if mandatory input field is empty
@@ -363,13 +474,18 @@ public class FormValidationBean implements FormValidationLocal {
 		mapIdToColumnName.put("bank_holder_name", "bank holder's name"); 
 		mapIdToColumnName.put("bank_name", "bank name");
 		mapIdToColumnName.put("bank_account_number", "bank account number");
-		
+	    mapIdToColumnName.put("customernumber", "customer number"); 
+	    mapIdToColumnName.put("checknumber", "check number"); 
+	    mapIdToColumnName.put("amount", "amount"); 
+	    mapIdToColumnName.put("paymentdate", "payment date"); 
+	    mapIdToColumnName.put("paymentmethod", "payment method");
+	    
 		return mapIdToColumnName;
 	}
 	
 	/**
-	 * Lookup table to produce custom form error message
-	 * based on the column name. 
+	 * Function to print a custom form error according to 
+	 * the @param error_type.
 	 * 
 	 * @param error_type
 	 * @param columnName
@@ -413,7 +529,7 @@ public class FormValidationBean implements FormValidationLocal {
 	}
 	
 	/**
-	 * Determine if the given input field in the order form should be 
+	 * Determine if the given input field in the form should be 
 	 * optional or not, based on the "@Column" annotation in the Customer 
 	 * entity class.
 	 * 

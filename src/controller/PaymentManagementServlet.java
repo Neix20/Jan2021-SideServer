@@ -2,6 +2,8 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -15,6 +17,7 @@ import com.google.gson.Gson;
 
 import domain.Payment;
 import domain.PaymentJson;
+import session_bean.FormValidationLocal;
 import session_bean.PaymentLocal;
 import utility.PaginationRequestProcessor;
 import utility.UrlGenerator;
@@ -34,6 +37,9 @@ public class PaymentManagementServlet extends HttpServlet {
     
     @EJB
     private PaymentLocal paymentBean;
+    
+	@EJB
+	private FormValidationLocal formValidator;
 	
     public PaymentManagementServlet() {
         super();
@@ -76,54 +82,68 @@ public class PaymentManagementServlet extends HttpServlet {
 	 * To perform add, update, delete operation on payment's record.
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String customernumber = request.getParameter("customernumber");
-		String checknumber = request.getParameter("checknumber");
-		String amount = request.getParameter("amount");
-		String paymentdate = request.getParameter("paymentdate");
-		String paymentmethod = request.getParameter("paymentmethod");
-			
+					
 		PrintWriter out = response.getWriter();
-	
-		String[] s = {
-			customernumber,
-			checknumber,
-			amount,	
-			paymentdate,
-			paymentmethod,
-		};
-	
 		String action = request.getParameter("user_action");
 		
-		try {
-		    if (action.equals("UPDATE")) {
-		    	paymentBean.updatePayment(s, customernumber, checknumber);
-		    } else if (action.equals("DELETE")) {
-		    	paymentBean.deletePayment(customernumber, checknumber);
-		    } else {
-		    	paymentBean.addPayment(s);
-		    }	
-		} catch (EJBException ex) {
-			throw ex;
+		/*
+		 * Check if it is a AJAX request	
+		 * Reference: https://stackoverflow.com/a/4113258
+		 */
+		boolean ajax = "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+
+		/*
+		 * <JSON response>. 
+		 * Use payment form validation service to produce
+		 * JSON. The JSON is then passed back to the client 
+		 * to display the relevant form error message.
+		 */
+	    if (ajax) {
+	    	Map<String, String> formValidationResult = new LinkedHashMap<>();
+	    	// Only validate form if user wants to add or update record
+	    	if (!action.equals("DELETE")) {
+	    		formValidationResult = formValidator.validatePaymentForm(request);
+	    	}
+	        String json = new Gson().toJson(formValidationResult);
+	        response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        out.write(json);
+	    }
+		
+		/*
+		 * <Regular JSP Response>
+		 * Perform CREATE, UPDATE, DELETE on payment.
+		 */
+		else {
+			try {
+			    if (action.equals("UPDATE")) {
+			    	paymentBean.updatePayment(request);
+			    } else if (action.equals("DELETE")) {
+			    	paymentBean.deletePayment(request);
+			    } else {
+			    	paymentBean.addPayment(request);
+			    }	
+			} catch (EJBException ex) {
+				throw ex;
+			}
+			
+			// Use custom class to process the request's parameter to reduce redundancy
+			PaginationRequestProcessor requestProcessor = new PaginationRequestProcessor();
+			requestProcessor.process(request);
+			int nOfPages = requestProcessor.getnOfPages();
+			int currentPage = requestProcessor.getCurrentPage();
+			int recordsPerPage = requestProcessor.getRecordsPerPage();
+			String keyword = requestProcessor.getKeyword();
+			String sortItem = requestProcessor.getSortItem();
+			String sortType = requestProcessor.getSortType();
+			
+			String absoluteLink = request.getContextPath();
+			absoluteLink += "/Payment";
+			UrlGenerator urlGenerator = new UrlGenerator(absoluteLink, nOfPages, currentPage, 
+														 recordsPerPage, keyword, sortItem, sortType);
+			request.setAttribute("urlGenerator", urlGenerator);
+
+		    Redirect.navigateJS(out, urlGenerator.toString(), action);
 		}
-		
-		// Use custom class to process the request's parameter to reduce redundancy
-		PaginationRequestProcessor requestProcessor = new PaginationRequestProcessor();
-		requestProcessor.process(request);
-		int nOfPages = requestProcessor.getnOfPages();
-		int currentPage = requestProcessor.getCurrentPage();
-		int recordsPerPage = requestProcessor.getRecordsPerPage();
-		String keyword = requestProcessor.getKeyword();
-		String sortItem = requestProcessor.getSortItem();
-		String sortType = requestProcessor.getSortType();
-		
-		String absoluteLink = request.getContextPath();
-		absoluteLink += "/Payment";
-		UrlGenerator urlGenerator = new UrlGenerator(absoluteLink, nOfPages, currentPage, 
-													 recordsPerPage, keyword, sortItem, sortType);
-		request.setAttribute("urlGenerator", urlGenerator);
-
-	    Redirect.navigateJS(out, urlGenerator.toString(), action);
 	}
-
 }
