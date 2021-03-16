@@ -1,0 +1,8 @@
+this.ordernumber = o.ordernumber;
+		this.orderdate = o.orderdate;
+		this.requireddate = o.requireddate;
+		this.shippeddate = o.shippeddate;
+		this.status = o.status;
+		this.comments = o.comments;
+		this.customernumber = o.customernumber;
+		this.orderdetails = o.orderdetails;

@@ -24,7 +24,7 @@ public class ShoppingCart {
 	
 	public void addItem(ShoppingCartItem sc) {
 		//Check for duplicates
-		if(this.list.contains(sc)) {
+		if(hashMap.containsKey(sc.getProductname())) {
 			ShoppingCartItem tmp = getShoppingCartItem(sc.getProductname());
 			tmp.setQuantity(tmp.getQuantity() + sc.getQuantity());
 			tmp.countPrice();
@@ -36,7 +36,7 @@ public class ShoppingCart {
 	}
 	
 	public boolean removeItem(ShoppingCartItem sc) {
-		if(this.list.contains(sc)) {
+		if(hashMap.containsKey(sc.getProductname())) {
 			this.list.remove(sc);
 			hashMap.remove(sc.getProductname());
 			return true;
@@ -60,7 +60,7 @@ public class ShoppingCart {
 	public void countTotalPrice() {
 		BigDecimal tmp = new BigDecimal(0);
 		for(ShoppingCartItem sc : list) { tmp = tmp.add(sc.getSubPrice()); }
-		totalPrice = tmp;
+		this.totalPrice = tmp;
 	}
 	
 	public List<ShoppingCartItem> getList() {
