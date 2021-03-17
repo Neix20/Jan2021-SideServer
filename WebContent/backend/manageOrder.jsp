@@ -319,8 +319,7 @@ table.table tr th:first-child {
 							<textarea id="otd<%=num%>" name="comment" class="form-control"
 								form="update_form<%=num%>"></textarea>
 							<script>
-								document.querySelector("#otd<%=num%>").value = "<%=o.getComments()%>
-								";
+							document.querySelector("#otd<%=num%>").value = "<%=o.getComments()%>";
 							</script>
 						</div>
 						<div class="form-group">

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -67,6 +68,8 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+		PrintWriter out = response.getWriter();
 
 		String date_select = request.getParameter("date_select");
 		if (date_select == null)
@@ -79,6 +82,7 @@ public class DashboardServlet extends HttpServlet {
 			String str = a[0].toString() + " " + a[1].toString();
 			date_options.add(str);
 		}
+			
 
 		List<Order> orderList = orderBean.getOrderMonth(date_select);
 
@@ -93,8 +97,26 @@ public class DashboardServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-
-		PrintWriter out = response.getWriter();
+		
+		request.setAttribute("date_options", date_options);
+		request.setAttribute("orderMonthList", orderMonthList);
+		
+		ShoppingCart scList = getShoppingCartList(orderMonthList);
+		List<ShoppingCartItem> inventoryList = scList.getList().stream().sorted(Comparator.comparingInt(ShoppingCartItem::getQuantity)).collect(Collectors.toList());
+		Collections.reverse(inventoryList);
+		inventoryList = inventoryList.subList(0, 5);
+		
+		BigDecimal totalBuyPriceMonth, totalSalesMonth, totalMsrpMonth = scList.getTotalPrice();
+		totalBuyPriceMonth = scList.getList().stream().map(y -> y.getBuyprice().multiply(new BigDecimal(y.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add);
+		totalSalesMonth = totalMsrpMonth.subtract(totalBuyPriceMonth);
+		double orderShipped = orderMonthList.stream().filter(y -> y.getStatus().equals("Shipped")).collect(Collectors.toList()).size(), orderHaventShipped = orderMonthList.size() - orderShipped, numOfOrders = orderMonthList.size();
+		double[] default_info = {orderHaventShipped, numOfOrders, orderShipped, totalSalesMonth.doubleValue()};
+		
+		HashMap<String, Integer> productlineHashMap = getProductlineHashMap(scList);
+		
+		request.setAttribute("default_info", default_info);
+		request.setAttribute("inventoryList", inventoryList);
+		request.setAttribute("productlineHashMap", productlineHashMap);
 		
 		//Get Weekly Order
 		//Use Stream Filter Reduce to sum up all the buyPrice, Sell Price, Total Sales Revenue
@@ -159,15 +181,12 @@ public class DashboardServlet extends HttpServlet {
 		salesWeekSum = msrpWeekSum.subtract(buyPriceWeekSum);
 		totalSalesWeekList.add(salesWeekSum);
 		
-		out.println("<h1>Total Orders Week</h1>");
-		for(int i : totalOrderWeekList) {
-			out.println(html_generator.p_tag("Total Order Week: " + i));
-		}
+		request.setAttribute("totalOrderWeekList", totalOrderWeekList);
+		request.setAttribute("totalProductWeekList", totalProductWeekList);
+		request.setAttribute("totalBuyPriceWeekList", totalBuyPriceWeekList);
+		request.setAttribute("totalMsrpWeekList", totalMsrpWeekList);
+		request.setAttribute("totalSalesWeekList", totalSalesWeekList);
 		
-		out.println("<h1>Total Products Week</h1>");
-		for(int i : totalProductWeekList) {
-			out.println(html_generator.p_tag("Total Products Week: " + i));
-		}
 		
 		out.println("<h1>Total Buy Price Week: </h1>");
 		for(BigDecimal bd : totalBuyPriceWeekList) {
@@ -183,39 +202,11 @@ public class DashboardServlet extends HttpServlet {
 		for(BigDecimal bd : totalSalesWeekList) {
 			out.println(html_generator.p_tag("Total Sales Revenue: " + bd.setScale(2, RoundingMode.HALF_UP)));
 		}
-		
 
-		ShoppingCart scList = getShoppingCartList(orderMonthList);
-		List<ShoppingCartItem> tmpList = scList.getList().stream().sorted(Comparator.comparingInt(ShoppingCartItem::getQuantity)).collect(Collectors.toList());
-		Collections.reverse(tmpList);
+		request.setAttribute("servlet_name", "manageDashboard");
 		
-		int orderShipped = orderMonthList.stream().filter(y -> y.getStatus().equals("Shipped")).collect(Collectors.toList()).size();
-		int orderHaventShipped = orderMonthList.size() - orderShipped;
-		
-		out.println(html_generator.p_tag("Total Quantity: " + scList.count()));
-		out.println(html_generator.p_tag("Total Order Shipped: " + orderShipped));
-		out.println(html_generator.p_tag("Total Order not shipped: " + orderHaventShipped));
-		
-		out.println(html_generator.p_tag("Mum"));
-		
-		
-		BigDecimal totalBuyPriceMonth, totalSalesMonth, totalMsrpMonth = scList.getTotalPrice();
-		totalBuyPriceMonth = scList.getList().stream().map(y -> y.getBuyprice().multiply(new BigDecimal(y.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add);
-		totalSalesMonth = totalMsrpMonth.subtract(totalBuyPriceMonth);
-		
-		out.println(html_generator.p_tag("Total Sales Revenue: " + totalSalesMonth.doubleValue()));
-		
-		HashMap<String, Integer> productlineHashMap = getProductlineHashMap(scList);
-		for (String s : productlineHashMap.keySet()) {
-			out.println("<p>" + s + " " + productlineHashMap.get(s) + "</p>");
-		}
-
-//		request.setAttribute("servlet_name", "manageDashboard");
-//		request.setAttribute("date_options", date_options);
-//		request.setAttribute("orderMonthList", orderMonthList);
-//		
-//		RequestDispatcher req = request.getRequestDispatcher("backend/dashboardDebug.jsp");
-//		req.forward(request, response);
+		RequestDispatcher req = request.getRequestDispatcher("backend/manageDashboard.jsp");
+		req.forward(request, response);
 	}
 
 	/**
