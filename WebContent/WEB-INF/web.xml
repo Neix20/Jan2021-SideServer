@@ -12,8 +12,12 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-	<context-param> 
-    <param-name>image_save_dir</param-name>
-    <param-value>/${pageContext.request.contextPath}/frontend/assets/images</param-value>
-</context-param>
+	<context-param>
+		<param-name>image_save_dir</param-name>
+		<param-value>frontend/assets/images</param-value>
+	</context-param>
+	<context-param>
+		<param-name>report_save_dir</param-name>
+		<param-value>backend/assets/reports</param-value>
+	</context-param>
 </web-app>

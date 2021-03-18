@@ -87,14 +87,14 @@ public class ProductlineServlet extends HttpServlet {
 
 		switch (type) {
 		case "ADD":
-			String x = request.getServletContext().getRealPath("") + File.separator
+			String file_dir = request.getServletContext().getRealPath("") + File.separator
 					+ request.getServletContext().getInitParameter("image_save_dir");
 			final Part filePart = request.getPart("imageFile");
 			final String fileName = request.getParameter("productline").split(" ")[0] + ".jpg";
 			OutputStream out = null;
 			InputStream filecontent = null;
 			try {
-				out = new FileOutputStream(new File(x + File.separator + fileName));
+				out = new FileOutputStream(new File(file_dir + File.separator + fileName));
 				filecontent = filePart.getInputStream();
 				int read = 0;
 				final byte[] bytes = new byte[1024];

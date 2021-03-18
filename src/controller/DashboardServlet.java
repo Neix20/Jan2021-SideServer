@@ -1,9 +1,7 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +30,6 @@ import session_bean.OrderDetailSessionBeanLocal;
 import session_bean.OrderSessionBeanLocal;
 import session_bean.ProductSessionBeanLocal;
 import session_bean.ProductlineSessionBeanLocal;
-import utility.html_generator;
 
 /**
  * Servlet implementation class DashboardServlet
@@ -68,8 +65,6 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		PrintWriter out = response.getWriter();
 
 		String date_select = request.getParameter("date_select");
 		if (date_select == null)
@@ -104,7 +99,9 @@ public class DashboardServlet extends HttpServlet {
 		ShoppingCart scList = getShoppingCartList(orderMonthList);
 		List<ShoppingCartItem> inventoryList = scList.getList().stream().sorted(Comparator.comparingInt(ShoppingCartItem::getQuantity)).collect(Collectors.toList());
 		Collections.reverse(inventoryList);
-		inventoryList = inventoryList.subList(0, 5);
+		inventoryList = (inventoryList.size() < 5) ? inventoryList : inventoryList.subList(0, 5);
+		
+		System.out.println("Hello World");
 		
 		BigDecimal totalBuyPriceMonth, totalSalesMonth, totalMsrpMonth = scList.getTotalPrice();
 		totalBuyPriceMonth = scList.getList().stream().map(y -> y.getBuyprice().multiply(new BigDecimal(y.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -186,22 +183,6 @@ public class DashboardServlet extends HttpServlet {
 		request.setAttribute("totalBuyPriceWeekList", totalBuyPriceWeekList);
 		request.setAttribute("totalMsrpWeekList", totalMsrpWeekList);
 		request.setAttribute("totalSalesWeekList", totalSalesWeekList);
-		
-		
-		out.println("<h1>Total Buy Price Week: </h1>");
-		for(BigDecimal bd : totalBuyPriceWeekList) {
-			out.println(html_generator.p_tag("Total Buy Price: " + bd.setScale(2, RoundingMode.HALF_UP)));
-		}
-		
-		out.println("<h1>Total MSRP Week: </h1>");
-		for(BigDecimal bd : totalMsrpWeekList) {
-			out.println(html_generator.p_tag("Total MSRP Price: " + bd.setScale(2, RoundingMode.HALF_UP)));
-		}
-		
-		out.println("<h1>Total Sales Revenue Week: </h1>");
-		for(BigDecimal bd : totalSalesWeekList) {
-			out.println(html_generator.p_tag("Total Sales Revenue: " + bd.setScale(2, RoundingMode.HALF_UP)));
-		}
 
 		request.setAttribute("servlet_name", "manageDashboard");
 		

@@ -106,6 +106,12 @@ $(document).ready(function(){
 													</h2>
 												</div>
 												<div class="col-sm-6">
+													<form action="Product" method="get">
+														<button class="btn btn-danger" name="type" value="DOWNLOAD">
+															<i class="fas fa-file-excel"></i> <span>Download
+																Report</span>
+														</button>
+													</form>
 													<a href="#addProductModal" class="btn btn-success"
 														data-toggle="modal"><i class="fas fa-plus-circle"></i>
 														<span>Add New Product</span></a>
@@ -396,7 +402,8 @@ $(document).ready(function(){
 							<small>This action cannot be undone.</small>
 						</p>
 					</div>
-					<input name="productcode" value="<%=p.getProductcode()%>" hidden type="text">
+					<input name="productcode" value="<%=p.getProductcode()%>" hidden
+						type="text">
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal"
 							value="Cancel"> <input type="submit"
