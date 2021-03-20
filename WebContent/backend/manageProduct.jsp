@@ -106,7 +106,7 @@ $(document).ready(function(){
 													</h2>
 												</div>
 												<div class="col-sm-6">
-													<form action="Product" method="get">
+													<form action="<%=servlet_name%>" method="get">
 														<button class="btn btn-danger" name="type" value="DOWNLOAD">
 															<i class="fas fa-file-excel"></i> <span>Download
 																Report</span>

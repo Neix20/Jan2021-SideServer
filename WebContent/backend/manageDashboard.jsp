@@ -324,7 +324,7 @@ function toggleDataSeries(e) {
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="white-box">
-							<form id="date_select" class="px-3">
+							<form id="date_select" class="px-3" action="<%=servlet_name%>" method="get">
 								<div class="row">
 									<div class="col-2">
 										<select class="search_select" form="date_select"

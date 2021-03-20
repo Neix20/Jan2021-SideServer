@@ -32,7 +32,7 @@ import utility.html_generator;
 /**
  * Servlet implementation class ProductServlet
  */
-@WebServlet(name = "Product Servlet", urlPatterns = { "/manageProduct", "/product", "/Product" })
+@WebServlet(name = "Product Servlet", urlPatterns = { "/manageProduct"})
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

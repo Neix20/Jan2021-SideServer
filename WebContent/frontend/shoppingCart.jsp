@@ -6,8 +6,7 @@
 <%@ page import="java.util.HashMap"%>
 <%
 	ShoppingCart scList = (ShoppingCart) session.getAttribute("ShoppingCart");
-	if (scList == null)
-		scList = new ShoppingCart();
+	if (scList == null) scList = new ShoppingCart();
  	BigDecimal temp = scList.getTotalPrice();
  	temp = temp.multiply(new BigDecimal(1.06));
 %>
@@ -54,37 +53,6 @@ input[type=number] {
 }
 </style>
 
-<script>
-//Remove Javascript
-    $(function () {
-      $(".plus").on("click", e => {
-        let num = $(e.target).siblings("input[type=number]").val(), 
-          max_limit = parseInt($(e.target).siblings("input[type=number]").attr("max")),
-          min_limit = parseInt($(e.target).siblings("input[type=number]").attr("min"));
-        (num >= max_limit) ? $(e.target).prop("disabled", true) : $(e.target).siblings("input[type=number]").val(++num);
-        if (num >= min_limit) $(e.target).siblings(".minus").prop("disabled", false);
-      });
-
-      $(".minus").on("click", e => {
-        let num = $(e.target).siblings("input[type=number]").val(), 
-          max_limit = parseInt($(e.target).siblings("input[type=number]").attr("max")),
-          min_limit = parseInt($(e.target).siblings("input[type=number]").attr("min"));
-        (num <= min_limit) ? $(e.target).prop("disabled", true) : $(e.target).siblings("input[type=number]").val(--num);
-        if (num <= max_limit) $(e.target).siblings(".plus").prop("disabled", false);
-      });
-
-      $(".buy_quantity").on("keypress", e => {
-        if (e.keyCode == 13) {
-          let num = $(e.target).val(), max_limit = parseInt($(e.target).attr("max")), min_limit = parseInt($(e.target).attr("min"));
-          if (num > max_limit) $(e.target).siblings(".plus").prop("disabled", true);
-          if (num < min_limit) $(e.target).siblings(".minus").prop("disabled", true);
-          if (num >= min_limit) $(e.target).siblings(".minus").prop("disabled", false);
-          if (num <= max_limit) $(e.target).siblings(".plus").prop("disabled", false);
-        }
-      });
-
-    });
-  </script>
 </head>
 
 <body>

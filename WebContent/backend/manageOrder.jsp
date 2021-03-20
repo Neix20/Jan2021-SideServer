@@ -7,8 +7,7 @@
 <%
 	List<Order> orderList = (List<Order>) request.getAttribute("orderList");
 	List<Customer> customerList = (List<Customer>) request.getAttribute("customerList");
-	HashMap<Integer, String> customerHashMap = (HashMap<Integer, String>) request
-			.getAttribute("customerHashMap");
+	HashMap<Integer, String> customerHashMap = (HashMap<Integer, String>) request.getAttribute("customerHashMap");
 	int nextOrderNumber = (Integer) request.getAttribute("nextOrderNumber");
 	String servlet_name = (String) request.getAttribute("servlet_name");
 	int currentPage = (Integer) request.getAttribute("currentPage");
@@ -102,7 +101,8 @@ table.table tr th:first-child {
 												</div>
 												<div class="col-sm-6">
 													<form action="<%=servlet_name%>" method="get">
-														<button class="btn btn-danger" name="type" value="DOWNLOAD">
+														<button class="btn btn-danger" name="type"
+															value="DOWNLOAD">
 															<i class="fas fa-file-excel"></i> <span>Download
 																Report</span>
 														</button>
@@ -139,7 +139,7 @@ table.table tr th:first-child {
 													<td><%=o.getStatus()%></td>
 													<td><%=customerHashMap.get(o.getCustomernumber())%></td>
 													<td><a
-														href="OrderDetail?orderNumber=<%=o.getOrdernumber()%>">View</a></td>
+														href="manageOrderDetail?orderNumber=<%=o.getOrdernumber()%>">View</a></td>
 													<td><a href="#editOrderModal<%=num%>" class="edit"
 														data-toggle="modal"><i class="fas fa-pen-square"
 															data-toggle="tooltip" title="Edit"></i></a> <a
@@ -376,7 +376,8 @@ table.table tr th:first-child {
 							<small>This action cannot be undone.</small>
 						</p>
 					</div>
-					<input name="ordernumber" value="<%=o.getOrdernumber()%>" hidden type="text">
+					<input name="ordernumber" value="<%=o.getOrdernumber()%>" hidden
+						type="text">
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal"
 							value="Cancel"> <input type="submit"

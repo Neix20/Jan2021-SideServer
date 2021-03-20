@@ -34,7 +34,7 @@ import session_bean.ProductlineSessionBeanLocal;
 /**
  * Servlet implementation class DashboardServlet
  */
-@WebServlet(name = "Dashboard Servlet", urlPatterns = { "/manageDashboard", "/dashboard", "/Dashboard" })
+@WebServlet(name = "Dashboard Servlet", urlPatterns = { "/manageDashboard"})
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

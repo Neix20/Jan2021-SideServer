@@ -50,7 +50,7 @@
 	<!-- ***** Preloader End ***** -->
 
 	<!-- ***** Header Area Start ***** -->
-	<header class="header-area header-sticky">
+	<header class="header-area header-sticky background-header">
 	    <div class="container">
 	        <div class="row">
 	            <div class="col-12">
@@ -63,6 +63,7 @@
 	                        <li><a href="${pageContext.request.contextPath}">Home</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/productCatalog">Vehicle Models</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/shoppingCart">Shopping Cart</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/manageDashboard">Login</a></li>
 	                    </ul>
 	                    <a class='menu-trigger'> <span>Menu</span>
 	                    </a>

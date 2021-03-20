@@ -31,7 +31,7 @@ import utility.html_generator;
 /**
  * Servlet implementation class OrderServlet
  */
-@WebServlet(name = "Order Servlet", urlPatterns = { "/Order", "/order", "/manageOrders" })
+@WebServlet(name = "Order Servlet", urlPatterns = {"/manageOrders"})
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

@@ -26,7 +26,7 @@ import utility.html_generator;
 /**
  * Servlet implementation class ProductlineServlet
  */
-@WebServlet(name = "Product Line Servlet", urlPatterns = { "/manageProductline", "/productline", "/Productline" })
+@WebServlet(name = "Product Line Servlet", urlPatterns = { "/manageProductline"})
 @MultipartConfig
 public class ProductlineServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
