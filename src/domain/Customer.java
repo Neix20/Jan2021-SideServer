@@ -38,7 +38,7 @@ import javax.persistence.Table;
 	),
 	@NamedQuery(
 			name="Customer.locateNextPK", 
-			query="SELECT MAX(c.customernumber) FROM Customer c"
+			query="SELECT MAX(c.customernumber)+1 FROM Customer c"
 	),
 })
 public class Customer implements Serializable {
