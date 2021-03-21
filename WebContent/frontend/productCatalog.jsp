@@ -32,22 +32,71 @@
 	href="${pageContext.request.contextPath}/frontend/assets/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/frontend/assets/css/font-awesome.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
 
-<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/frontend/assets/js/jquery-3.5.1.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/frontend/assets/js/bootstrap.min.js"></script>
+<script
+	src="${ pageContext.request.contextPath }/frontend/assets/js/selectize.js"></script>
+<link rel="stylesheet"
+	href="${ pageContext.request.contextPath }/frontend/assets/css/selectize/selectize.css" />
 <script>
-        $(function(){
-            $(".btnDropDown").on("click", e => {
-                let str = $(e.target).siblings(".detail_board").css("display");
-                (str == "none") ? $(e.target).siblings(".detail_board").css("display", "hidden") : $(e.target).siblings(".detail_board").css("display", "none");
-            });
-        });
-    </script>
+	$(function() {
+		$('.search_select').selectize({
+			sortField : 'text'
+		});
+	});
+</script>
 
 </head>
 
 <body>
-	<%@ include file="header.jsp"%>
+	<!-- ***** Preloader Start ***** -->
+	<div id="js-preloader" class="js-preloader">
+		<div class="preloader-inner">
+			<span class="dot"></span>
+			<div class="dots">
+				<span></span> <span></span> <span></span>
+			</div>
+		</div>
+	</div>
+	<!-- ***** Preloader End ***** -->
+
+	<!-- ***** Header Area Start ***** -->
+	<header class="header-area header-sticky">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<nav class="main-nav">
+						<!-- ***** Logo Start ***** -->
+						<a href="${pageContext.request.contextPath}" class="logo">Vehicle
+							Models <em>Website</em>
+						</a>
+						<!-- ***** Logo End ***** -->
+						<!-- ***** Menu Start ***** -->
+						<ul class="nav">
+							<li><a href="${pageContext.request.contextPath}">Home</a></li>
+							<li><a
+								href="${pageContext.request.contextPath}/productCatalog">Vehicle
+									Models</a></li>
+							<li><a
+								href="${pageContext.request.contextPath}/shoppingCart">Shopping
+									Cart</a></li>
+							<li><a
+								href="${pageContext.request.contextPath}/manageDashboard">Login</a></li>
+						</ul>
+						<a class='menu-trigger'> <span>Menu</span>
+						</a>
+						<!-- ***** Menu End ***** -->
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- ***** Header Area End ***** -->
 
 	<!-- ***** Call to Action Start ***** -->
 	<section class="section section-bg" id="call-to-action"
@@ -75,36 +124,24 @@
 			<form action="ProductCatalog" method="GET">
 				<div class="row py-3">
 					<div class="col-2">
-						<button type="button" class="btn btn-primary btnDropDown">Category
-							&#9660;</button>
-						<div class="detail_board p-1"
-							style="height: 240px; width: 100%; background-color: rgb(211, 211, 211); display: none; position: absolute; z-index: 2; right: -12px;">
+						<select class="search_select" name="category">
+							<option value="">Enter a Product Line...</option>
 							<%
 								for (Productline pl : ProductlineList) {
 							%>
-							<input type="checkbox" name="category"
-								value="<%out.print(pl.getProductline());%>" /> <label
-								for="all"> <% out.print(pl.getProductline()); %>
-							</label><br />
+							<option value="<%=pl.getProductline()%>"><%=pl.getProductline()%></option>
 							<%
 								}
 							%>
-						</div>
+						</select>
 					</div>
 					<div class="col-2">
-						<button type="button" class="btn btn-primary btnDropDown">Sort
-							By &#9660;</button>
-						<div class="detail_board p-1"
-							style="height: 135px; width: 100px; background-color: rgb(211, 211, 211); display: none; position: absolute; z-index: 2; right: 75px;">
-							<input type="radio" name="sort_keyword" value="name_asc" /> <label
-								for="name_asc">Name &#9650;</label><br /> <input type="radio"
-								name="sort_keyword" value="name_desc" /> <label for="name_desc">Name
-								&#9660;</label><br /> <input type="radio" name="sort_keyword"
-								value="price_asc" /> <label for="price_asc">Price
-								&#9650;</label><br /> <input type="radio" name="sort_keyword"
-								value="price_desc" /> <label for="price_desc">Price
-								&#9660;</label>
-						</div>
+						<select class="search_select" name="sort_keyword">
+							<option value="name_asc">Name &#9650;</option>
+							<option value="name_desc">Name &#9660;</option>
+							<option value="price_asc">Price &#9650;</option>
+							<option value="price_desc">Price &#9660;</option>
+						</select>
 					</div>
 					<div class="col-7"></div>
 					<div class="col-1">
@@ -157,7 +194,8 @@
 					<li class="page-item">
 						<%
 							if (currentPage > 2) {
-								link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductCatalog?"
+										+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage - 2)
 										+ "\" aria-label=\"Previous\"><span aria-hidden=\"true\">&laquo;</span><span class=\"sr-only\">Previous</span></a>";
 								out.println(link);
@@ -167,7 +205,8 @@
 					<li class="page-item">
 						<%
 							if (currentPage > 1) {
-								link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductCatalog?"
+										+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage - 1) + "\">" + (currentPage - 1) + "</a>";
 								out.println(link);
 							}
@@ -175,7 +214,8 @@
 					</li>
 					<li class="page-item">
 						<%
-							link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+							link = "<a class=\"page-link\" href=\"ProductCatalog?"
+									+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
 									+ "&currentPage=" + currentPage + "\"><b>" + currentPage + "</b></a>";
 							out.println(link);
 						%>
@@ -183,7 +223,8 @@
 					<li class="page-item">
 						<%
 							if (currentPage < nOfPage) {
-								link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductCatalog?"
+										+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage + 1) + "\">" + (currentPage + 1) + "</a>";
 								out.println(link);
 							}
@@ -192,7 +233,8 @@
 					<li class="page-item">
 						<%
 							if (currentPage < nOfPage - 1) {
-								link = "<a class=\"page-link\" href=\"ProductCatalog?"+html_generator.getParameterArrayValues("category", category)+"&sort_keyword=" + sort
+								link = "<a class=\"page-link\" href=\"ProductCatalog?"
+										+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage + 2)
 										+ "\" aria-label=\"Next\"><span aria-hidden=\"true\">&raquo;</span><span class=\"sr-only\">Next</span></a>";
 								out.println(link);
@@ -221,23 +263,27 @@
 		</div>
 	</footer>
 
-	<!-- jQuery -->
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
-
 	<!-- Bootstrap -->
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/popper.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/popper.js"></script>
 
 	<!-- Plugins -->
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/scrollreveal.min.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/waypoints.min.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery.counterup.min.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/imgfix.min.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/mixitup.js"></script>
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/accordions.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/scrollreveal.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/waypoints.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/jquery.counterup.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/imgfix.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/mixitup.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/accordions.js"></script>
 
 	<!-- Global Init -->
-	<script src="${pageContext.request.contextPath}/frontend/assets/js/custom.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/frontend/assets/js/custom.js"></script>
 </body>
 
 </html>

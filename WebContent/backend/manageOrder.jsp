@@ -32,17 +32,17 @@
 	href="https://www.wrappixel.com/templates/ample-admin-lite/" />
 <!-- Favicon icon -->
 <link rel="icon" type="image/png" sizes="16x16"
-	href="backend/assets/plugins/images/favicon.png">
+	href="${ pageContext.request.contextPath }/backend/assets/plugins/images/favicon.png">
 <!-- Custom CSS -->
-<link href="backend/assets/css/style.min.css" rel="stylesheet">
+<link href="${ pageContext.request.contextPath }/backend/assets/css/style.min.css" rel="stylesheet">
 <title>Manage Order</title>
 <link rel="stylesheet"
-	href="backend/assets/bootstrap/dist/css/bootstrap.min.css" />
-<script src="backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
-<script src="backend/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<link href="backend/assets/css/def_table.css" rel="stylesheet">
-<script src="backend/assets/js/selectize.js"></script>
-<link rel="stylesheet" href="backend/assets/css/selectize/selectize.css" />
+	href="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/css/bootstrap.min.css" />
+<script src="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
+<script src="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<link href="${ pageContext.request.contextPath }/backend/assets/css/def_table.css" rel="stylesheet">
+<script src="${ pageContext.request.contextPath }/backend/assets/js/selectize.js"></script>
+<link rel="stylesheet" href="${ pageContext.request.contextPath }/backend/assets/css/selectize/selectize.css" />
 <style>
 table.table tr th:first-child {
 	width: 100px;
@@ -224,15 +224,15 @@ table.table tr th:first-child {
 						</div>
 						<div class="form-group">
 							<label>ORDER DATE</label> <input name="orderdate"
-								class="form-control input-md" required type="text">
+								class="form-control input-md" required type="date">
 						</div>
 						<div class="form-group">
 							<label>REQUIRED DATE</label> <input name="requireddate"
-								class="form-control input-md" required type="text">
+								class="form-control input-md" required type="date">
 						</div>
 						<div class="form-group">
 							<label>SHIPPED DATE</label> <input name="shippeddate"
-								class="form-control input-md" required type="text">
+								class="form-control input-md" type="date">
 						</div>
 						<div class="form-group">
 							<label>STATUS</label> <select name="status" form="add_form"
@@ -297,17 +297,17 @@ table.table tr th:first-child {
 						<div class="form-group">
 							<label>ORDER DATE</label> <input name="orderdate"
 								class="form-control input-md" value="<%=o.getOrderdate()%>"
-								required type="text">
+								required type="date">
 						</div>
 						<div class="form-group">
 							<label>REQUIRED DATE</label> <input name="requireddate"
 								class="form-control input-md" value="<%=o.getRequireddate()%>"
-								required type="text">
+								required type="date">
 						</div>
 						<div class="form-group">
 							<label>SHIPPED DATE</label> <input name="shippeddate"
 								class="form-control input-md" value="<%=o.getShippeddate()%>"
-								required type="text">
+								type="date">
 						</div>
 						<div class="form-group">
 							<label>STATUS</label> <select name="status"
@@ -388,19 +388,20 @@ table.table tr th:first-child {
 		</div>
 	</div>
 	<%
+		num++;
 		}
 	%>
 
 	<!-- Bootstrap tether Core JavaScript -->
 	<script
-		src="backend/assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
-	<script src="backend/assets/js/app-style-switcher.js"></script>
+		src="${ pageContext.request.contextPath }/backend/assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/app-style-switcher.js"></script>
 	<!--Wave Effects -->
-	<script src="backend/assets/js/waves.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/waves.js"></script>
 	<!--Menu sidebar -->
-	<script src="backend/assets/js/sidebarmenu.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/sidebarmenu.js"></script>
 	<!--Custom JavaScript -->
-	<script src="backend/assets/js/custom.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/custom.js"></script>
 </body>
 
 </html>

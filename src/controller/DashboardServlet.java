@@ -101,8 +101,6 @@ public class DashboardServlet extends HttpServlet {
 		Collections.reverse(inventoryList);
 		inventoryList = (inventoryList.size() < 5) ? inventoryList : inventoryList.subList(0, 5);
 		
-		System.out.println("Hello World");
-		
 		BigDecimal totalBuyPriceMonth, totalSalesMonth, totalMsrpMonth = scList.getTotalPrice();
 		totalBuyPriceMonth = scList.getList().stream().map(y -> y.getBuyprice().multiply(new BigDecimal(y.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add);
 		totalSalesMonth = totalMsrpMonth.subtract(totalBuyPriceMonth);

@@ -31,17 +31,17 @@
 	href="https://www.wrappixel.com/templates/ample-admin-lite/" />
 <!-- Favicon icon -->
 <link rel="icon" type="image/png" sizes="16x16"
-	href="backend/assets/plugins/images/favicon.png">
+	href="${ pageContext.request.contextPath }/backend/assets/plugins/images/favicon.png">
 <!-- Custom CSS -->
-<link href="backend/assets/css/style.min.css" rel="stylesheet">
+<link href="${ pageContext.request.contextPath }/backend/assets/css/style.min.css" rel="stylesheet">
 <title>Order Detail Page</title>
-<script src="backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
-<script src="backend/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
+<script src="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet"
-	href="backend/assets/bootstrap/dist/css/bootstrap.min.css" />
-<link href="backend/assets/css/def_table.css" rel="stylesheet">
-<script src="backend/assets/js/selectize.js"></script>
-<link rel="stylesheet" href="backend/assets/css/selectize/selectize.css" />
+	href="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/css/bootstrap.min.css" />
+<link href="${ pageContext.request.contextPath }/backend/assets/css/def_table.css" rel="stylesheet">
+<script src="${ pageContext.request.contextPath }/backend/assets/js/selectize.js"></script>
+<link rel="stylesheet" href="${ pageContext.request.contextPath }/backend/assets/css/selectize/selectize.css" />
 <style>
 table.table tr th:first-child {
 	width: 50px;
@@ -346,14 +346,14 @@ table.table tr th:first-child {
 
 	<!-- Bootstrap tether Core JavaScript -->
 	<script
-		src="backend/assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
-	<script src="backend/assets/js/app-style-switcher.js"></script>
+		src="${ pageContext.request.contextPath }/backend/assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/app-style-switcher.js"></script>
 	<!--Wave Effects -->
-	<script src="backend/assets/js/waves.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/waves.js"></script>
 	<!--Menu sidebar -->
-	<script src="backend/assets/js/sidebarmenu.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/sidebarmenu.js"></script>
 	<!--Custom JavaScript -->
-	<script src="backend/assets/js/custom.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/custom.js"></script>
 </body>
 
 </html>

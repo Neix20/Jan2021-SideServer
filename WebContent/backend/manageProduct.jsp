@@ -33,24 +33,25 @@
 	href="https://www.wrappixel.com/templates/ample-admin-lite/" />
 <!-- Favicon icon -->
 <link rel="icon" type="image/png" sizes="16x16"
-	href="backend/assets/plugins/images/favicon.png">
+	href="${ pageContext.request.contextPath }/backend/assets/plugins/images/favicon.png">
 <!-- Custom CSS -->
-<link href="backend/assets/css/style.min.css" rel="stylesheet">
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+<link href="${ pageContext.request.contextPath }/backend/assets/css/style.min.css" rel="stylesheet">
 <title>Product Page</title>
 <link rel="stylesheet"
-	href="backend/assets/bootstrap/dist/css/bootstrap.min.css" />
-<script src="backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
-<link href="backend/assets/css/def_table.css" rel="stylesheet">
+	href="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/css/bootstrap.min.css" />
+<script src="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/js/jquery-3.5.1.min.js"></script>
+<script src="${ pageContext.request.contextPath }/backend/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<link href="${ pageContext.request.contextPath }/backend/assets/css/def_table.css" rel="stylesheet">
+<script src="${ pageContext.request.contextPath }/backend/assets/js/selectize.js"></script>
+<link rel="stylesheet" href="${ pageContext.request.contextPath }/backend/assets/css/selectize/selectize.css" />
 <script>
 $(document).ready(function(){
 	// Activate tooltip
 	$('[data-toggle="tooltip"]').tooltip();
+
+	$('.search_select').selectize({
+        sortField: 'text'
+    });
 });
 </script>
 </head>
@@ -70,9 +71,6 @@ $(document).ready(function(){
 		<%@ include file="template_top.jsp"%>
 
 		<div class="page-wrapper">
-			<!-- ============================================================== -->
-			<!-- Bread crumb and right sidebar toggle -->
-			<!-- ============================================================== -->
 			<div class="page-breadcrumb bg-white">
 				<div class="row align-items-center">
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -80,18 +78,9 @@ $(document).ready(function(){
 							Table</h4>
 					</div>
 				</div>
-				<!-- /.col-lg-12 -->
 			</div>
-			<!-- ============================================================== -->
-			<!-- End Bread crumb and right sidebar toggle -->
-			<!-- ============================================================== -->
-			<!-- ============================================================== -->
-			<!-- Container fluid  -->
-			<!-- ============================================================== -->
+			
 			<div class="container-fluid">
-				<!-- ============================================================== -->
-				<!-- Start Page Content -->
-				<!-- ============================================================== -->
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="white-box">
@@ -202,13 +191,8 @@ $(document).ready(function(){
 						</div>
 					</div>
 				</div>
-				<!-- ============================================================== -->
-				<!-- End Page Content -->
-				<!-- ============================================================== -->
 			</div>
-			<!-- ============================================================== -->
-			<!-- End Container fluid  -->
-			<!-- ============================================================== -->
+
 			<footer class="footer text-center">
 				2020 © Ample Admin brought to you by <a
 					href="https://www.wrappixel.com/">wrappixel.com</a>
@@ -221,7 +205,7 @@ $(document).ready(function(){
 	<div id="addProductModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="Product" method="POST" id="add_form">
+				<form action="<%=servlet_name%>" method="POST" id="add_form">
 					<div class="modal-header">
 						<h4 class="modal-title">Add Product</h4>
 						<button type="button" class="close" data-dismiss="modal"
@@ -246,8 +230,10 @@ $(document).ready(function(){
 								form="add_form" required></textarea>
 						</div>
 						<div class="form-group">
-							<label for="productline">productline</label> <select
-								id="productline" name="productline" class="form-control">
+							<label for="productline">productline</label>
+							<select class="search_select" id="productline"
+								name="productline" form="add_form">
+								<option value="">Enter a Product Line...</option>
 								<%
 									for (Productline pl : productlineList) {
 								%>
@@ -303,7 +289,7 @@ $(document).ready(function(){
 	<div id="editProductModal<%=num%>" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="Product" method="POST" id="update_form<%=num%>">
+				<form action="<%=servlet_name%>" method="POST" id="update_form<%=num%>">
 					<div class="modal-header">
 						<h4 class="modal-title">Update Product</h4>
 						<button type="button" class="close" data-dismiss="modal"
@@ -328,14 +314,21 @@ $(document).ready(function(){
 								placeholder="PRODUCT DESCRIPTION" class="form-control"
 								form="update_form<%=num%>" required></textarea>
 							<script>
-								document.querySelector("#pD<%=num%>").value = "<%=p.getProductdescription()%>";
+								document.querySelector("#pD<%=num%>").value = `<%=p.getProductdescription()%>`;
 							</script>
 						</div>
 						<div class="form-group">
-							<label for="productline">PRODUCT LINE</label> <input
-								id="productline" name="productline"
-								class="form-control input-md" value="<%=p.getProductline()%>"
-								readonly type="text">
+							<label for="productline">PRODUCT LINE</label> <select class="search_select" id="productline"
+								name="productline" form="update_form<%=num%>">
+								<option value="<%=p.getProductline()%>"><%=p.getProductline()%></option>
+								<%
+									for (Productline pl : productlineList) {
+								%>
+								<option value="<%=pl.getProductline()%>"><%=pl.getProductline()%></option>
+								<%
+									}
+								%>
+							</select>
 						</div>
 						<div class="form-group">
 							<label for="productscale">PRODUCT SCALE</label> <input
@@ -390,7 +383,7 @@ $(document).ready(function(){
 	<div id="deleteProductModal<%=num%>" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="Product" method="POST">
+				<form action="<%=servlet_name%>" method="POST">
 					<div class="modal-header">
 						<h4 class="modal-title">Delete Product</h4>
 						<button type="button" class="close" data-dismiss="modal"
@@ -418,21 +411,15 @@ $(document).ready(function(){
 		}
 	%>
 
-	<!-- All Jquery -->
-	<!-- ============================================================== -->
 	<script
-		src="backend/assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-	<!-- Bootstrap tether Core JavaScript -->
-	<script
-		src="backend/assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
-	<script src="backend/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="backend/assets/js/app-style-switcher.js"></script>
+		src="${ pageContext.request.contextPath }/backend/assets/plugins/bower_components/popper.js/dist/umd/popper.min.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/app-style-switcher.js"></script>
 	<!--Wave Effects -->
-	<script src="backend/assets/js/waves.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/waves.js"></script>
 	<!--Menu sidebar -->
-	<script src="backend/assets/js/sidebarmenu.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/sidebarmenu.js"></script>
 	<!--Custom JavaScript -->
-	<script src="backend/assets/js/custom.js"></script>
+	<script src="${ pageContext.request.contextPath }/backend/assets/js/custom.js"></script>
 </body>
 
 </html>

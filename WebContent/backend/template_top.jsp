@@ -22,10 +22,10 @@
 					href="javascript:void(0)"><i class="ti-menu ti-close"></i></a></li>
 			</ul>
 			<ul class="navbar-nav ml-auto d-flex align-items-center">
-				<li><a class="profile-pic" href="#"> <img
+				<li><div class="profile-pic"> <img
 						src="${ pageContext.request.contextPath }/backend/assets/plugins/images/users/default_male.jpg"
 						alt="user-img" width="36" class="img-circle"><span
-						class="text-white font-medium">Admin</span></a></li>
+						class="text-white font-medium">Admin</span></div></li>
 			</ul>
 		</div>
 	</nav>

@@ -50,7 +50,7 @@
 	<!-- ***** Preloader End ***** -->
 
 	<!-- ***** Header Area Start ***** -->
-	<header class="header-area header-sticky background-header">
+	<header class="header-area header-sticky">
 	    <div class="container">
 	        <div class="row">
 	            <div class="col-12">
