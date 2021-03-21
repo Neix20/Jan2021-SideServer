@@ -39,7 +39,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
 			crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/frontend/assets/css/font-awesome.css">
-	<link rel="stylesheet" href="${ pageContext.request.contextPath }/css/customer-page.css">
+	<link rel="stylesheet" href="${ pageContext.request.contextPath }/backend/assets/css/customer-page.css">
 	<!-- ============================================================== -->
 	<!-- End dependencies & libraries -->
 	<!-- ============================================================== -->

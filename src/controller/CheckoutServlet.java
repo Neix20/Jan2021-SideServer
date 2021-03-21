@@ -111,7 +111,7 @@ public class CheckoutServlet extends HttpServlet {
 			paymentServiceBean.run(request);
 			
 			// Forward to Receipt servlet to print receipt.
-		    RequestDispatcher req = request.getRequestDispatcher("frontend/Receipt");
+		    RequestDispatcher req = request.getRequestDispatcher("Receipt");
 		    req.forward(request, response);
 	    }
 	}

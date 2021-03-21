@@ -75,7 +75,7 @@ public class CheckoutServiceBean implements CheckoutServiceLocal {
 		   ================================================================================================== */
 		String[] paymentServiceOutput = makePayment(request, customerNumber, totalOrderAmount.toString());
 		String checkNumber = paymentServiceOutput[0];
-		String paymentType = paymentServiceOutput[1]; //TODO set payment type?
+		String paymentType = paymentServiceOutput[1];
 		String paymentDate = paymentServiceOutput[2];
 		/* ==================================================================================================
 		   <Manage order>
@@ -251,8 +251,8 @@ public class CheckoutServiceBean implements CheckoutServiceLocal {
 		 * Using my fellow teammate, Tan Xi En's module function.
 		 */
 		order.setEverything2(orderAttributes);
-		Integer ordernumber = orderbean.locateNextPK();
 		orderbean.addOrder(order);
+		Integer ordernumber = orderbean.locateNextPK();
 		
 		/* Update `order detail` information
 		 * The format of orderDetailAttributes
