@@ -92,9 +92,7 @@ input[type=number] {
 						<div class="pt-4 wish-list">
 
 							<h5 class="mb-4">
-								Cart (<span> <%
- 	out.println(scList.count());
- %>
+								Cart (<span> <%=scList.count()%>
 								</span> items)
 							</h5>
 

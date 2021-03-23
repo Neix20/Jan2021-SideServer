@@ -154,8 +154,7 @@ $(document).ready(function(){
 											<ul class="pagination">
 												<%
 													if (currentPage > 2) {
-														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?currentPage=" + (currentPage - 2)
-																+ "\">Previous</a></li>";
+														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?currentPage=1\">First</a></li>";
 														out.println(link);
 													}
 												%>
@@ -178,8 +177,8 @@ $(document).ready(function(){
 												%>
 												<%
 													if (currentPage < nOfPage - 1) {
-														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?currentPage=" + (currentPage + 2)
-																+ "\">Next</a></li>";
+														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?currentPage=" + nOfPage
+																+ "\">Last</a></li>";
 														out.println(link);
 													}
 												%>

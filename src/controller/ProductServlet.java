@@ -60,7 +60,8 @@ public class ProductServlet extends HttpServlet {
 		List<Productline> productlineList = productlineBean.getAllProductline();
 
 		int recordsPerPage = 10, nOfPage = productList.size() / recordsPerPage;
-		nOfPage += 1;
+		if (productList.size() % recordsPerPage != 0)
+			nOfPage += 1;
 		String temp = request.getParameter("currentPage");
 		int currentPage = (temp != null) ? Integer.valueOf(temp) : 1;
 		int start_num = (currentPage - 1) * recordsPerPage;
@@ -69,7 +70,7 @@ public class ProductServlet extends HttpServlet {
 
 		productList = productList.subList(start_num, end_num);
 
-		String lastCode = productBean.getLastId().get(0).getProductcode();
+		String lastCode = productList.get(0).getProductcode();
 		String lastId = (lastCode.equals("S72_3212")) ? "S904_0001" : getProductCode(lastCode);
 		
 		String downloadFile = request.getParameter("type");

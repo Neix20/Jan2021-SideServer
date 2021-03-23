@@ -162,32 +162,31 @@ table.table tr th:first-child {
 											<ul class="pagination">
 												<%
 													if (currentPage > 2) {
-														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber
-																+ "&currentPage=" + (currentPage - 2) + "\">Previous</a></li>";
+														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?currentPage=1\">First</a></li>";
 														out.println(link);
 													}
 												%>
 												<%
 													if (currentPage > 1) {
-														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber
-																+ "&currentPage=" + (currentPage - 1) + "\">" + (currentPage - 1) + "</a></li>";
+														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?currentPage=" + (currentPage - 1) + "\">"
+																+ (currentPage - 1) + "</a></li>";
 														out.println(link);
 													}
 												%>
 												<li class="page-item active"><a
-													href="<%=servlet_name%>?orderNumber=<%=orderNumber%>&currentPage=<%=currentPage%>"
+													href="<%=servlet_name%>?currentPage=<%=currentPage%>"
 													class="page-link"><%=currentPage%></a></li>
 												<%
 													if (currentPage < nOfPage) {
-														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber
-																+ "&currentPage=" + (currentPage + 1) + "\">" + (currentPage + 1) + "</a></li>";
+														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?currentPage=" + (currentPage + 1) + "\">"
+																+ (currentPage + 1) + "</a></li>";
 														out.println(link);
 													}
 												%>
 												<%
 													if (currentPage < nOfPage - 1) {
-														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?orderNumber=" + orderNumber
-																+ "&currentPage=" + (currentPage + 2) + "\">Next</a></li>";
+														link = "<li class=\"page-item\"><a href=\"" + servlet_name + "?currentPage=" + nOfPage
+																+ "\">Last</a></li>";
 														out.println(link);
 													}
 												%>

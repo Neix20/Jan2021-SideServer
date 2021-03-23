@@ -13,6 +13,7 @@
 	int nOfPage = (Integer) request.getAttribute("nOfPage");
 	String[] category = (String[]) request.getAttribute("category");
 	String sort = (String) request.getAttribute("sort_keyword");
+	String servlet_name = (String) request.getAttribute("servlet_name");
 	String link;
 %>
 <!DOCTYPE html>
@@ -121,7 +122,7 @@
 	<!-- ***** Fleet Starts ***** -->
 	<section class="section" id="trainers">
 		<div class="container">
-			<form action="ProductCatalog" method="GET">
+			<form action="<%=servlet_name%>" method="GET">
 				<div class="row py-3">
 					<div class="col-2">
 						<select class="search_select" name="category">
@@ -163,16 +164,10 @@
 								alt="" style="width: 100%;">
 						</div>
 						<div class="down-content">
-							<span> <sup>RM</sup> <%
- 	out.print(p.getMsrp().toString());
- %>
+							<span> <sup>RM</sup> <%=p.getMsrp().toString()%>
 							</span>
 
-							<h4>
-								<%
-									out.print(p.getProductname());
-								%>
-							</h4>
+							<h4><%=p.getProductname()%></h4>
 
 							<ul class="social-icons">
 								<li><a
@@ -194,10 +189,9 @@
 					<li class="page-item">
 						<%
 							if (currentPage > 2) {
-								link = "<a class=\"page-link\" href=\"ProductCatalog?"
+								link = "<a class=\"page-link\" href=\"" + servlet_name + "?"
 										+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
-										+ "&currentPage=" + (currentPage - 2)
-										+ "\" aria-label=\"Previous\"><span aria-hidden=\"true\">&laquo;</span><span class=\"sr-only\">Previous</span></a>";
+										+ "&currentPage=1\" aria-label=\"Previous\"><span aria-hidden=\"true\">&laquo;</span><span class=\"sr-only\">First</span></a>";
 								out.println(link);
 							}
 						%>
@@ -205,7 +199,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage > 1) {
-								link = "<a class=\"page-link\" href=\"ProductCatalog?"
+								link = "<a class=\"page-link\" href=\"" + servlet_name + "?"
 										+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage - 1) + "\">" + (currentPage - 1) + "</a>";
 								out.println(link);
@@ -214,7 +208,7 @@
 					</li>
 					<li class="page-item">
 						<%
-							link = "<a class=\"page-link\" href=\"ProductCatalog?"
+							link = "<a class=\"page-link\" href=\"" + servlet_name + "?"
 									+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
 									+ "&currentPage=" + currentPage + "\"><b>" + currentPage + "</b></a>";
 							out.println(link);
@@ -223,7 +217,7 @@
 					<li class="page-item">
 						<%
 							if (currentPage < nOfPage) {
-								link = "<a class=\"page-link\" href=\"ProductCatalog?"
+								link = "<a class=\"page-link\" href=\"" + servlet_name + "?"
 										+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
 										+ "&currentPage=" + (currentPage + 1) + "\">" + (currentPage + 1) + "</a>";
 								out.println(link);
@@ -233,10 +227,10 @@
 					<li class="page-item">
 						<%
 							if (currentPage < nOfPage - 1) {
-								link = "<a class=\"page-link\" href=\"ProductCatalog?"
+								link = "<a class=\"page-link\" href=\"" + servlet_name + "?"
 										+ html_generator.getParameterArrayValues("category", category) + "&sort_keyword=" + sort
-										+ "&currentPage=" + (currentPage + 2)
-										+ "\" aria-label=\"Next\"><span aria-hidden=\"true\">&raquo;</span><span class=\"sr-only\">Next</span></a>";
+										+ "&currentPage=" + nOfPage
+										+ "\" aria-label=\"Next\"><span aria-hidden=\"true\">&raquo;</span><span class=\"sr-only\">Last</span></a>";
 								out.println(link);
 							}
 						%>

@@ -124,26 +124,18 @@ input[type=number] {
 		<div class="row">
 			<!--Images-->
 			<div class="col-md-6 mb-4 mb-md-0">
-				<img src="${pageContext.request.contextPath}/frontend/assets/images/<%out.print(image_url);%>" style="width: 100%;" />
+				<img src="${pageContext.request.contextPath}/frontend/assets/images/<%=image_url%>" style="width: 100%;" />
 			</div>
 
 			<!--Put into div class= container-->
 			<div class="col-md-6">
 
-				<h5>
-					<%
-						out.print(p.getProductname());
-					%>
-				</h5>
+				<h5><%=p.getProductname()%></h5>
 				<p>
-					<span class="mr-1"><strong>RM<%
-						out.print(p.getMsrp().toString());
-					%></strong></span>
+					<span class="mr-1"><strong>RM <%=p.getMsrp().toString()%></strong></span>
 				</p>
 				<p class="pt-1">
-					<%
-						out.print(p.getProductdescription());
-					%>
+					<%=p.getProductdescription()%>
 				</p>
 				<div class="table-responsive">
 					<table class="table table-sm table-borderless mb-0">
@@ -151,25 +143,19 @@ input[type=number] {
 							<tr>
 								<th class="pl-0 w-25" scope="row"><strong>Model</strong></th>
 								<td>
-									<%
-										out.print(p.getProductline());
-									%>
+									<%=p.getProductline()%>
 								</td>
 							</tr>
 							<tr>
 								<th class="pl-0 w-25" scope="row"><strong>Scale</strong></th>
 								<td>
-									<%
-										out.print(p.getProductscale());
-									%>
+									<%=p.getProductscale()%>
 								</td>
 							</tr>
 							<tr>
 								<th class="pl-0 w-25" scope="row"><strong>Vendor</strong></th>
 								<td>
-									<%
-										out.print(p.getProductvendor());
-									%>
+									<%=p.getProductvendor()%>
 								</td>
 							</tr>
 						</tbody>
@@ -188,7 +174,7 @@ input[type=number] {
 										<button type="button" class="btn btn-primary minus">&#9660;</button>
 										<input class="text-right buy_quantity" style="width: 100px;"
 										name="buy_quantity" value="1" type="number" min="1"
-										max="<%out.print(p.getQuantityinstock());%>" />
+										max="<%=p.getQuantityinstock()%>" />
 										<button type="button" class="btn btn-primary plus">&#9650;</button>
 									</td>
 								</tr>

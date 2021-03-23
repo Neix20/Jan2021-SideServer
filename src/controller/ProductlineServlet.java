@@ -26,19 +26,20 @@ import utility.html_generator;
 /**
  * Servlet implementation class ProductlineServlet
  */
-@WebServlet(name = "Product Line Servlet", urlPatterns = { "/manageProductline"})
+@WebServlet(name = "Product Line Servlet", urlPatterns = { "/manageProductline" })
 @MultipartConfig
 public class ProductlineServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
 	private ProductlineSessionBeanLocal productlineBean;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ProductlineServlet() {
-        super();
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public ProductlineServlet() {
+		super();
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -50,7 +51,8 @@ public class ProductlineServlet extends HttpServlet {
 		List<Productline> productlineList = productlineBean.getAllProductline();
 
 		int recordsPerPage = 4, nOfPage = productlineList.size() / recordsPerPage;
-		nOfPage += 1;
+		if (productlineList.size() % recordsPerPage != 0)
+			nOfPage += 1;
 		String temp = request.getParameter("currentPage");
 		int currentPage = (temp != null) ? Integer.valueOf(temp) : 1;
 		int start_num = (currentPage - 1) * recordsPerPage;

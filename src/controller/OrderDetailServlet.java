@@ -22,13 +22,13 @@ import utility.html_generator;
 /**
  * Servlet implementation class OrderDetailServlet
  */
-@WebServlet(name = "Order Detail Servlet", urlPatterns = { "/manageOrderDetail"})
+@WebServlet(name = "Order Detail Servlet", urlPatterns = { "/manageOrderDetail" })
 public class OrderDetailServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
 	private OrderDetailSessionBeanLocal orderDetailBean;
-	
+
 	@EJB
 	private ProductSessionBeanLocal productBean;
 
@@ -49,21 +49,23 @@ public class OrderDetailServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		int orderNumber = Integer.valueOf(request.getParameter("orderNumber"));
 		List<Orderdetail> orderdetailList = orderDetailBean.getAllOrderDetails(orderNumber);
-		
-		for(Orderdetail od : orderdetailList) {
+
+		for (Orderdetail od : orderdetailList) {
 			Product p = productBean.getProduct(od.getId().getProductcode());
 			od.setProduct(p);
 		}
 
 		int recordsPerPage = 10, nOfPage = orderdetailList.size() / recordsPerPage;
-		nOfPage += 1;
+		if (orderdetailList.size() % recordsPerPage != 0)
+			nOfPage += 1;
 		String temp = request.getParameter("currentPage");
 		int currentPage = (temp != null) ? Integer.valueOf(temp) : 1;
 		int start_num = (currentPage - 1) * recordsPerPage;
-		int end_num = (currentPage * recordsPerPage > orderdetailList.size()) ? orderdetailList.size() : currentPage * recordsPerPage;
+		int end_num = (currentPage * recordsPerPage > orderdetailList.size()) ? orderdetailList.size()
+				: currentPage * recordsPerPage;
 
 		orderdetailList = (orderdetailList.isEmpty()) ? orderdetailList : orderdetailList.subList(start_num, end_num);
-		
+
 		List<Product> productList = productBean.getAllProduct();
 
 		request.setAttribute("servlet_name", "manageOrderDetail");
@@ -87,15 +89,16 @@ public class OrderDetailServlet extends HttpServlet {
 		String type = request.getParameter("type");
 		String[] parameter = Orderdetail.getParameter();
 		String[] arr = new String[parameter.length];
-		
-		for(int i = 0; i < arr.length; i++) arr[i] = request.getParameter(parameter[i]);
-		
+
+		for (int i = 0; i < arr.length; i++)
+			arr[i] = request.getParameter(parameter[i]);
+
 		Orderdetail od;
 		Product p;
 		OrderdetailPK tmp;
 		PrintWriter out = response.getWriter();
-		
-		switch(type) {
+
+		switch (type) {
 		case "ADD":
 			od = new Orderdetail();
 			p = productBean.getProduct(arr[1]);

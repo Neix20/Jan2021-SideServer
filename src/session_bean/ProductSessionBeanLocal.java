@@ -16,5 +16,4 @@ public interface ProductSessionBeanLocal {
 	public void addProduct(Product p) throws EJBException;
 	public void updateProduct(Product p) throws EJBException;
 	public void deleteProduct(Product p) throws EJBException;
-	public List<Product> getLastId() throws EJBException;
 }
