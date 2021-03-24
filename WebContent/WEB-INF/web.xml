@@ -56,6 +56,8 @@
 			<url-pattern>/manageOrderDetail</url-pattern>
 			<url-pattern>/manageProduct</url-pattern>
 			<url-pattern>/manageProductline</url-pattern>
+			<url-pattern>/manageEmployee</url-pattern>
+			<url-pattern>/manageOffice</url-pattern>
 			<url-pattern>/Payment</url-pattern>
 			<url-pattern>/Customer</url-pattern>
 		</web-resource-collection>

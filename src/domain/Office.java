@@ -6,54 +6,68 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 
 /**
  * The persistent class for the offices database table.
  * 
  */
 @Entity
-@Table(name="offices", schema="classicmodels")
-@NamedQuery(name="Office.findAll", query="SELECT o FROM Office o")
+@Table(name = "offices", schema = "classicmodels")
+@NamedQueries({ @NamedQuery(name = "Office.findAll", query = "SELECT o FROM Office o"),
+		@NamedQuery(name = "Office.findByOfficeCode", query = "SELECT f from Office f WHERE f.officecode = ?1") })
+
 public class Office implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="officecode")
+	@Column(name = "officecode")
 	private Integer officecode;
-	
-	@Column(name="city", length=13)
+
+	@Column(name = "city", length = 13)
 	private String city;
-	
-	@Column(name="phone", length=16)
+
+	@Column(name = "phone", length = 16)
 	private String phone;
 
-	@Column(name="addressline1", length=24)
+	@Column(name = "addressline1", length = 24)
 	private String addressline1;
 
-	@Column(name="addressline2", length=9)
+	@Column(name = "addressline2", length = 9)
 	private String addressline2;
 
-	@Column(name="state", length=10)
+	@Column(name = "state", length = 10)
 	private String state;
 
-	@Column(name="country", length=9)
+	@Column(name = "country", length = 9)
 	private String country;
 
-	@Column(name="postalcode", length=8)
+	@Column(name = "postalcode", length = 8)
 	private String postalcode;
 
-	@Column(name="territory", length=5)
+	@Column(name = "territory", length = 5)
 	private String territory;
 
-	//bi-directional many-to-one association to Employee
-	@OneToMany(mappedBy="office")
+	// bi-directional many-to-one association to Employee
+	@OneToMany(mappedBy = "office")
 	private List<Employee> employees;
 
 	public Office() {
+	}
+
+	public Office(Office f) {
+		this.officecode = f.officecode;
+		this.city = f.city;
+		this.phone = f.phone;
+		this.addressline1 = f.addressline1;
+		this.addressline2 = f.addressline2;
+		this.state = f.state;
+		this.country = f.country;
+		this.postalcode = f.postalcode;
+		this.territory = f.territory;
 	}
 
 	public Integer getOfficecode() {
@@ -150,4 +164,20 @@ public class Office implements Serializable {
 		return employee;
 	}
 
+	public void setEverything(String[] arr) {
+		this.setOfficecode(Integer.valueOf(arr[0]));
+		this.setCity(arr[1]);
+		this.setAddressline1(arr[2]);
+		this.setAddressline2(arr[3]);
+		this.setPostalcode(arr[4]);
+		this.setPhone("999");
+		this.setTerritory("NA");
+		this.setCountry("Malaysia");
+	}
+
+
+	public static String[] getParameter() {
+		String[] s = { "officenumber", "city", "addressline1", "addressline2", "postalcode"};
+		return s;
+	}
 }

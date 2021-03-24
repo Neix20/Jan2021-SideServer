@@ -120,6 +120,16 @@
 						aria-hidden="true"></i><span class="hide-menu">Payment</span></a></li>
 				<li class="sidebar-item"><a
 					class="sidebar-link waves-effect waves-dark sidebar-link"
+					href="${pageContext.request.contextPath}/manageEmployee"
+					aria-expanded="false"><i class="fas fa-credit-card"
+						aria-hidden="true"></i><span class="hide-menu">Employee</span></a></li>
+				<li class="sidebar-item"><a
+					class="sidebar-link waves-effect waves-dark sidebar-link"
+					href="${pageContext.request.contextPath}/manageOffice"
+					aria-expanded="false"><i class="fas fa-credit-card"
+						aria-hidden="true"></i><span class="hide-menu">Office</span></a></li>
+				<li class="sidebar-item"><a
+					class="sidebar-link waves-effect waves-dark sidebar-link"
 					href="${pageContext.request.contextPath}/logout" aria-expanded="false"><i
 						class="fas fa-sign-out-alt" aria-hidden="true"></i><span
 						class="hide-menu">Logout</span></a></li>
