@@ -36,8 +36,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/frontend/assets/css/style.css">
 
-<script
-	src="${pageContext.request.contextPath}/frontend/assets/js/jquery-3.5.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/frontend/assets/js/jquery-2.1.0.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/frontend/assets/js/bootstrap.min.js"></script>
 <script
@@ -46,6 +45,11 @@
 	href="${ pageContext.request.contextPath }/frontend/assets/css/selectize/selectize.css" />
 <script>
 	$(function() {
+		$(".btnDropDown").on("click", e => {
+            let str = $(e.target).siblings(".detail_board").css("display");
+            (str == "none") ? $(e.target).siblings(".detail_board").css("display", "hidden") : $(e.target).siblings(".detail_board").css("display", "none");
+        });
+        
 		$('.search_select').selectize({
 			sortField : 'text'
 		});
@@ -125,16 +129,21 @@
 			<form action="<%=servlet_name%>" method="GET">
 				<div class="row py-3">
 					<div class="col-2">
-						<select class="search_select" name="category">
-							<option value="">Enter a Product Line...</option>
+						<button type="button" class="btn btn-primary btnDropDown">Category
+							&#9660;</button>
+						<div class="detail_board p-1"
+							style="height: 240px; width: 100%; background-color: rgb(211, 211, 211); display: none; position: absolute; z-index: 2; right: -12px;">
 							<%
 								for (Productline pl : ProductlineList) {
 							%>
-							<option value="<%=pl.getProductline()%>"><%=pl.getProductline()%></option>
+							<input type="checkbox" name="category"
+								value="<%out.print(pl.getProductline());%>" /> <label
+								for="all"> <% out.print(pl.getProductline()); %>
+							</label><br />
 							<%
 								}
 							%>
-						</select>
+						</div>
 					</div>
 					<div class="col-2">
 						<select class="search_select" name="sort_keyword">
