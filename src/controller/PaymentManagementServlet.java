@@ -102,10 +102,7 @@ public class PaymentManagementServlet extends HttpServlet {
 		 */
 	    if (ajax) {
 	    	Map<String, String> formValidationResult = new LinkedHashMap<>();
-	    	// Only validate form if user wants to add or update record
-	    	if (!action.equals("DELETE")) {
-	    		formValidationResult = formValidator.validatePaymentForm(request);
-	    	}
+    		formValidationResult = formValidator.validatePaymentForm(request);
 	        String json = new Gson().toJson(formValidationResult);
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");

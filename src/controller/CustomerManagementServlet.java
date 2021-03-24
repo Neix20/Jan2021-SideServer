@@ -102,10 +102,7 @@ public class CustomerManagementServlet extends HttpServlet {
 		 */
 	    if (ajax) {
 	    	Map<String, String> formValidationResult = new LinkedHashMap<>();
-	    	// Only validate form if user wants to add or update record
-	    	if (!action.equals("DELETE")) {
-	    		formValidationResult = formValidator.validateCustomerForm(request);
-	    	}
+	    	formValidationResult = formValidator.validateCustomerForm(request);
 	        String json = new Gson().toJson(formValidationResult);
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
