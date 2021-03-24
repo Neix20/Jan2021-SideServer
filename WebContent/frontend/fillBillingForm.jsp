@@ -21,7 +21,7 @@ List<String> employeeEmails = (List<String>) request.getAttribute("employee_emai
 	<div class="panel-heading">
 		<h4 class="panel-title">
 			<a class="collapsed" data-toggle="collapse" data-parent="#accordion"
-				href="#collapseTwo"><i class="fa icon-change" aria-hidden="true"></i>Order Information</a>
+				href="#collapseTwo"><i class="fa icon-change" aria-hidden="true"></i> Order Information</a>
 		</h4>
 	</div>
 	<!-- ============================================================== -->

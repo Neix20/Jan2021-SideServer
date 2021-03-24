@@ -344,8 +344,9 @@ ShoppingCart purchasedOrderProduct = (ShoppingCart) request.getAttribute("purcha
 					<!-- Download and print receipt -->
 					<!-- ============================================================== -->
 					<div class="row invoice-total d-print-none">
-						<div class="col-5 mt-3 mx-auto d-flex justify-content-center">
+						<div class="col-6 mt-3 mx-auto d-flex justify-content-around">
 							<button class="btn btn-success" id="invoice-print"><i class="fa fa-print"></i> Download and Print Invoice</button>
+							<a class="btn btn-secondary" href="${pageContext.request.contextPath}/">Back to Home Page</a>
 						</div>
 					</div>
 					<!-- ============================================================== -->

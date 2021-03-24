@@ -161,7 +161,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 		$(document).ready(function () {
 			/* Expand "Review order" section on page load
 			*/ 
-			$('#collapseOne').collapse('toggle');
+			$('#collapseOne').collapse('show');
 
 			/* Expand "Billing information/order information" section and 
 			   collpase "Review order" section when user clicks "Continue 
@@ -170,7 +170,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			$('#continue_billing').on('click', function() {
 				$('#continue_billing').fadeOut();
 				$('#continue_payment').fadeIn();
-				$('#collapseOne').collapse('toggle');
+				$('#collapseOne').collapse('hide');
 			});
 
 			/* Expand "Payment form" section and collpase "Billing information"
@@ -178,7 +178,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 			*/
 			$('#continue_payment').on('click', function() {
 				$('#continue_payment').fadeOut();
-				$('#collapseTwo').collapse('toggle');
+				$('#collapseTwo').collapse('hide');
 			});
 
 			/* Switch the payment method between 'bank' and 'card' depending 
@@ -261,6 +261,11 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 				        // Append the constructed error message in the parent div of the wrong input
 				        $parent.append("<div class='invalid-feedback'>"+errorMessage+"</div>");
 				    });
+
+					/* Open the form to show the errors.
+					*/
+					$('#collapseTwo').collapse('show');
+					$('#collapseThree').collapse('show');
 				});
 			});
 		});

@@ -51,7 +51,7 @@ Reminder  : Please enable Internet connection to load third party libraries: Tha
 						<div class="row d-flex align-items-center">
 							<div class="col-12 mb-2"><h5><%=order.getProductname()%></h5></div>
 							<div class="col-md-5 col-lg-3 col-xl-3">
-								<img src="${pageContext.request.contextPath}/frontend/assets/images/<%out.print(type + "_" + number + ".jpg");%>"
+								<img src="${pageContext.request.contextPath}/frontend/assets/images/<%out.print(type + ".jpg");%>"
 								style="width: 100%;" />
 							</div>
 							<div class="col-md-7 col-lg-9 col-xl-9">

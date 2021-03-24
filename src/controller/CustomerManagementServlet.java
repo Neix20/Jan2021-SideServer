@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -50,11 +51,7 @@ public class CustomerManagementServlet extends HttpServlet {
 	 * from the client's request.
 	 */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("customernumber");
-	    Customer customer = customerBean.findCustomerById(id);
-	    request.setAttribute("customer", customer);
-	
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		/*
 		 * Check if it is a AJAX request	
 		 * Reference: https://stackoverflow.com/a/4113258
@@ -68,13 +65,17 @@ public class CustomerManagementServlet extends HttpServlet {
 		 * to the client.
 		 */
 		if (ajax) {
+			String id = request.getParameter("customernumber");
+		    Customer customer = customerBean.findCustomerById(id);
+		    request.setAttribute("customer", customer);
 			CustomerJson customJson = new CustomerJson(customer);
 			String json = new Gson().toJson(customJson);
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(json);
 		} else {
-			//TODO 404 Not found
+		    RequestDispatcher req = request.getRequestDispatcher("404Error.jsp");
+		    req.forward(request, response);
 		}
     }
 

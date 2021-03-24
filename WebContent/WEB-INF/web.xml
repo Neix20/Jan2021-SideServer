@@ -64,4 +64,24 @@
 			<role-name>admin</role-name>
 		</auth-constraint>
 	</security-constraint>
+	
+	<security-constraint>
+	    <web-resource-collection>
+	        <web-resource-name>JSP Files</web-resource-name>
+	        <description>No direct access to JSP files</description>
+	        <url-pattern>/frontend/fillBillingForm.jsp</url-pattern>
+			<url-pattern>/frontend/footer.jsp</url-pattern>
+			<url-pattern>/frontend/header.jsp</url-pattern>
+			<url-pattern>/frontend/performCheckout.jsp</url-pattern>
+			<url-pattern>/frontend/performPayment.jsp</url-pattern>
+			<url-pattern>/frontend/printReceipt.jsp</url-pattern>
+			<url-pattern>/frontend/productCatalog.jsp</url-pattern>
+			<url-pattern>/frontend/productDetails.jsp</url-pattern>
+			<url-pattern>/frontend/reviewOrder.jsp</url-pattern>
+			<url-pattern>/frontend/shoppingCart.jsp</url-pattern>
+	        <http-method>POST</http-method>
+	        <http-method>GET</http-method>
+	    </web-resource-collection>
+	    <auth-constraint />
+	</security-constraint>
 </web-app>

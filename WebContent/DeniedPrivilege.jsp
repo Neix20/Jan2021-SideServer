@@ -87,11 +87,14 @@
 					<img class="profile-img"
 						src="${pageContext.request.contextPath}/frontend/assets/images/warning.jpg"
 						alt="">
-					<div class="h3 text-center">You are not allowed the privilege</div>
-					<div class="d-flex justify-content-center align-items-center">
+					<div class="h3 text-center">You don't have permission to access this page.</div>
+					<div class="d-flex justify-content-around align-items-center">
 						<a class="btn btn-primary"
-							href="${pageContext.request.contextPath}/manageDashboard">Back to
+							href="${pageContext.request.contextPath}/manageDashboard">Go to
 							Login Page</a>
+						<a class="btn btn-secondary"
+							href="${pageContext.request.contextPath}/">Go to
+							Home Page</a>
 					</div>
 				</div>
 			</div>

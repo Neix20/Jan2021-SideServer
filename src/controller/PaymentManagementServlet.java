@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -50,11 +51,6 @@ public class PaymentManagementServlet extends HttpServlet {
 	 * from the client's request.
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String customernumber = request.getParameter("customernumber");
-		String checknumber = request.getParameter("checknumber");
-	    Payment payment = paymentBean.findPayment(customernumber, checknumber);
-	    request.setAttribute("payment", payment);
-	    
 		/*
 		 * Check if it is a AJAX request	
 		 * Reference: https://stackoverflow.com/a/4113258
@@ -68,13 +64,19 @@ public class PaymentManagementServlet extends HttpServlet {
 		 * to the client.
 		 */
 		if (ajax) {
+			String customernumber = request.getParameter("customernumber");
+			String checknumber = request.getParameter("checknumber");
+		    Payment payment = paymentBean.findPayment(customernumber, checknumber);
+		    request.setAttribute("payment", payment);
+			
 			PaymentJson paymentJson = new PaymentJson(payment);
 			String json = new Gson().toJson(paymentJson);
 	        response.setContentType("application/json");
 	        response.setCharacterEncoding("UTF-8");
 	        response.getWriter().write(json);
 		} else {
-			//TODO 404 Not found
+		    RequestDispatcher req = request.getRequestDispatcher("404Error.jsp");
+		    req.forward(request, response);
 		}
 	}
 

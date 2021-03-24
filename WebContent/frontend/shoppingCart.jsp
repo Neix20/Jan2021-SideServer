@@ -8,6 +8,7 @@
 	ShoppingCart scList = (ShoppingCart) session.getAttribute("ShoppingCart");
 	if (scList == null) scList = new ShoppingCart();
  	BigDecimal temp = scList.getTotalPrice();
+ 	BigDecimal taxAmount = temp.multiply(new BigDecimal(0.06));
  	temp = temp.multiply(new BigDecimal(1.06));
 %>
 <!DOCTYPE html>
@@ -225,13 +226,13 @@ input[type=number] {
 								</li>
 								<li
 									class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-									Shipping Fee <span>RM0.00</span>
+									Tax amount (6%) <span>RM<%=String.format("%.2f", taxAmount.doubleValue())%></span>
 								</li>
 								<li
 									class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
 									<div>
 										<strong>The total amount of</strong> <strong>
-											<p class="mb-0">(including GST)</p>
+											<p class="mb-0">(including SST)</p>
 										</strong>
 									</div> <span> <strong>RM <%=String.format("%.2f", temp.doubleValue())%>
 									</strong>
