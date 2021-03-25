@@ -280,7 +280,7 @@ table.table tr th:first-child {
 						<div class="form-group">
 							<label>PRODUCT QUANTITY</label> <input name="quantityordered"
 								class="form-control input-md"
-								value="<%=od.getQuantityordered()%>" required type="text">
+								value="<%=od.getQuantityordered()%>" required type="number">
 						</div>
 						<div class="form-group">
 							<label>ORDER LINE NUMBER</label> <input name="orderlinenumber"

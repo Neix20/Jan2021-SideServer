@@ -101,7 +101,7 @@ input[type=number] {
 								for (ShoppingCartItem sc : scList.getList()) {
 									String type = sc.getProductline().split(" ")[0];
 							%>
-							<form action="/SideServerAssignment/ShoppingCart" method="post">
+							<form action="${pageContext.request.contextPath}/ShoppingCart" method="post">
 								<div class="row mb-4">
 									<div class="col-md-5 col-lg-3 col-xl-3">
 										<img

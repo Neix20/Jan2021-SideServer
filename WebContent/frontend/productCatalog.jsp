@@ -45,6 +45,8 @@
 	href="${ pageContext.request.contextPath }/frontend/assets/css/selectize/selectize.css" />
 <script>
 	$(function() {
+		let height = 35, num_of_items = <%=ProductlineList.size()%>;
+		$(".btnDropDown").css("height", `${height * num_of_items} px`);
 		$(".btnDropDown").on("click", e => {
             let str = $(e.target).siblings(".detail_board").css("display");
             (str == "none") ? $(e.target).siblings(".detail_board").css("display", "hidden") : $(e.target).siblings(".detail_board").css("display", "none");
@@ -132,7 +134,7 @@
 						<button type="button" class="btn btn-primary btnDropDown">Category
 							&#9660;</button>
 						<div class="detail_board p-1"
-							style="height: 240px; width: 100%; background-color: rgb(211, 211, 211); display: none; position: absolute; z-index: 2; right: -12px;">
+							style="width: 100%; background-color: rgb(211, 211, 211); display: none; position: absolute; z-index: 2; right: -12px;">
 							<%
 								for (Productline pl : ProductlineList) {
 							%>

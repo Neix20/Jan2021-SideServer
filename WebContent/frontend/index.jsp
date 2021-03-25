@@ -121,7 +121,7 @@
 			<br>
 
 			<div class="main-button text-center">
-				<a href="/SideServerAssignment/productCatalog">View Vehicle Models</a>
+				<a href="${pageContext.request.contextPath}/productCatalog">View Vehicle Models</a>
 			</div>
 		</div>
 	</section>

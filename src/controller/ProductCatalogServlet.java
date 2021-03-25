@@ -50,7 +50,6 @@ public class ProductCatalogServlet extends HttpServlet {
 		String[] tmp = { "all" };
 
 		category = (category == null || category[0] == "") ? tmp : category;
-		System.out.println("Hello World");
 		sort = (sort == null) ? "name_ASC" : sort;
 
 		List<Product> productList = productBean.getProductList(category, sort);

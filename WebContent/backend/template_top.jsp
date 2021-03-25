@@ -73,12 +73,12 @@
 				<li class="sidebar-item"><a
 					class="sidebar-link waves-effect waves-dark sidebar-link"
 					href="${pageContext.request.contextPath}/manageEmployee"
-					aria-expanded="false"><i class="fas fa-credit-card"
+					aria-expanded="false"><i class=" fas fa-user-md"
 						aria-hidden="true"></i><span class="hide-menu">Employee</span></a></li>
 				<li class="sidebar-item"><a
 					class="sidebar-link waves-effect waves-dark sidebar-link"
 					href="${pageContext.request.contextPath}/manageOffice"
-					aria-expanded="false"><i class="fas fa-credit-card"
+					aria-expanded="false"><i class=" fas fa-building"
 						aria-hidden="true"></i><span class="hide-menu">Office</span></a></li>
 				<li class="sidebar-item"><a
 					class="sidebar-link waves-effect waves-dark sidebar-link"
