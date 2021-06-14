@@ -33,10 +33,13 @@ Task: Design an **Online Order Management Monitoring System** (Ecommerce Website
 Bootstrap v4.6, JQuery, JDK 11
 
 ## Functional Hierarchy Chart
+![Functional Chart](Images/functional_chart.png)
 
 ## Use Case Diagram
+![Use case Diagram](Images/use_case.png)
 
 ## ERD Diagram
+![ERD Diagram](Images/erd.png)
 
 ## How To Install
 1. Create New Database in PgAdmin Shell Script
