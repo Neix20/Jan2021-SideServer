@@ -32,11 +32,17 @@ Task: Design an **Online Order Management Monitoring System** (Ecommerce Website
 ## Libraries Used
 Bootstrap v4.6, JQuery, JDK 11
 
-## How To Install
-1. Replace Standalone.xml in the Wildfly Folder
-2. WAR File
+## Functional Hierarchy Chart
+
+## Use Case Diagram
 
 ## ERD Diagram
+
+## How To Install
+1. Create New Database in PgAdmin Shell Script
+2. Upload SQL Script to PostgreSQL Database
+3. Replace Standalone.xml in the Wildfly Folder
+4. Upload WAR File to WildFly Server
 
 ## Program Functions
 1. The system is able to manage daily operations, CRUD Operations of Client
@@ -48,3 +54,11 @@ Bootstrap v4.6, JQuery, JDK 11
 ... and many more
 
 ## Demonstration
+1. Navigation
+2. Add New Productline Item
+3. Update Item
+4. Delete Item
+5. Download Report
+6. Pagination
+7. Dashboard
+8. Checkout
