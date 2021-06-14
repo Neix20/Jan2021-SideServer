@@ -62,10 +62,18 @@ Bootstrap v4.6, JQuery, JDK 11
 
 ## Demonstration
 1. Navigation
+   ![Navigation](Images/1.gif)
 2. Add New Productline Item
+   ![Add New Item](Images/2.gif)
 3. Update Item
+   ![Update Item](Images/3.gif)
 4. Delete Item
+   ![Delete Item](Images/4.gif)
 5. Download Report
+   ![Download Report](Images/5.gif)
 6. Pagination
+   ![Pagination](Images/6.gif)
 7. Dashboard
+    ![Dashboard](Images/7.gif)
 8. Checkout
+    ![Checkout](Images/8.gif)
