@@ -3,6 +3,7 @@ package domain;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -52,7 +53,7 @@ public class Office implements Serializable {
 	private String territory;
 
 	// bi-directional many-to-one association to Employee
-	@OneToMany(mappedBy = "office")
+	@OneToMany(mappedBy = "office", cascade={CascadeType.REMOVE})
 	private List<Employee> employees;
 
 	public Office() {

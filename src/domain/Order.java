@@ -21,7 +21,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name="orders", schema="classicmodels")
 @NamedQueries({ 
-	//please change me
 	@NamedQuery(
 		name = "Order.findAll", 
 		query = "SELECT o FROM Order o ORDER BY o.ordernumber DESC"

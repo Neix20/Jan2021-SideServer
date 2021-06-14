@@ -3,6 +3,7 @@ package domain;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -52,7 +53,7 @@ public class Productline implements Serializable {
 	private String image;
 
 	//bi-directional many-to-one association to Product
-	@OneToMany(mappedBy="productlineBean")
+	@OneToMany(mappedBy="productlineBean", cascade={CascadeType.REMOVE})
 	private List<Product> products;
 
 	public Productline() {
