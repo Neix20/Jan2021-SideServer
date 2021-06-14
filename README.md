@@ -43,9 +43,13 @@ Bootstrap v4.6, JQuery, JDK 11
 
 ## How To Install
 1. Create New Database in PgAdmin Shell Script
+   ![Step 1](Installation/1.gif)
 2. Upload SQL Script to PostgreSQL Database
+   ![Step 2](Installation/2.gif)
 3. Replace Standalone.xml in the Wildfly Folder
+   ![Step 3](Installation/3.gif)
 4. Upload WAR File to WildFly Server
+   ![Step 4](Installation/4.gif)
 
 ## Program Functions
 1. The system is able to manage daily operations, CRUD Operations of Client
